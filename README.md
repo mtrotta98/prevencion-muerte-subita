@@ -29,7 +29,7 @@
 
 ### Para levantar la aplicacion
 
-    flask run --debug
+    flask run
 
 ### Dependencias
 
