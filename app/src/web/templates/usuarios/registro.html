@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        <title>{% block title %} Registro - Sistema Prevencion Muerte Subita {% endblock %}</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static',filename='style.css') }}"
+        />
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+        />
+    </head>
+    <body>
+
+        {% block content %} 
+        <div id="navbar">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Sistema de Prevencion Muerte Subita</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <div id="main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <p class="flash {{(category)}}">{{ message }}</p>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+              <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Registro</h5>
+                  <form action="{{ url_for('usuarios.agregar_usuario') }}" method="POST">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-control" name="nombre" placeholder="Nombre" required />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Apellido</label>
+                                <input type="text" class="form-control" name="apellido" placeholder="Apellido" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" class="form-control" name="usuario" placeholder="Nombre Usuario" required />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Dni</label>
+                                <input type="text" class="form-control" name="dni" placeholder="Documento" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" name="pass1" placeholder="Contraseña" required />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-4">
+                                <label class="form-label">Confirmar Contraseña</label>
+                                <input type="password" class="form-control" name="pass2" placeholder="Repita la contraseña" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rol" id="adminProv" value="Administrador Provincial" onclick="clickRadio()" checked>
+                                <label class="form-check-label" for="adminProv">
+                                    Administrador Provincial
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rol" id="Repre" value="Representante" onclick="clickRadio()">
+                                <label class="form-check-label" for="Repre">
+                                  Representante
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="rol" id="UsCert" value="Usuario Certificante" onclick="clickRadio()">
+                                <label class="form-check-label" for="UsCert">
+                                  Usuario certificante
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6" id="selectProv">
+                            <select class="form-select" aria-label="Default select example" name="prov" id="prov" required>
+                                <option selected>Provincia</option>
+                                {% for provincia in provincias %}
+                                    <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                                {% endfor %}
+                              </select>
+                        </div>
+                    </div>
+                    <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endblock %}
+
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+    <script>
+        function clickRadio(){
+            let adminProv = document.getElementById("adminProv")
+            let repre = document.getElementById("Repre")
+            let usCert = document.getElementById("UsCert")
+            if(repre.checked){
+                document.getElementById("selectProv").setAttribute('hidden', 'true')
+                document.getElementById("prov").removeAttribute('required')
+            }else{
+                document.getElementById("selectProv").removeAttribute('hidden')
+                document.getElementById("prov").setAttribute('required', 'true')
+            }
+        }
+    </script>
+</html>
