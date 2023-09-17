@@ -14,6 +14,17 @@ def agregar_usuario(data):
     db.session.commit()
     return usuario
 
+def validar_datos_existentes(usuario, dni):
+    """Esta funcion valida que los datos de alta de usuario no existan en la base"""
+    username_existente = Usuario.query.filter_by(usuario=usuario).first()
+    dni_existente = Usuario.query.filter_by(dni=dni).first()
+    if username_existente is not None:
+        return False, "El usuario ya esta cargado en el sistema."
+    elif dni_existente is not None:
+        return False, "El dni ya esta cargado en el sistema."
+    else:
+        return True, ""
+
 def agregar_provincia(usuario, provincia):
     """Esta funcion relaciona a un usuario con una provincia"""
     usuario.provincias.append(provincia)

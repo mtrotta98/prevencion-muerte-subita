@@ -35,7 +35,10 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
               {% if messages %}
                 {% for category, message in messages %}
-                  <p class="flash {{(category)}}">{{ message }}</p>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>{{ message }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 {% endfor %}
               {% endif %}
             {% endwith %}
@@ -111,7 +114,7 @@
                         </div>
                         <div class="col-6" id="selectProv">
                             <select class="form-select" aria-label="Default select example" name="prov" id="prov" required>
-                                <option selected>Provincia</option>
+                                <option value="" selected>Provincia</option>
                                 {% for provincia in provincias %}
                                     <option value={{provincia.id}}>{{provincia.nombre}}</option>
                                 {% endfor %}
