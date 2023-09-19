@@ -1,5 +1,5 @@
 from src.core.entidades.entidades import Entidad
-from src.core.db import db
+
 
 def get_entidades():
     """Esta funcion devuelve todas las entidades"""

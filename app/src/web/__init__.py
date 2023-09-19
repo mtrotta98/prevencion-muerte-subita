@@ -3,6 +3,7 @@ from src.web.config import config
 from src.core.db import db, init_db
 
 from src.web.controllers.usuarios import usuario_blueprint
+from src.web.controllers.entidades import entidad_blueprint
 
 #from src.core.db import db, init_db
 
@@ -16,6 +17,7 @@ def create_app(env="development", static_folder="static"):
         return 'Hello, World!'
     
     app.register_blueprint(usuario_blueprint)
+    app.register_blueprint(entidad_blueprint)
     
     with app.app_context():
         init_db(app)

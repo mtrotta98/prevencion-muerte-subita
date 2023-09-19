@@ -7,7 +7,8 @@ class Entidad(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     razon_social = db.Column(db.String(100), nullable=False)
     tipo_institucion = db.Column(db.String(100), nullable=False)
-    sector = db.column(db.String(100), nullable=False)
+    sector = db.Column(db.String(100), nullable=False)
+
 
 
 def __init__(self, razon_social, tipo_institucion, sector):
