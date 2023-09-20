@@ -4,6 +4,7 @@ from src.core.db import db
 class Usuario(db.Model):
     __tablename__ = "Usuarios"
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
+    id_publico = db.Column(db.String(50), unique = True)
     nombre = db.Column(db.String, nullable=False)
     apellido = db.Column(db.String, nullable=False)
     usuario = db.Column(db.String, unique=True, nullable=False)

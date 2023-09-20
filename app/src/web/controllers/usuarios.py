@@ -1,6 +1,9 @@
-import json
+import uuid
 
-from flask import Blueprint, render_template, request, flash, redirect, session, abort
+from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify
+from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies
+from datetime import datetime, timedelta
 
 from src.core import usuarios
 from src.core import provincias
@@ -39,13 +42,48 @@ def agregar_usuario():
 
     if data_existente and inputs_validados:
         data_usuario.pop("contraseña2")
+        data_usuario["id_publico"] = str(uuid.uuid4())
         usuario = usuarios.agregar_usuario(data_usuario)
     
         if provincia != "":
             prov = provincias.get_provincia(provincia)
             usuarios.agregar_provincia(usuario, prov)
 
-        return 'Hello, World!'
+        return redirect("/usuarios/login")
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/usuarios/registro")
+    
+@usuario_blueprint.route("/login")
+def form_login():
+    """Esta funcion retorna el formulario para loguearse"""
+    return render_template("usuarios/login.html")
+
+@usuario_blueprint.post("/authenticate")
+def authenticate():
+    """Esta funcion realiza la autenticacion de usuarios"""
+    params = request.form
+    validacion, mensaje = validator_usuario.validar_inputs_login(usuario=params["usuario"], contraseña=params["contraseña"])
+
+    if not validacion:
+        flash(mensaje)
+        return redirect("/usuarios/login")
+    
+    usuario, mensaje = usuarios.verificar_usuario(params["usuario"], params["contraseña"])
+    
+    if usuario is None:
+        flash(mensaje)
+        return redirect("/usuarios/login")
+    
+    access_token = create_access_token(identity=usuario.id_publico)
+    response = jsonify(access_token)
+    set_access_cookies(response, access_token)
+    return "Te logueaste!"
+
+@usuario_blueprint.get("/logout_publico")
+@jwt_required()
+def logout_publico():
+    """Esta funcion desloguea a un socio de la app publica"""
+    response = jsonify()
+    unset_jwt_cookies(response)
+    return redirect("/usuarios/login")

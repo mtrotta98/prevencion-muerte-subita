@@ -29,3 +29,14 @@ def agregar_provincia(usuario, provincia):
     """Esta funcion relaciona a un usuario con una provincia"""
     usuario.provincias.append(provincia)
     db.session.commit()
+
+def verificar_usuario(usuario, contraseña):
+    """Esta funcion verifica la existencia del usuario que intenta loguearse"""
+    usuario = Usuario.query.filter(Usuario.usuario==usuario).first()
+    if usuario is None:
+        return None, "Datos incorrectos"
+    else:
+        if check_password_hash(usuario.contraseña, contraseña):
+            return usuario, "Datos correctos"
+        else:
+            return None, "Datos incorrectos"
