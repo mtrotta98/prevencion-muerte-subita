@@ -1,13 +1,13 @@
 import uuid
 
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask_jwt_extended import jwt_required, unset_jwt_cookies
 from flask_jwt_extended import create_access_token, set_access_cookies
-from datetime import datetime, timedelta
 
 from src.core import usuarios
 from src.core import provincias
 from src.core import roles
+from src.core import permisos
 from src.web.controllers.validators import validator_usuario
 
 usuario_blueprint = Blueprint("usuarios", __name__, url_prefix="/usuarios")
@@ -24,7 +24,7 @@ def form_usuario():
 def agregar_usuario():
     """Esta funcion llama al metodo correspondiente para dar de alta un usuario."""
     nombre_rol = request.form.get("rol")
-    provincia = request.form.get("prov")
+    data_provincias = request.form.getlist("prov")
     rol = roles.get_rol(nombre_rol)
 
     data_usuario = {
@@ -45,9 +45,10 @@ def agregar_usuario():
         data_usuario["id_publico"] = str(uuid.uuid4())
         usuario = usuarios.agregar_usuario(data_usuario)
     
-        if provincia != "":
-            prov = provincias.get_provincia(provincia)
-            usuarios.agregar_provincia(usuario, prov)
+        if data_provincias:
+            for provincia in data_provincias:
+                prov = provincias.get_provincia(provincia)
+                usuarios.agregar_provincia(usuario, prov)
 
         return redirect("/usuarios/login")
     else:
@@ -75,15 +76,14 @@ def authenticate():
         flash(mensaje)
         return redirect("/usuarios/login")
     
-    access_token = create_access_token(identity=usuario.id_publico)
-    response = jsonify(access_token)
-    set_access_cookies(response, access_token)
-    return "Te logueaste!"
+    access_token = create_access_token(identity=str(usuario.id))
+    resp = make_response(redirect('/', 302))
+    set_access_cookies(resp, access_token)
 
-@usuario_blueprint.get("/logout_publico")
-@jwt_required()
-def logout_publico():
-    """Esta funcion desloguea a un socio de la app publica"""
-    response = jsonify()
-    unset_jwt_cookies(response)
-    return redirect("/usuarios/login")
+    return resp
+
+@usuario_blueprint.get("/logout")
+def unset_jwt():
+    resp = make_response(redirect("/usuarios/login", 302))
+    unset_jwt_cookies(resp)
+    return resp
