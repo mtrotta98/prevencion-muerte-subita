@@ -2,7 +2,7 @@ import uuid
 
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
-from flask_jwt_extended import create_access_token, set_access_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies, get_jwt_identity
 
 from src.core import usuarios
 from src.core import provincias
@@ -19,6 +19,19 @@ def form_usuario():
         "provincias": provincias.get_provincias()
     }
     return render_template("usuarios/registro.html", **kwargs)
+
+@usuario_blueprint.route("/inicio")
+@jwt_required()
+def inicio():
+    usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
+    kwargs = {
+        "nombre": usuario.nombre,
+        "apellido": usuario.apellido,
+        "rol": rol.nombre,
+    }
+    return render_template("index.html", **kwargs)
 
 @usuario_blueprint.route("/alta", methods=["POST"])
 def agregar_usuario():
@@ -77,13 +90,13 @@ def authenticate():
         return redirect("/usuarios/login")
     
     access_token = create_access_token(identity=str(usuario.id))
-    resp = make_response(redirect('/', 302))
+    resp = make_response(redirect('/usuarios/inicio', 302))
     set_access_cookies(resp, access_token)
 
     return resp
 
 @usuario_blueprint.get("/logout")
-def unset_jwt():
+def logout():
     resp = make_response(redirect("/usuarios/login", 302))
     unset_jwt_cookies(resp)
     return resp
