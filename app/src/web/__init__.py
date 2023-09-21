@@ -40,5 +40,15 @@ def create_app(env="development", static_folder="static"):
             "destino": "login",
         }
         return render_template("error.html", **kwargs)
+    
+    @jwt.expired_token_loader
+    def custom_expired_response(_err):
+        kwargs = {
+            "error_name": "403 Forbidden Error",
+            "error_description": "Expiro el token, por favor loguearse nuevamente",
+            "redirect_to": "usuarios.form_login",
+            "destino": "login",
+        }
+        return render_template("error.html", **kwargs)
 
     return app
