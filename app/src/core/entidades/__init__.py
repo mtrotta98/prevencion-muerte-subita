@@ -6,4 +6,5 @@ def get_entidades():
     return Entidad.query.all()
 
 def get_entidad(id):
+    """Devuelve una sede buscada por su id"""
     return Entidad.query.filter_by(id=id).first()
