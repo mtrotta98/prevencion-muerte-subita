@@ -47,7 +47,38 @@
             <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
-                  <h5 class="card-title text-center mb-5 fw-light fs-5">Registro</h5>
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Registro de Entidades</h5>
+                  <form action="{{ url_for('entidades.agregar_entidad') }}" method="POST">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">CUIT</label>
+                                <input type="text" class="form-control" name="cuit" placeholder="CUIT" required />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Razon Social</label>
+                                <input type="text" class="form-control" name="razon_social" placeholder="Razon Social" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Tipo de Institucion</label>
+                                <input type="text" class="form-control" name="tipo_institucion" placeholder="Tipo de Institucion" required />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="form-label">Sector</label>
+                                <input type="text" class="form-control" name="sector" placeholder="Sector" required />
+                            </div>
+                        </div>
+                    </div>
+                    <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
+                  </form>
                 </div>
               </div>
             </div>
