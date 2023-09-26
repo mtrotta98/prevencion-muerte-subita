@@ -1,8 +1,10 @@
 from flask import Flask, render_template
+from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required
 from src.web.config import config
 from src.core.db import db, init_db
+from src.web.helpers import handlers
 
 from src.web.controllers.usuarios import usuario_blueprint
 
@@ -14,7 +16,11 @@ def create_app(env="development", static_folder="static"):
     app.config.from_object(config[env])
     app.config['JWT_TOKEN_LOCATION'] = ['cookies']
     app.config['JWT_SECRET_KEY'] = 'super-secret'
+    app.config['JWT_ACCESS_TOKEN_EXPIRES '] = False
+    app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+    app.config['JWT_ACCESS_CSRF_HEADER_NAME'] = "csrf_access_token"
 
+    csrf = CSRFProtect(app)
     jwt = JWTManager(app)
 
     @app.route('/')
@@ -42,7 +48,7 @@ def create_app(env="development", static_folder="static"):
         return render_template("error.html", **kwargs)
     
     @jwt.expired_token_loader
-    def custom_expired_response(_err):
+    def custom_expired_response(jwt_header, jwt_payload):
         kwargs = {
             "error_name": "403 Forbidden Error",
             "error_description": "Expiro el token, por favor loguearse nuevamente",
@@ -50,5 +56,7 @@ def create_app(env="development", static_folder="static"):
             "destino": "login",
         }
         return render_template("error.html", **kwargs)
+    
+    app.register_error_handler(403, handlers.not_authorized_error)
 
     return app

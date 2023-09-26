@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Solicitudes - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Lista de Solicitudes</h4>
+                </div>
+            </div>
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Administrador</th>
+                <th>Sede</th>
+                <th>Estado Solicitud</th>
+                <th>Razon</th>
+                <th>Ver</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for solicitud in solicitudes %}
+                <tr>
+                    <td>
+                        {{solicitud['Nombre']}} {{solicitud['Apellido']}}
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        {{solicitud['Estado']}}
+                    </td>
+                    <td>
+                        {% if solicitud['Estado'] != 'Pendiente' %}
+                            {{solicitud['Razon']}}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if solicitud['Estado'] == 'Pendiente' %}
+                            <a href="{{ url_for('usuarios.info_solicitud', id=solicitud['id_solicitud']) }}" class="btn btn-primary">Ver Mas</a>
+                        {% else %}
+                            Evaluada
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
