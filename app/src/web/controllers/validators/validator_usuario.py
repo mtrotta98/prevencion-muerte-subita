@@ -22,3 +22,12 @@ def validar_inputs(nombre, apellido, usuario, contraseña, contraseña2, dni, id
         return False, "La contraseña debe contener entre 6 y 10 caracteres."
     else:
         return True, ""
+    
+def validar_inputs_login(usuario, contraseña):
+    """Esta funcion valida los inputs del login"""
+    if not (contraseña != "" and usuario != ""):
+        return False, "Todos los datos deben estar completos"
+    elif not (len(contraseña) >= 6 and len(contraseña) <= 10):
+        return False, "La contraseña debe contener entre 6 y 10 caracteres."
+    else:
+        return True, ""

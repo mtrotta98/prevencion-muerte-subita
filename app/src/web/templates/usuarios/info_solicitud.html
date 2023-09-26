@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Info Solicitud - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+    <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+      <div class="card border-0 shadow rounded-3 my-5">
+        <div class="card-body p-4 p-sm-5">
+          <h5 class="card-title text-center mb-5 fw-light fs-5">Evaluar</h5>
+          <form action="{{ url_for('usuarios.evaluacion_solicitud') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Administrador</label>
+                            <input type="text" class="form-control" name="nombre_adm" value="{{nombre_admin}}" readonly required />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre Sede</label>
+                            <input type="text" class="form-control" name="nombre_sede" required readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones</label>
+                            <input type="text-area" class="form-control" name="observacion" placeholder="Observacion sobre la solicitud" required />
+                        </div>
+                    </div>
+                    <div class="col-6" hidden>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="id" placeholder="Observacion sobre la solicitud" value="{{id_solicitud}}" required readonly/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rol" value="Aceptada" checked>
+                            <label class="form-check-label" for="Aceptar">
+                                Aceptar
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="rol" value="Rechazada"">
+                            <label class="form-check-label" for="Rechazar">
+                              Rechazar
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-primary btn-login text-uppercase fw-bold mt-2" type="submit" value="Aceptar" />
+            </form>
+        </div>
+      </div>
+    </div>
+{% endblock %}

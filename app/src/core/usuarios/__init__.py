@@ -2,9 +2,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from src.core.usuarios.usuarios import Usuario
 from src.core.db import db
 
-def get_usuarios():
-    """Esta funcion devuelve todos los usuarios"""
-    return Usuario.query.all()
+def get_usuario(id):
+    """Esta funcion devuelve un usuario por su id"""
+    return Usuario.query.filter_by(id=id).first()
 
 def agregar_usuario(data):
     """Esta funcion da de alta un usuario"""
@@ -29,3 +29,14 @@ def agregar_provincia(usuario, provincia):
     """Esta funcion relaciona a un usuario con una provincia"""
     usuario.provincias.append(provincia)
     db.session.commit()
+
+def verificar_usuario(usuario, contraseña):
+    """Esta funcion verifica la existencia del usuario que intenta loguearse"""
+    usuario = Usuario.query.filter(Usuario.usuario==usuario).first()
+    if usuario is None:
+        return None, "Datos incorrectos"
+    else:
+        if check_password_hash(usuario.contraseña, contraseña):
+            return usuario, "Datos correctos"
+        else:
+            return None, "Datos incorrectos"
