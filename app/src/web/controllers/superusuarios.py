@@ -1,4 +1,7 @@
 import uuid
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort
 from flask_jwt_extended import jwt_required
@@ -63,8 +66,31 @@ def alta_admin():
                 prov = provincias.get_provincia(provincia)
                 usuarios.agregar_provincia(usuario, prov)
 
+        sender = "nicolastrotta88@gmail.com"
+        receiver = data_usuario["email"]
+        nombre = data_usuario["nombre"]
+        apellido = data_usuario["apellido"]
+        usuario = data_usuario["usuario"]
+        contrasenia = data_usuario["contraseña"]
+
+        message = MIMEMultipart("alternative")
+        message["Subject"] = "multipart test"
+        message["From"] = sender
+        message["To"] = receiver
+
+        text = f"""\
+        Bienvenido {nombre} {apellido} para ingresar al sistema debera usar las siguientes credenciales 
+        Usuario {usuario} 
+        Contrasenia {contrasenia}."""
+
+        part = MIMEText(text, "plain")
+        message.attach(part)
+
+        with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
+            server.login("d0ee292999b484", "3ab3cd187c026c")
+            server.sendmail(sender, receiver, message.as_string())
+
         return redirect("/usuarios/inicio")
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/super_usuario/form_alta")
-
