@@ -17,6 +17,32 @@
                     <h4>Lista de Solicitudes</h4>
                 </div>
             </div>
+            <div class="col-5 ms-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <form
+                            class="d-flex"
+                            method="GET"
+                            action="{{ url_for('usuarios.listado_solicitudes') }}"
+                        >
+                            <select
+                                class="form-control select-input me-2"
+                                aria-label="Buscar por activo"
+                                name="tipo"
+                                id="tipo"
+                            >
+                                <option value="">----Seleccione una opcion----</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Aceptada">Aceptada</option>
+                                <option value="Rechazada">Rechazada</option>
+                            </select>
+                            <button class="btn btn-outline-success" type="submit">
+                                Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </caption>
         <thead class="bg-light">
             <tr>

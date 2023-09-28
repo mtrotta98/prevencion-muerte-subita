@@ -111,7 +111,8 @@ def listado_solicitudes():
     info_solicitudes = []
     usuario = usuarios.get_usuario(usuario_actual)
     rol = roles.get_rol(usuario.id_rol)
-    solis = solicitudes.solicitudes()
+    tipo = request.args.get("tipo") if request.args.get("tipo", type=str) != "" else None
+    solis = solicitudes.solicitudes(tipo)
     for soli in solis:
         data_usuario = usuarios.get_usuario(soli.id_usuario)
         dict_usuario = {"Nombre": data_usuario.nombre, "Apellido": data_usuario.apellido, "Estado": soli.estado, "Razon": soli.razon, "id_solicitud": soli.id}

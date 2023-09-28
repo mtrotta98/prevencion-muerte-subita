@@ -1,8 +1,10 @@
 from src.core.solicitudes.solicitudes import Solicitud
 from src.core.db import db
 
-def solicitudes():
+def solicitudes(tipo):
     """Esta funcion devuelve todas las solicitudes existentes"""
+    if tipo:
+        return Solicitud.query.filter_by(estado=tipo).all()
     return Solicitud.query.all()
 
 def get_solicitud(id):
