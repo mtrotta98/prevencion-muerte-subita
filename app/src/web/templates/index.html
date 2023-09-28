@@ -11,19 +11,9 @@
 {% block content %} 
 <div class="col-6 mt-5">
     {% if rol == 'Administrador Provincial' %}
-    <div class="card text-center">
-        <div class="card-header">
-          Featured
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Evaluar solicitudes</h5>
-          <p class="card-text">Aceptar/Rechazar solicitudes para representar un espacio obligado</p>
-          <a href="{{ url_for('usuarios.listado_solicitudes') }}" class="btn btn-primary">Ver</a>
-        </div>
-        <div class="card-footer text-muted">
-          <br>
-        </div>
-    </div>
+        {% include 'admin_provincial/tareas_admin_provincial.html' %}
+    {% elif rol == 'Super Usuario' %}
+        {% include 'super_usuario/tareas_super_usuario.html' %}
     {% endif %}
 </div>
 {% endblock %}

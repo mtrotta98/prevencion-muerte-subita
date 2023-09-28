@@ -7,7 +7,7 @@ class Solicitud(db.Model):
     id_usuario = db.Column(db.Integer, db.ForeignKey("Usuarios.id"))
     #id_sede = db.Column(db.Integer, db.ForeignKey("Sede.id"))
     estado = db.Column(db.String, nullable=False)
-    razon = db.Column(db.String, nullable=False)
+    razon = db.Column(db.String)
     
 
 

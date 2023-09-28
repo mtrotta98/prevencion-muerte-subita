@@ -9,6 +9,8 @@ from src.web.helpers import handlers
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.entidades import entidad_blueprint
 from src.web.controllers.sedes import sede_blueprint
+from src.web.controllers.admin_provincial import admin_provincial
+from src.web.controllers.superusuarios import super_usuario
 
 #from src.core.db import db, init_db
 
@@ -33,6 +35,8 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(entidad_blueprint)
     app.register_blueprint(sede_blueprint)
+    app.register_blueprint(admin_provincial)
+    app.register_blueprint(super_usuario)
     
     with app.app_context():
         init_db(app)

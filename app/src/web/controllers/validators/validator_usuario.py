@@ -1,10 +1,11 @@
 import re
 
 
-def validar_inputs(nombre, apellido, usuario, contraseña, contraseña2, dni, id_rol):
+def validar_inputs(nombre, apellido, usuario, contraseña, contraseña2, dni, email, id_rol):
     """Esta funcion valida que los inputs sean del tipo correcto."""
     regex_nombre_apellido = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+$"
-    if not (nombre != "" and contraseña != "" and apellido != "" and dni != "" and usuario != ""):
+    regex_email = "^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$"
+    if not (nombre != "" and contraseña != "" and apellido != "" and dni != "" and usuario != "" and email != ""):
         return False, "Todos los datos deben estar completos"
     elif not (re.search(regex_nombre_apellido, nombre)):
         return False, "El nombre debe ser valido"
@@ -20,6 +21,8 @@ def validar_inputs(nombre, apellido, usuario, contraseña, contraseña2, dni, id
         return False, "Las contraseñas deben coincidir"
     elif not (len(contraseña) >= 6 and len(contraseña) <= 10):
         return False, "La contraseña debe contener entre 6 y 10 caracteres."
+    elif not (re.search(regex_email, email)):
+        return False, "El email debe ser valido"
     else:
         return True, ""
     

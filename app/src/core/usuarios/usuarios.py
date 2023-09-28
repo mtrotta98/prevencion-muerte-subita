@@ -10,6 +10,7 @@ class Usuario(db.Model):
     usuario = db.Column(db.String, unique=True, nullable=False)
     contraseña = db.Column(db.String, nullable=False)
     dni = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
     id_rol = db.Column(db.Integer, db.ForeignKey("Roles.id"))
     
 
