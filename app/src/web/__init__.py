@@ -1,9 +1,11 @@
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required
 from src.web.config import config
 from src.core.db import db, init_db
+from src.core import usuarios
 from src.web.helpers import handlers
 
 from src.web.controllers.usuarios import usuario_blueprint
@@ -61,6 +63,16 @@ def create_app(env="development", static_folder="static"):
         }
         return render_template("error.html", **kwargs)
     
+    def print_users():
+        with app.app_context():
+            users = usuarios.get_usuarios_admin_provincial()
+            for user in users:
+                print(f"usuarios {user.nombre}")
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=print_users, trigger="interval", seconds=60)
+    scheduler.start()
+
     app.register_error_handler(403, handlers.not_authorized_error)
 
     return app
