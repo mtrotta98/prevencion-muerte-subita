@@ -47,7 +47,61 @@
             <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
-                  <h5 class="card-title text-center mb-5 fw-light fs-5">Registro</h5>
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Registro de Sede</h5>
+                  <form action="{{ url_for('sedes.agregar_sede') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <div class="row">
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Nombre</label>
+                              <input type="text" class="form-control" name="nombre" placeholder="Nombre" required />
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Flujo de Personas</label>
+                              <input type="text" class="form-control" name="flujo_personas" placeholder="Flujo de Personas" required />
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Latitud</label>
+                              <input type="text" class="form-control" name="latitud" placeholder="Latitud" required />
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Longitud</label>
+                              <input type="text" class="form-control" name="longitud" placeholder="Longitud" required />
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Superficie</label>
+                              <input type="text" class="form-control" name="superficie" placeholder="Superficie" required />
+                          </div>
+                      </div>
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Personal Estable</label>
+                              <input type="text" class="form-control" name="personal_estable" placeholder="Personal Estable" required />
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                          <div class="mb-3">
+                              <label class="form-label">Cantidad de Pisos</label>
+                              <input type="text" class="form-control" name="cantidad_pisos" placeholder="Cantidad de Pisos" required />
+                          </div>
+                      </div>
+                    </div>
+                    <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
+                  </form>
                 </div>
               </div>
             </div>

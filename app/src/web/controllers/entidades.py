@@ -26,7 +26,7 @@ def agregar_entidad():
     }
 
     data_existente, mensaje = entidades.validar_datos_existentes(data_entidad["cuit"], data_entidad["razon_social"])
-    inputs_validados, mensaje2 = validator_entidad_sede.validar_inputs_entidad_sede(**data_entidad)
+    inputs_validados, mensaje2 = validator_entidad_sede.validar_inputs_entidad(**data_entidad)
 
     if data_existente and inputs_validados:
         entidad = entidades.agregar_entidad(data_entidad)

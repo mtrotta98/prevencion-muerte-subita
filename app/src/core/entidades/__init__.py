@@ -21,7 +21,7 @@ def agregar_entidad(data):
 
 
 def validar_datos_existentes(cuit, razon_social):
-    """Esta funcion valida que los datos de alta de usuario no existan en la base de datos"""
+    """Esta funcion valida que los datos de alta de entidad no existan en la base de datos"""
 
     cuit_existente = Entidad.query.filter_by(cuit=cuit).first()
     razon_social_existente = Entidad.query.filter_by(razon_social=razon_social).first()
