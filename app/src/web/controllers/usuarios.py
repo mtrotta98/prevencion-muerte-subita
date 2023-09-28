@@ -47,10 +47,11 @@ def agregar_usuario():
         "contraseña": request.form.get("pass1"),
         "contraseña2": request.form.get("pass2"),
         "dni": request.form.get("dni"),
+        "email": request.form.get("email"),
         "id_rol": rol.id
     }
 
-    data_existente, mensaje = usuarios.validar_datos_existentes(data_usuario["usuario"], data_usuario["dni"])
+    data_existente, mensaje = usuarios.validar_datos_existentes(data_usuario["usuario"], data_usuario["dni"], data_usuario["email"])
     inputs_validados, mensaje2 = validator_usuario.validar_inputs(**data_usuario)
 
     if data_existente and inputs_validados:
@@ -101,61 +102,3 @@ def logout():
     resp = make_response(redirect("/usuarios/login", 302))
     unset_jwt_cookies(resp)
     return resp
-
-@usuario_blueprint.get("/solicitudes")
-@jwt_required()
-def listado_solicitudes():
-    usuario_actual = get_jwt_identity()
-    if not (validator_permission.has_permission(usuario_actual, "administrador_provincial_autorizaciones")):
-        return abort(403)
-    info_solicitudes = []
-    usuario = usuarios.get_usuario(usuario_actual)
-    rol = roles.get_rol(usuario.id_rol)
-    tipo = request.args.get("tipo") if request.args.get("tipo", type=str) != "" else None
-    solis = solicitudes.solicitudes(tipo)
-    for soli in solis:
-        data_usuario = usuarios.get_usuario(soli.id_usuario)
-        dict_usuario = {"Nombre": data_usuario.nombre, "Apellido": data_usuario.apellido, "Estado": soli.estado, "Razon": soli.razon, "id_solicitud": soli.id}
-        info_solicitudes.append(dict_usuario)
-    kwargs = {
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido,
-        "rol": rol.nombre,
-        "solicitudes": info_solicitudes,
-    }
-    return render_template("usuarios/evaluar_solicitudes.html", **kwargs)
-
-@usuario_blueprint.route("/info_solicitud/<id>")
-@jwt_required()
-def info_solicitud(id):
-    usuario_actual = get_jwt_identity()
-    if not (validator_permission.has_permission(usuario_actual, "administrador_provincial_autorizaciones")):
-        return abort(403)
-    usuario = usuarios.get_usuario(usuario_actual)
-    solicitud = solicitudes.get_solicitud(id)
-    id_admin = solicitud.id_usuario
-    data_admin = usuarios.get_usuario(id_admin)
-    kwargs = {
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido,
-        "nombre_admin": data_admin.nombre + " " + data_admin.apellido,
-        "id_solicitud": id,
-        #"nombre_sede":,
-    }
-    return render_template("usuarios/info_solicitud.html", **kwargs)
-
-@usuario_blueprint.post("/aceptar_solicitud")
-@jwt_required()
-def evaluacion_solicitud():
-    usuario_actual = get_jwt_identity()
-    if not (validator_permission.has_permission(usuario_actual, "administrador_provincial_autorizaciones")):
-        return abort(403)
-    data_solicitud = {
-        "id": request.form.get("id"),
-        "estado": request.form.get("rol"),
-        "razon": request.form.get("observacion"),
-    }
-    
-    solicitudes.actualizar_solicitud(data_solicitud)
-
-    return redirect("/usuarios/solicitudes")

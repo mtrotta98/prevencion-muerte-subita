@@ -13,7 +13,7 @@
       <div class="card border-0 shadow rounded-3 my-5">
         <div class="card-body p-4 p-sm-5">
           <h5 class="card-title text-center mb-5 fw-light fs-5">Evaluar</h5>
-          <form action="{{ url_for('usuarios.evaluacion_solicitud') }}" method="POST">
+          <form action="{{ url_for('admin_provincial.evaluacion_solicitud') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div class="col-6">

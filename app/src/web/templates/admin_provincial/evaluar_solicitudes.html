@@ -23,7 +23,7 @@
                         <form
                             class="d-flex"
                             method="GET"
-                            action="{{ url_for('usuarios.listado_solicitudes') }}"
+                            action="{{ url_for('admin_provincial.listado_solicitudes') }}"
                         >
                             <select
                                 class="form-control select-input me-2"
@@ -74,7 +74,7 @@
                     </td>
                     <td>
                         {% if solicitud['Estado'] == 'Pendiente' %}
-                            <a href="{{ url_for('usuarios.info_solicitud', id=solicitud['id_solicitud']) }}" class="btn btn-primary">Ver Mas</a>
+                            <a href="{{ url_for('admin_provincial.info_solicitud', id=solicitud['id_solicitud']) }}" class="btn btn-primary">Ver Mas</a>
                         {% else %}
                             Evaluada
                         {% endif %}
