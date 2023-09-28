@@ -26,6 +26,6 @@ def validar_datos_existentes(nombre):
 
     nombre_existente = Sede.query.filter_by(nombre=nombre).first()
     if nombre_existente is not None:
-        return False, "El nombre ya esta cargado en el sistema."
+        return False, "La sede ya esta cargada en el sistema."
     else:
         return True, ""
