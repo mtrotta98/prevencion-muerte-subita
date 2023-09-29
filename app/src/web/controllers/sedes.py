@@ -1,6 +1,7 @@
 import json
 
 from src.core import sedes
+from src.core import provincias
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 from src.web.controllers.validators import validator_entidad_sede
 
@@ -9,7 +10,7 @@ sede_blueprint = Blueprint("sedes", __name__, url_prefix="/sedes")
 @sede_blueprint.route("/registro")
 def form_sede():
     kwargs = {
-        "lista_sedes" : sedes.get_sedes()
+        "provincias" : provincias.get_provincias()
     }
     return render_template("sedes/registro_sede.html", **kwargs)
 
@@ -33,8 +34,9 @@ def agregar_sede():
 
     if data_existente and inputs_validos:
         sede = sedes.agregar_sede(data_sede)
-
-        return "Hello, World!"
+        mensaje_exito =  "La sede se ha cargado con exito."
+        flash(mensaje_exito)
+        return redirect("/sedes/registro")
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/sedes/registro")

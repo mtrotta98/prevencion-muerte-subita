@@ -5,11 +5,11 @@ class Sede(db.Model):
 
     # Columnas
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
-    latitud = db.Column(db.Integer, nullable=False)
-    longitud = db.Column(db.Integer, nullable=False)
+    latitud = db.Column(db.Float, nullable=False)
+    longitud = db.Column(db.Float, nullable=False)
     nombre = db.Column(db.String(100), nullable=False)
     flujo_personas = db.Column(db.Integer, nullable=False)
-    superficie = db.Column(db.Integer, nullable=False)
+    superficie = db.Column(db.Float, nullable=False)
     personal_estable = db.Column(db.Integer, nullable=False)
     pisos = db.Column(db.Integer, nullable=False)
     estado = db.Column(db.String(100), nullable=False)

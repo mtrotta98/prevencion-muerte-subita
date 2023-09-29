@@ -30,8 +30,9 @@ def agregar_entidad():
 
     if data_existente and inputs_validados:
         entidad = entidades.agregar_entidad(data_entidad)
-        
-        return 'Hello, World!'
+        mensaje_exito = "La entidad se ha cargado con exito."
+        flash(mensaje_exito)
+        return redirect("/entidades/registro")
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/entidades/registro")
