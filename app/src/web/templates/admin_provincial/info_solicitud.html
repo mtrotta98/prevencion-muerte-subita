@@ -25,7 +25,22 @@
                     <div class="col-6">
                         <div class="mb-3">
                             <label class="form-label">Nombre Sede</label>
-                            <input type="text" class="form-control" name="nombre_sede" required readonly />
+                            <input type="text" class="form-control" name="nombre_sede" value="{{nombre_sede}}" required readonly />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Cuit Entidad Perteneciente</label>
+                            <input type="text" class="form-control" name="cep" value="{{cuit_entidad}}" readonly required />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label">Razon Social Entidad Perteneciente</label>
+                            <input type="text" class="form-control" name="rsep" value="{{rs_entidad}}" required readonly />
                         </div>
                     </div>
                 </div>
@@ -47,13 +62,13 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="rol" value="Aceptada" checked>
+                            <input class="form-check-input" type="radio" name="estado" value="Aceptada" checked>
                             <label class="form-check-label" for="Aceptar">
                                 Aceptar
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="rol" value="Rechazada"">
+                            <input class="form-check-input" type="radio" name="estado" value="Rechazada"">
                             <label class="form-check-label" for="Rechazar">
                               Rechazar
                             </label>
