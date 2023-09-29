@@ -1,43 +1,5 @@
 from src.core.db import db
 
-
-Provincia_Sede = db.Table(
-    "Provincia_Sede",
-    db.Column(
-        "id_provincia",
-        db.Integer,
-        db.ForeignKey("Provincias.id"),
-        nullable=False,
-        primary_key=True,
-    ),
-    db.Column(
-        "id_sede",
-        db.Integer,
-        db.ForeignKey("Sedes.id"),
-        nullable=False,
-        primary_key=True,
-    ),
-)
-
-Entidad_Sede = db.Table(
-    "Entidad_Sede",
-    db.Column(
-        "id_entidad",
-        db.Integer,
-        db.ForeignKey("Entidades.id"),
-        nullable=False,
-        primary_key=True,
-    ),
-    db.Column(
-        "id_sede",
-        db.Integer,
-        db.ForeignKey("Sedes.id"),
-        nullable=False,
-        primary_key=True,
-    ),
-)
-
-
 class Sede(db.Model):
     __tablename__ = "Sedes"
 
@@ -51,9 +13,8 @@ class Sede(db.Model):
     personal_estable = db.Column(db.Integer, nullable=False)
     pisos = db.Column(db.Integer, nullable=False)
     estado = db.Column(db.String(100), nullable=False)
-
-    provincias = db.relationship("Provincia", secondary=Provincia_Sede, backref="sedes")
-    entidades = db.relationship("Entidad", secondary=Entidad_Sede, backref="sedes")
+    id_provincia = db.Column(db.Integer, db.ForeignKey("Provincias.id"))
+    id_entidad = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
 
 
 def __init__(self, latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado):
