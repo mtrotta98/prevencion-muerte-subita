@@ -10,7 +10,7 @@ class Ddjj(db.Model):
     protocolo_accion = db.Column(db.Boolean)
     sistema_emergencia = db.Column(db.Boolean)
     cantidad_dea = db.Column(db.Boolean)
-    #id_sede = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
+    id_sede = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
     
 
 

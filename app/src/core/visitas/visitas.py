@@ -7,7 +7,7 @@ class Visita(db.Model):
     fecha = db.Column(db.Date)
     resultado = db.Column(db.Boolean)
     observacion = db.Column(db.String(50))
-    #id_sede = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
+    id_sede = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
     
 
 
