@@ -1,5 +1,23 @@
 from src.core.db import db
 
+Usuario_Sede = db.Table(
+    "Usuario_Sede",
+    db.Column(
+        "id_usuario",
+        db.Integer,
+        db.ForeignKey("Usuarios.id"),
+        nullable=False,
+        primary_key=True,
+    ),
+    db.Column(
+        "id_sede",
+        db.Integer,
+        db.ForeignKey("Sedes.id"),
+        nullable=False,
+        primary_key=True,
+    ),
+)
+
 class Sede(db.Model):
     __tablename__ = "Sedes"
 
@@ -15,6 +33,8 @@ class Sede(db.Model):
     estado = db.Column(db.String(100), nullable=False)
     id_provincia = db.Column(db.Integer, db.ForeignKey("Provincias.id"))
     id_entidad = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
+
+    usuarios = db.relationship("Usuario", secondary=Usuario_Sede, backref="sedes")
 
 
 def __init__(self, latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado):
