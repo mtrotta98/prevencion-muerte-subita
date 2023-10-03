@@ -41,6 +41,9 @@ def carga_ddjj():
         flash("Todos los datos deben estar marcados con SI para cargar la declaracion jurada")
         return redirect("/representante/ddjj")
     
+    #if not ddjj.verificar_ddjj_existente(id_sede):
+    #    flash("Ya existen una declaracion jurada para la sede seleccionada")
+    #    return redirect("/representante/ddjj")
     declaracion = ddjj.agregar_ddjj(data_ddjj)
     visita = visitas.agregar_visita()
     return redirect("/usuarios/inicio")
