@@ -14,6 +14,8 @@
         {% include 'admin_provincial/tareas_admin_provincial.html' %}
     {% elif rol == 'Super Usuario' %}
         {% include 'super_usuario/tareas_super_usuario.html' %}
+    {% elif rol == 'Representante' %}
+        {% include 'representante/listado_entidades_existentes.html' %}
     {% endif %}
 </div>
 {% endblock %}
