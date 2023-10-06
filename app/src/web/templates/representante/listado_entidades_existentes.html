@@ -24,7 +24,7 @@
                 <th>Razon Social</th>
                 <th>Tipo de Institucion</th>
                 <th>Sector</th>
-                <th>Ver</th>
+                <th>Ver Sedes</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +41,9 @@
                     </td>
                     <td>
                         {{entidad['sector']}}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('representante.sedes_asociadas', id=entidad['id']) }}" class="btn btn-primary">Ver</a>
                     </td>
                 </tr>
             {% endfor %}

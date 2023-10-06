@@ -29,3 +29,16 @@ def validar_datos_existentes(nombre):
         return False, "La sede ya esta cargada en el sistema."
     else:
         return True, ""
+    
+def get_sedes_asociadas(id):
+    """Devuelve las sedes asociadas a una entidad"""
+
+    id_entidad = id
+    sedes = get_sedes()
+    sedes_asociadas = []
+    for sede in sedes:
+        id_sede = sede.id_entidad
+        if id_sede == id_entidad:
+            sedes_asociadas.append(sede)
+   
+    return sedes_asociadas
