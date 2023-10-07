@@ -16,6 +16,19 @@
                 <div class="col-5">
                     <h4>Lista de Entidades</h4>
                 </div>
+                <div class="col-5 ms-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <form class="d-flex" method="GET" action="{{ url_for('representante.buscar_entidad') }}">
+                                <input class="form-control me-2" type="search" placeholder="Buscar Entidad"
+                                    aria-label="Buscar Entidad" id="busqueda" name="busqueda" />
+                                <button class="btn btn-outline-success" type="submit">
+                                    Buscar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </caption>
         <thead class="bg-light">
@@ -49,5 +62,7 @@
             {% endfor %}
         </tbody>
     </table>
+    <br>
+    <a href="{{ url_for('entidades.form_entidad') }}" class="btn btn-primary">Agregar Entidad</a>
 </div>
 {% endblock %}

@@ -18,11 +18,11 @@ def validar_inputs_entidad(cuit, razon_social, tipo_institucion, sector):
         return True, ""
     
 
-def validar_inputs_sede(nombre, flujo_personas, latitud, longitud, superficie, personal_estable, pisos, estado):
+def validar_inputs_sede(nombre, flujo_personas, latitud, longitud, superficie, personal_estable, pisos, estado, id_entidad):
     """Esta funcion valida quqe los inputs de la sede sean del tipo correcto"""
 
     regex_campo = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+$"
-    if not (nombre != "" and flujo_personas != "" and latitud != "" and longitud != "" and superficie != "" and personal_estable != "" and pisos != ""):
+    if not (nombre != "" and flujo_personas != "" and latitud != "" and longitud != "" and superficie != "" and personal_estable != "" and pisos != "" and id_entidad != ""):
         return False, "Todos los datos deben estar completos"
     elif not (re.search(regex_campo, nombre)):
         return False, "El nombre debe ser valido"
@@ -40,5 +40,7 @@ def validar_inputs_sede(nombre, flujo_personas, latitud, longitud, superficie, p
         return False, "La cantidad de pisos debe ser un numero entero"
     elif not (estado):
         return False, "El estado debe ser valido"
+    elif not (id_entidad.isnumeric()):
+        return False, "El id de la entidad no es numerico"
     else:
         return True, ""

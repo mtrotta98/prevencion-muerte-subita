@@ -31,3 +31,10 @@ def validar_datos_existentes(cuit, razon_social):
         return False, "La razon social ya esta cargada en el sistema."
     else:
         return True, ""
+
+
+def filtrar_entidades(busqueda):
+    """Esta funcion retorna a una entidad buscada por su nombre"""
+    with db.session.no_autoflush:
+        entidad = Entidad.query.filter_by(razon_social=busqueda).first()
+    return entidad
