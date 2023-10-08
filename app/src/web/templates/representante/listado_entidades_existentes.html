@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado Entidades - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Lista de Entidades</h4>
+                </div>
+                <div class="col-5 ms-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <form class="d-flex" method="GET" action="{{ url_for('representante.buscar_entidad') }}">
+                                <input class="form-control me-2" type="search" placeholder="Buscar Entidad"
+                                    aria-label="Buscar Entidad" id="busqueda" name="busqueda" />
+                                <button class="btn btn-outline-success" type="submit">
+                                    Buscar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>CUIT</th>
+                <th>Razon Social</th>
+                <th>Tipo de Institucion</th>
+                <th>Sector</th>
+                <th>Ver Sedes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entidad in lista_entidades %}
+                <tr>
+                    <td>
+                        {{entidad['cuit']}}
+                    </td>
+                    <td>
+                        {{entidad['razon_social']}}
+                    </td>
+                    <td>
+                        {{entidad['tipo_institucion']}}
+                    </td>
+                    <td>
+                        {{entidad['sector']}}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('representante.sedes_asociadas', id=entidad['id']) }}" class="btn btn-primary">Ver</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{{ url_for('entidades.form_entidad') }}" class="btn btn-primary">Agregar Entidad</a>
+</div>
+{% endblock %}
