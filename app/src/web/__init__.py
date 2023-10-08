@@ -69,14 +69,14 @@ def create_app(env="development", static_folder="static"):
         }
         return render_template("error.html", **kwargs)
     
-    def print_users():
+    def verificar_certificaciones():
         with app.app_context():
             users = usuarios.get_usuarios_admin_provincial()
             for user in users:
                 print(f"usuarios {user.nombre}")
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=print_users, trigger="interval", seconds=60)
+    scheduler.add_job(func=verificar_certificaciones, trigger="interval", seconds=60) # 86400
     scheduler.start()
 
     app.register_error_handler(403, handlers.not_authorized_error)
