@@ -12,6 +12,7 @@ from src.core import provincias
 from src.core import roles
 from src.core import solicitudes
 from src.web.controllers.validators import validator_usuario, validator_permission
+from src.web.helpers.send_emails import enviar_email_alta_admin_prov
 
 super_usuario = Blueprint("super_usuario", __name__, url_prefix="/super_usuario")
 
@@ -66,29 +67,7 @@ def alta_admin():
                 prov = provincias.get_provincia(provincia)
                 usuarios.agregar_provincia(usuario, prov)
 
-        sender = "nicolastrotta88@gmail.com"
-        receiver = data_usuario["email"]
-        nombre = data_usuario["nombre"]
-        apellido = data_usuario["apellido"]
-        usuario = data_usuario["usuario"]
-        contrasenia = data_usuario["contraseña"]
-
-        message = MIMEMultipart("alternative")
-        message["Subject"] = "multipart test"
-        message["From"] = sender
-        message["To"] = receiver
-
-        text = f"""\
-        Bienvenido {nombre} {apellido} para ingresar al sistema debera usar las siguientes credenciales 
-        Usuario {usuario} 
-        Contrasenia {contrasenia}."""
-
-        part = MIMEText(text, "plain")
-        message.attach(part)
-
-        with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
-            server.login("d0ee292999b484", "3ab3cd187c026c")
-            server.sendmail(sender, receiver, message.as_string())
+        enviar_email_alta_admin_prov(data_usuario)
 
         return redirect("/usuarios/inicio")
     else:

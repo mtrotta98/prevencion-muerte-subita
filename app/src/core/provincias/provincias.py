@@ -23,6 +23,7 @@ class Provincia(db.Model):
     __tablename__ = "Provincias"
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     nombre = db.Column(db.String, nullable=False, unique=True)
+    vencimiento = db.Column(db.Integer)
 
     usuarios = db.relationship("Usuario", secondary=Usuario_Provincia, backref="provincias")
 
