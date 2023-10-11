@@ -12,39 +12,18 @@ representante = Blueprint("representante", __name__, url_prefix="/representante"
 @representante.get("/entidades")
 @jwt_required()
 def listado_entidades_existentes():
+
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
     if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
         return abort(403)
-    lista_entidades = entidades.get_entidades()
+    busqueda = request.args.get("busqueda" if request.args.get("busqueda", type=str) != "" else None)
+    lista_entidades = entidades.get_entidades(busqueda)
     kwargs = {
         "lista_entidades": lista_entidades,
         "nombre": usuario.nombre,
         "apellido": usuario.apellido
     }
-    return render_template("representante/listado_entidades_existentes.html", **kwargs)
-
-
-@representante.route("/entidades")
-@jwt_required()
-def buscar_entidad():
-    """Esta funcion llama al modulo correspondiente para filtrar la busqueda de entidades"""
-
-    usuario_actual = get_jwt_identity()
-    usuario = usuarios.get_usuario(usuario_actual)
-    busqueda = (
-        request.args.get("busqueda", type=str)
-        if request.args.get("busqueda", type=str) != ""
-        else print("")
-    )
-    print(busqueda)
-    kwargs = {
-        "entidades": entidades.filtrar_entidades(busqueda),
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido,
-        "busqueda": busqueda
-    }
-    
     return render_template("representante/listado_entidades_existentes.html", **kwargs)
 
 
@@ -55,8 +34,11 @@ def sedes_asociadas(id):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
+        return abort(403)
+    busqueda = request.args.get("busquedaSede" if request.args.get("busquedaSede", type=str) != "" else None)
     id_entidad = int(id)
-    sedes_asociadas = sedes.get_sedes_asociadas(id_entidad)
+    sedes_asociadas = sedes.get_sedes_asociadas(id_entidad, busqueda)
     kwargs = {
         "sedes_asociadas": sedes_asociadas,
         "nombre": usuario.nombre,

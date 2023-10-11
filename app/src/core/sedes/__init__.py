@@ -2,8 +2,11 @@ from src.core.sedes.sedes import Sede
 from src.core.db import db
 
 
-def get_sedes():
+def get_sedes(busqueda):
     """Esta funcion devuelve todas las sedes"""
+
+    if busqueda:
+        return Sede.query.filter_by(nombre=busqueda).all()
     return Sede.query.all()
 
 
@@ -30,11 +33,11 @@ def validar_datos_existentes(nombre):
     else:
         return True, ""
     
-def get_sedes_asociadas(id):
+def get_sedes_asociadas(id, busqueda):
     """Devuelve las sedes asociadas a una entidad"""
 
     id_entidad = id
-    sedes = get_sedes()
+    sedes = get_sedes(busqueda)
     sedes_asociadas = []
     for sede in sedes:
         id_sede = sede.id_entidad

@@ -19,9 +19,9 @@
                 <div class="col-5 ms-auto">
                     <div class="row">
                         <div class="col-12">
-                            <form class="d-flex" method="GET" action="{{ url_for('representante.buscar_entidad') }}">
-                                <input class="form-control me-2" type="search" placeholder="Buscar Entidad"
-                                    aria-label="Buscar Entidad" id="busqueda" name="busqueda" />
+                            <form class="d-flex" method="GET" action="{{ url_for('representante.listado_entidades_existentes') }}">
+                                <input class="form-control me-2" type="search" placeholder="Buscar Entidad" aria-label="Buscar Entidad" 
+                                id="busqueda" name="busqueda" />
                                 <button class="btn btn-outline-success" type="submit">
                                     Buscar
                                 </button>

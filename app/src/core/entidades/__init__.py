@@ -2,8 +2,11 @@ from src.core.entidades.entidades import Entidad
 from src.core.db import db
 
 
-def get_entidades():
+def get_entidades(busqueda):
     """Esta funcion devuelve todas las entidades"""
+    
+    if busqueda:
+        return Entidad.query.filter_by(razon_social=busqueda).all()
     return Entidad.query.all()
 
 
@@ -31,10 +34,3 @@ def validar_datos_existentes(cuit, razon_social):
         return False, "La razon social ya esta cargada en el sistema."
     else:
         return True, ""
-
-
-def filtrar_entidades(busqueda):
-    """Esta funcion retorna a una entidad buscada por su nombre"""
-    with db.session.no_autoflush:
-        entidad = Entidad.query.filter_by(razon_social=busqueda).first()
-    return entidad

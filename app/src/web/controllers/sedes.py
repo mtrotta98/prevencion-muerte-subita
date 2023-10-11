@@ -19,6 +19,11 @@ def form_sede(id_entidad):
 def agregar_sede(id_entidad):
     """Esta funcion se encarga de llamar al metodo correspondiente para dar de alta una sede"""
 
+    data_provincias = request.form.getlist("prov")
+    if data_provincias:
+            for provincia in data_provincias:
+                id_provincia = provincia
+
     data_sede = {
         "nombre": request.form.get("nombre"),
         "flujo_personas": request.form.get("flujo_personas"),
@@ -28,6 +33,7 @@ def agregar_sede(id_entidad):
         "personal_estable": request.form.get("personal_estable"),
         "pisos": request.form.get("cantidad_pisos"),
         "estado": "En proceso de ser cardioasistido",
+        "id_provincia": id_provincia,
         "id_entidad": id_entidad
     }
 
