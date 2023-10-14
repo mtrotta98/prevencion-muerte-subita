@@ -5,8 +5,9 @@ from src.core.db import db
 def get_entidades(busqueda):
     """Esta funcion devuelve todas las entidades"""
     
-    if busqueda:
-        return Entidad.query.filter_by(razon_social=busqueda).all()
+    with db.session.no_autoflush:
+        if busqueda:
+            return Entidad.query.filter_by(razon_social=busqueda).all()
     return Entidad.query.all()
 
 
