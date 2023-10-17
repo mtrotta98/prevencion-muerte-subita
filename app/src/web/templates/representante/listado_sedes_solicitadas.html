@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado Sedes Asociadas - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-9">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Sedes Solicitadas</h4>
+                </div>
+                <br>
+                <br>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <button href="{{ url_for('representante.listado_sedes_solicitadas', tipo="administradas") }}" type="button" class="btn btn-outline-primary">Sedes Administradas</button>
+                    <button  href="{{ url_for('representante.listado_sedes_solicitadas', tipo="pendientes") }}" type="button" class="btn btn-outline-primary">Sedes Pendientes</button>
+                    <button href="{{ url_for('representante.listado_sedes_solicitadas', tipo="rechazadas") }}" type="button" class="btn btn-outline-primary">Sedes Rechazadas</button>
+                </div>
+            </div>
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Estado</th>
+                <th>Razon</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tipo == 'administradas' %}
+                <tr>
+                    <td>
+                        <a>Administrada</a>
+                    </td>
+                    <td>
+                        <a>Cumple</a>
+                    </td>
+                </tr>
+            {% elif tipo == 'pendientes' %}
+                <tr>
+                    <td>
+                        <a>Pendientes</a>
+                    </td>
+                    <td>
+                        <a>Esperando respuesta</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>
+                        <a>Rechazada</a>
+                    </td>
+                    <td>
+                        <a>No cumple</a>
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

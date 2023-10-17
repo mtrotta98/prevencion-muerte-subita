@@ -80,7 +80,7 @@
                         {{sede['id_provincia']}}
                     </td>
                     <td>
-                        <a  class="btn btn-primary">Administrar</a>
+                        <a href="{{ url_for('solicitudes.registrar_solicitud', id_entidad=id_entidad) }}" class="btn btn-primary">Administrar</a>
                     </td>
                 </tr>
             {% endfor %}

@@ -6,6 +6,7 @@ from src.core import entidades
 from src.core import sedes
 from src.core import usuarios
 from src.core import provincias
+from src.core import solicitudes
 from src.web.controllers.validators import validator_usuario, validator_permission
 
 representante = Blueprint("representante", __name__, url_prefix="/representante")
@@ -53,8 +54,28 @@ def sedes_asociadas(id):
         """"sedes_provincias": sedes_provincias,"""
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
+        "id_usuario": usuario.id,
         "id_entidad": id_entidad,
         "provincias": provincias.get_provincias()
     }
     return render_template("/representante/listado_sedes_asociadas.html", **kwargs)
+
+
+@representante.route("/listado_sedes_solicitadas/<tipo>")
+@jwt_required()
+def listado_sedes_solicitadas(tipo):
+    """Esta funcion devuelve las sedes asociadas al representante (administradas/pendientes/rechazadas)"""
+
+    usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+
+    kwargs = {
+        "sedes_administradas": solicitudes.solicitudes(tipo),
+        "sedes_pendientes": solicitudes.solicitudes(tipo),
+        "sedes_rechazadas": solicitudes.solicitudes(tipo),
+        "tipo": tipo
+    }
+    return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)
+
+
 
