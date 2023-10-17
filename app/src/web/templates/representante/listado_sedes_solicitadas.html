@@ -19,15 +19,14 @@
                 <br>
                 <br>
                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <button href="{{ url_for('representante.listado_sedes_solicitadas', tipo="administradas") }}" type="button" class="btn btn-outline-primary">Sedes Administradas</button>
-                    <button  href="{{ url_for('representante.listado_sedes_solicitadas', tipo="pendientes") }}" type="button" class="btn btn-outline-primary">Sedes Pendientes</button>
-                    <button href="{{ url_for('representante.listado_sedes_solicitadas', tipo="rechazadas") }}" type="button" class="btn btn-outline-primary">Sedes Rechazadas</button>
+                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="administradas") }}" class="btn btn-outline-primary">Solicitudes Aprobadas</a>
+                    <a  href="{{ url_for('representante.listado_sedes_solicitadas', tipo="pendientes") }}" class="btn btn-outline-primary">Solicitudes Pendientes</a>
+                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="rechazadas") }}" class="btn btn-outline-primary">Solicitudes Rechazadas</a>
                 </div>
             </div>
         </caption>
         <thead class="bg-light">
             <tr>
-                <th>Nombre</th>
                 <th>Estado</th>
                 <th>Razon</th>
             </tr>
@@ -37,9 +36,6 @@
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Aprobada' %}
                         <tr>
-                            <td>
-                                {{info_sede.nombre}}
-                            </td>
                             <td>
                                 {{solicitud['estado']}}
                             </td>
@@ -54,9 +50,6 @@
                     {% if solicitud.estado == 'Pendiente' %}
                         <tr>
                             <td>
-                                {{info_sede.nombre}}
-                            </td>
-                            <td>
                                 {{solicitud['estado']}}
                             </td>
                             <td>
@@ -69,9 +62,6 @@
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Rechazada' %}
                         <tr>
-                            <td>
-                                {{info_sede.nombre}}
-                            </td>
                             <td>
                                 {{solicitud['estado']}}
                             </td>
