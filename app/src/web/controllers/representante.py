@@ -68,11 +68,11 @@ def listado_sedes_solicitadas(tipo):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    usuario_solicitudes = solicitudes.solicitudes_usuario(usuario)
 
     kwargs = {
-        "sedes_administradas": solicitudes.solicitudes(tipo),
-        "sedes_pendientes": solicitudes.solicitudes(tipo),
-        "sedes_rechazadas": solicitudes.solicitudes(tipo),
+        "solicitudes": usuario_solicitudes,
+        "info_sede": sedes.informacion_sede(usuario_solicitudes),
         "tipo": tipo
     }
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)

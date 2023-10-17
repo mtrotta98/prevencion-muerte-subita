@@ -27,38 +27,60 @@
         </caption>
         <thead class="bg-light">
             <tr>
+                <th>Nombre</th>
                 <th>Estado</th>
                 <th>Razon</th>
             </tr>
         </thead>
         <tbody>
             {% if tipo == 'administradas' %}
-                <tr>
-                    <td>
-                        <a>Administrada</a>
-                    </td>
-                    <td>
-                        <a>Cumple</a>
-                    </td>
-                </tr>
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'Aprobada' %}
+                        <tr>
+                            <td>
+                                {{info_sede.nombre}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
+                            </td>
+                            <td>
+                                {{solicitud['razon']}}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
             {% elif tipo == 'pendientes' %}
-                <tr>
-                    <td>
-                        <a>Pendientes</a>
-                    </td>
-                    <td>
-                        <a>Esperando respuesta</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td>
-                        <a>Rechazada</a>
-                    </td>
-                    <td>
-                        <a>No cumple</a>
-                    </td>
-                </tr>
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'Pendiente' %}
+                        <tr>
+                            <td>
+                                {{info_sede.nombre}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
+                            </td>
+                            <td>
+                                {{solicitud['razon']}}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% elif tipo == 'rechazadas' %}
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'Rechazada' %}
+                        <tr>
+                            <td>
+                                {{info_sede.nombre}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
+                            </td>
+                            <td>
+                                {{solicitud['razon']}}
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
             {% endif %}
         </tbody>
     </table>

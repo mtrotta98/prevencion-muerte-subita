@@ -18,3 +18,10 @@ def actualizar_solicitud(data):
     solicitud.razon = data["razon"]
     db.session.commit()
     return solicitud
+
+def solicitudes_usuario(usuario):
+    """Esta funcion devuelve las solicitudes que hizo un usuario"""
+
+    if usuario:
+        return Solicitud.query.filter_by(id_usuario=usuario.id).all()
+    return None

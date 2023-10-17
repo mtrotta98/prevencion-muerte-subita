@@ -75,3 +75,13 @@ def relacionar_representante_sede(id_representante, id_sede):
     admin = get_usuario(id_representante)
     sede.usuarios.append(admin)
     db.session.commit()
+
+def informacion_sede(usuario_solicitudes):
+    """Esta funcion devuelve la informacion de las sedes para poder mostrar en las solicitudes de un usuario"""
+
+    if usuario_solicitudes:
+        sedes = []
+        for solicitud in usuario_solicitudes:
+            sedes.append(get_sede(solicitud.id_sede))
+        return sedes
+    return None
