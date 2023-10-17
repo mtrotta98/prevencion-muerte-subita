@@ -1,5 +1,6 @@
 from src.core.sedes.sedes import Sede
 from src.core.db import db
+from src.core.usuarios import get_usuario
 
 
 def get_sedes(busqueda):
@@ -68,3 +69,9 @@ def get_sedes_por_provincia(id, id_provincia):
     
     return sedes_provincia
 
+def relacionar_representante_sede(id_representante, id_sede):
+    """Esta funcion genera la relacione entre un administrador provincial y una sede"""
+    sede = get_sede(id_sede)
+    admin = get_usuario(id_representante)
+    sede.usuarios.append(admin)
+    db.session.commit()
