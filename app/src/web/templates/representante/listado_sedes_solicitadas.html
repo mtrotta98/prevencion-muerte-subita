@@ -30,6 +30,7 @@
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Razon</th>
+                <th>DDJJ</th>
             </tr>
         </thead>
         <tbody>
@@ -46,6 +47,9 @@
                             </td>
                             <td>
                                 {{solicitud['razon']}}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('representante.form_ddjj', id_sede=info_sedes[contador[0]]['id']) }}" class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">DDJJ</a>
                             </td>
                         </tr>
                     {% endif %}

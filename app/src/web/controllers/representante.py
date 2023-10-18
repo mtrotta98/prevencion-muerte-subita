@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort
+from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort, url_for
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 
@@ -82,9 +82,9 @@ def listado_sedes_solicitadas(tipo):
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)
 
 
-@representante.route("/ddjj")
+@representante.route("/ddjj/<id_sede>")
 @jwt_required()
-def form_ddjj():
+def form_ddjj(id_sede):
     usuario_actual = get_jwt_identity()
     if not (validator_permission.has_permission(usuario_actual, "representante_ddjj")):
         return abort(403)
@@ -92,6 +92,7 @@ def form_ddjj():
     kwargs = {
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
+        "id_sede": id_sede,
     }
     return render_template("representante/form_ddjj.html", **kwargs)
 
@@ -107,16 +108,20 @@ def carga_ddjj():
         "responsable": True if request.form.get("responsable") == "si" else False,
         "protocolo_accion": True if request.form.get("prot_acc") == "si" else False,
         "sistema_emergencia": True if request.form.get("sist_emer") == "si" else False,
-        "cantidad_dea": request.form.get("cant_deas") if request.form.get("cant_deas") else False,
+        "cantidad_dea": request.form.get("cant_deas") if request.form.get("cant_deas") else None,
     }
 
     if not validator_ddjj.validator(**data_ddjj):
         flash("Todos los datos deben estar marcados con SI para cargar la declaracion jurada")
         return redirect("/representante/ddjj")
     
-    #if not ddjj.verificar_ddjj_existente(id_sede):
-    #    flash("Ya existen una declaracion jurada para la sede seleccionada")
-    #    return redirect("/representante/ddjj")
+    id_sede = request.form.get("id_sede") if request.form.get("id_sede") else None
+    data_ddjj["id_sede"] = id_sede
+    
+    if not ddjj.verificar_ddjj_existente(id_sede):
+        flash("Ya existen una declaracion jurada para la sede seleccionada")
+        return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
+    
     declaracion = ddjj.agregar_ddjj(data_ddjj)
     visita = visitas.agregar_visita()
     return redirect("/usuarios/inicio")
