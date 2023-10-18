@@ -92,7 +92,7 @@ def carga_ddjj():
         "responsable": True if request.form.get("responsable") == "si" else False,
         "protocolo_accion": True if request.form.get("prot_acc") == "si" else False,
         "sistema_emergencia": True if request.form.get("sist_emer") == "si" else False,
-        "cantidad_dea": True if request.form.get("deas_necesarios") == "si" else False,
+        "cantidad_dea": request.form.get("cant_deas") if request.form.get("cant_deas") else False,
     }
 
     if not validator_ddjj.validator(**data_ddjj):
