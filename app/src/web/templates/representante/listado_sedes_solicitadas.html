@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado Sedes Asociadas - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-9">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Sedes Solicitadas</h4>
+                </div>
+                <br>
+                <br>
+                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Aprobada") }}" class="btn btn-outline-primary">Solicitudes Aprobadas</a>
+                    <a  href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Pendiente") }}" class="btn btn-outline-primary">Solicitudes Pendientes</a>
+                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Rechazada") }}" class="btn btn-outline-primary">Solicitudes Rechazadas</a>
+                </div>
+            </div>
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Razon</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if tipo == 'Aprobada' %}
+                {% set contador = [0] %}
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'Aprobada' %}
+                        <tr>
+                            <td>
+                                {{info_sedes[contador[0]]['nombre']}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
+                            </td>
+                            <td>
+                                {{solicitud['razon']}}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% set _ = contador.append(contador.pop() + 1) %}
+                {% endfor %}
+            {% elif tipo == 'Pendiente' %}
+                {% set contador = [0] %}
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'Pendiente' %}
+                        <tr>
+                            <td>
+                                {{info_sedes[contador[0]]['nombre']}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
+                            </td>
+                            <td>
+                                {{solicitud['razon']}}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% set _ = contador.append(contador.pop() + 1) %}
+                {% endfor %}
+            {% elif tipo == 'Rechazada' %}
+                {% set contador = [0] %}
+                {% for solicitud in solicitudes %}
+                    {% if solicitud.estado == 'Rechazada' %}
+                        <tr>
+                            <td>
+                                {{sede['nombre']}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
+                            </td>
+                            <td>
+                                {{solicitud['razon']}}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% set _ = contador.append(contador.pop() + 1) %}
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{{ url_for('usuarios.inicio') }}" class="btn btn-primary">Inicio</a>
+</div>
+{% endblock %}

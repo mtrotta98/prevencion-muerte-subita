@@ -97,6 +97,13 @@
                               <input type="text" class="form-control" name="cantidad_pisos" placeholder="Cantidad de Pisos" required />
                           </div>
                       </div>
+                      <div class="col-6" id="selectProv">
+                            <select multiple class="selectpicker" name="prov" id="prov" required>
+                                {% for provincia in provincias %}
+                                    <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                      </div>
                     </div>
                     <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
                   </form>

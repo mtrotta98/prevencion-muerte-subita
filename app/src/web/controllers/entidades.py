@@ -8,10 +8,8 @@ entidad_blueprint = Blueprint("entidades", __name__, url_prefix="/entidades")
 
 @entidad_blueprint.route("/registro")
 def form_entidad():
-    kwargs = {
-        "entidades": entidades.get_entidades()
-    }
-    return render_template("entidades/registro_entidad.html", **kwargs)
+    
+    return render_template("entidades/registro_entidad.html")
 
 
 @entidad_blueprint.route("/alta", methods=["POST"])

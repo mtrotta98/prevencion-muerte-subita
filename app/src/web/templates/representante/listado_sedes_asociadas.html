@@ -16,6 +16,23 @@
                 <div class="col-5">
                     <h4>Sedes Asociadas a Entidad</h4>
                 </div>
+                <div class="col-5 ms-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <form class="d-flex" method="GET" action="{{ url_for('representante.sedes_asociadas', id=id_entidad) }}">
+                                <select class="form-control select-input me-2" type="search" placeholder="Buscar por Provincia" aria-label="Buscar por provincia"
+                                    name="busquedaProvincia" id="busquedaProvincia">
+                                    {% for provincia in provincias %}
+                                        <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <input class="form-control me-2" type="search" placeholder="Buscar por Nombre" aria-label="Buscar por Nombre" 
+                                id="busquedaSede" name="busquedaSede" />
+                                <button class="btn btn-outline-success" type="submit">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </caption>
         <thead class="bg-light">
@@ -63,7 +80,7 @@
                         {{sede['id_provincia']}}
                     </td>
                     <td>
-                        <a  class="btn btn-primary">Administrar</a>
+                        <a href="{{ url_for('solicitudes.registrar_solicitud', id_entidad=id_entidad) }}" class="btn btn-primary">Administrar</a>
                     </td>
                 </tr>
             {% endfor %}
