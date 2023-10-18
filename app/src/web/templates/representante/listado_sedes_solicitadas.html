@@ -27,16 +27,21 @@
         </caption>
         <thead class="bg-light">
             <tr>
+                <th>Nombre</th>
                 <th>Estado</th>
                 <th>Razon</th>
             </tr>
         </thead>
         <tbody>
             {% if tipo == 'Aprobada' %}
+                {% set contador = [0] %}
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Aprobada' %}
                         <tr>
                             <td>
+                                {{info_sedes[contador[0]]['nombre']}}
+                            </td>
+                            <td>
                                 {{solicitud['estado']}}
                             </td>
                             <td>
@@ -44,12 +49,17 @@
                             </td>
                         </tr>
                     {% endif %}
+                    {% set _ = contador.append(contador.pop() + 1) %}
                 {% endfor %}
             {% elif tipo == 'Pendiente' %}
+                {% set contador = [0] %}
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Pendiente' %}
                         <tr>
                             <td>
+                                {{info_sedes[contador[0]]['nombre']}}
+                            </td>
+                            <td>
                                 {{solicitud['estado']}}
                             </td>
                             <td>
@@ -57,12 +67,17 @@
                             </td>
                         </tr>
                     {% endif %}
+                    {% set _ = contador.append(contador.pop() + 1) %}
                 {% endfor %}
             {% elif tipo == 'Rechazada' %}
+                {% set contador = [0] %}
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Rechazada' %}
                         <tr>
                             <td>
+                                {{sede['nombre']}}
+                            </td>
+                            <td>
                                 {{solicitud['estado']}}
                             </td>
                             <td>
@@ -70,6 +85,7 @@
                             </td>
                         </tr>
                     {% endif %}
+                    {% set _ = contador.append(contador.pop() + 1) %}
                 {% endfor %}
             {% endif %}
         </tbody>

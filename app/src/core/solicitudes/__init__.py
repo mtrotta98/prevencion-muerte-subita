@@ -30,8 +30,8 @@ def usuario_tipo_solicitudes(usuario, tipo):
     """Esta funcion devuelve las solicitudes de cierto tipo de un solo usuario"""
 
     solicitudes = solicitudes_usuario(usuario)
-    solicitudes_tipo = []
     if solicitudes:
+        solicitudes_tipo = []
         for solicitud in solicitudes:
             if solicitud.estado == tipo:
                 solicitudes_tipo.append(solicitud)
