@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Declaracion Jurada - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %}
+
+        {% block content %}
+        <div id="main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p>{{ message }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+            <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+              <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Declaracion Jurada</h5>
+                  <form action="{{ url_for('representante.carga_ddjj') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="form-label">Personal Capacitado</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="per_cap" value="si" checked>
+                                <label class="form-check-label" for="per_cap">
+                                  Si
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="per_cap" value="no">
+                                <label class="form-check-label" for="per_cap">
+                                  No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">Tiene Responsable</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="responsable" value="si" checked>
+                                <label class="form-check-label" for="responsable">
+                                  Si
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="responsable" value="no">
+                                <label class="form-check-label" for="responsable">
+                                  No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">DEA señalizado</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="dea_señalizado" value="si" checked>
+                                <label class="form-check-label" for="dea_señalizado">
+                                  Si
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="dea_señalizado" value="no">
+                                <label class="form-check-label" for="dea_señalizado">
+                                  No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="form-label">Sistema de Emergencia</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="sist_emer" value="si" checked>
+                                <label class="form-check-label" for="sist_emer">
+                                  Si
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="sist_emer" value="no">
+                                <label class="form-check-label" for="sist_emer">
+                                  No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">Cantidad de DEAS necesarios</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="deas_necesarios" value="si" checked>
+                                <label class="form-check-label" for="deas_necesarios">
+                                  Si
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="deas_necesarios" value="no">
+                                <label class="form-check-label" for="deas_necesarios">
+                                  No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label">Protocolo de Accion</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="prot_acc" value="si" checked>
+                                <label class="form-check-label" for="prot_acc">
+                                  Si
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="radio" name="prot_acc" value="no">
+                                <label class="form-check-label" for="prot_acc">
+                                  No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
+                </form>
+                </div>
+              </div>
+            </div>
+        {% endblock %}

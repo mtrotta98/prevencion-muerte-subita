@@ -1,10 +1,14 @@
+from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template
 from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required
 from src.web.config import config
 from src.core.db import db, init_db
+from src.core import visitas, sedes, provincias
 from src.web.helpers import handlers
+from src.web.helpers.send_emails import enviar_email_vencimiento_certificacion
 
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.entidades import entidad_blueprint
@@ -69,6 +73,28 @@ def create_app(env="development", static_folder="static"):
         }
         return render_template("error.html", **kwargs)
     
+    def verificar_certificaciones():
+        with app.app_context():
+            visitas_aprobadas = visitas.get_visitas_aprobadas()
+            for visita in visitas_aprobadas:
+                sede_visitada = sedes.get_sede(visita.id_sede)
+                provincia_sede = provincias.get_provincia(sede_visitada.id_provincia)
+                fecha_vencimiento = visita.fecha + timedelta(days=365)
+                fecha_actual = datetime.now().date()
+                if fecha_vencimiento == fecha_actual:
+                    visita.resultado = False
+                    visita.observacion = "Certificacion vencida"
+                    sede_visitada.estado = "Espacio con certificacion vencida"
+                    db.session.commit()
+                    for representante in sede_visitada.usuarios:
+                        enviar_email_vencimiento_certificacion(representante.email, representante.nombre, representante.apellido, sede_visitada.nombre)
+                        
+                
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=verificar_certificaciones, trigger="interval", seconds=30) # 86400
+    scheduler.start()
+
     app.register_error_handler(403, handlers.not_authorized_error)
 
     return app
