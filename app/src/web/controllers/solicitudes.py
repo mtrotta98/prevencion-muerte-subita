@@ -8,6 +8,7 @@ from src.core import usuarios
 solicitud_blueprint = Blueprint("solicitudes", __name__, url_prefix="/solicitudes")
 
 @solicitud_blueprint.route("/registro/<id_entidad>")
+@jwt_required()
 def registrar_solicitud(id_entidad):
     """Esta funcion registra una solicitud de administrar sede, hecha por un representante"""
 
