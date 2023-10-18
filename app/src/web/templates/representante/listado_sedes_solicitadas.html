@@ -19,9 +19,9 @@
                 <br>
                 <br>
                 <div class="btn-group" role="group" aria-label="Basic outlined example">
-                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="administradas") }}" class="btn btn-outline-primary">Solicitudes Aprobadas</a>
-                    <a  href="{{ url_for('representante.listado_sedes_solicitadas', tipo="pendientes") }}" class="btn btn-outline-primary">Solicitudes Pendientes</a>
-                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="rechazadas") }}" class="btn btn-outline-primary">Solicitudes Rechazadas</a>
+                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Aprobada") }}" class="btn btn-outline-primary">Solicitudes Aprobadas</a>
+                    <a  href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Pendiente") }}" class="btn btn-outline-primary">Solicitudes Pendientes</a>
+                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Rechazada") }}" class="btn btn-outline-primary">Solicitudes Rechazadas</a>
                 </div>
             </div>
         </caption>
@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            {% if tipo == 'administradas' %}
+            {% if tipo == 'Aprobada' %}
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Aprobada' %}
                         <tr>
@@ -45,7 +45,7 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
-            {% elif tipo == 'pendientes' %}
+            {% elif tipo == 'Pendiente' %}
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Pendiente' %}
                         <tr>
@@ -58,7 +58,7 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
-            {% elif tipo == 'rechazadas' %}
+            {% elif tipo == 'Rechazada' %}
                 {% for solicitud in solicitudes %}
                     {% if solicitud.estado == 'Rechazada' %}
                         <tr>

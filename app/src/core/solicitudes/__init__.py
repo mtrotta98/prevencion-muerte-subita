@@ -21,7 +21,19 @@ def actualizar_solicitud(data):
 
 def solicitudes_usuario(usuario):
     """Esta funcion devuelve las solicitudes que hizo un usuario"""
-
+    
     if usuario:
         return Solicitud.query.filter_by(id_usuario=usuario.id).all()
     return None
+
+def usuario_tipo_solicitudes(usuario, tipo):
+    """Esta funcion devuelve las solicitudes de cierto tipo de un solo usuario"""
+
+    solicitudes = solicitudes_usuario(usuario)
+    solicitudes_tipo = []
+    if solicitudes:
+        for solicitud in solicitudes:
+            if solicitud.estado == tipo:
+                solicitudes_tipo.append(solicitud)
+        return solicitudes_tipo
+    return None    
