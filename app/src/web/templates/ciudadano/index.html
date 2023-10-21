@@ -1,0 +1,60 @@
+{% extends "ciudadano/layout_ciudadano.html" %}
+
+{% block title %}
+    Home - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="col-6 mt-5">
+    <input type="text" name="lat" id="lat" hidden>
+    <input type="text" name="lon" id="lon" hidden>
+    <div class="list-group mb-5">
+        <a href="#" id="enviar" class="list-group-item list-group-item-action bg-danger" aria-current="true">
+          <div class="d-flex w-80 justify-content-center align-items-center">
+            <h5 class="mb-1">SOLICITAR AYUDA</h5>
+            <br>
+            <br>
+            <br>
+          </div>
+        </a>
+    </div>
+
+    <div class="list-group mb-5">
+        <a href="#" class="list-group-item list-group-item-action bg-danger mb-1" aria-current="true">
+          <div class="d-flex w-80 justify-content-center align-items-center">
+            <h5 class="mb-1">Asistencia uso DEA</h5>
+          </div>
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action bg-danger" aria-current="true">
+            <div class="d-flex w-80 justify-content-center align-items-center">
+              <h5 class="mb-1">Asistencia RCP</h5>
+            </div>
+          </a>
+    </div>
+
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action bg-primary mb-1" aria-current="true">
+          <div class="d-flex w-80 justify-content-center align-items-center">
+            <h5 class="mb-1">Ver mapa</h5>
+          </div>
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action bg-primary mb-1" aria-current="true">
+            <div class="d-flex w-80 justify-content-center align-items-center">
+              <h5 class="mb-1">Informarme</h5>
+            </div>
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action bg-primary" aria-current="true">
+            <div class="d-flex w-80 justify-content-center align-items-center">
+              <h5 class="mb-1">Comunicacion</h5>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -28,9 +28,9 @@ def validar_inputs_sede(nombre, flujo_personas, latitud, longitud, superficie, p
         return False, "El nombre debe ser valido"
     elif not (flujo_personas.isnumeric()):
         return False, "El flujo de personas debe ser un numero entero"
-    elif not (latitud.isnumeric()):
+    elif not (latitud.strip("-").replace(".","").isnumeric()):
         return False, "La latitud debe ser un numero"
-    elif not (longitud.isnumeric()):
+    elif not (longitud.strip("-").replace(".","").isnumeric()):
         return False, "La longitud debe ser un numero"
     elif not (superficie.isnumeric()):
         return False, "La superficie debe ser un numero"
