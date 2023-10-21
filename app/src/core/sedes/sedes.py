@@ -32,7 +32,7 @@ class Sede(db.Model):
     pisos = db.Column(db.Integer, nullable=False)
     estado = db.Column(db.String(100), nullable=False)
     id_provincia = db.Column(db.Integer, db.ForeignKey("Provincias.id"))
-    id_entidad = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
+    id_entidad = db.Column(db.Integer, db.ForeignKey("Entidades.id"))
 
     usuarios = db.relationship("Usuario", secondary=Usuario_Sede, backref="sedes")
 

@@ -1,6 +1,7 @@
 from src.core.sedes.sedes import Sede
 from src.core.db import db
 from src.core.usuarios import get_usuario
+from src.core import entidades
 
 
 def get_sedes(busqueda):
@@ -28,6 +29,8 @@ def get_sede(id):
 def agregar_sede(data):
     """Esta funcion da de alta una sede"""
 
+    entidad = entidades.get_entidad(data["id_entidad"])
+    data["id_entidad"] = str(entidad.id)
     sede = Sede(**data)
     db.session.add(sede)
     db.session.commit()
