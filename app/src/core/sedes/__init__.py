@@ -3,8 +3,20 @@ from src.core.db import db
 from src.core.usuarios import get_usuario
 
 
-def get_sedes():
+def get_sedes(busqueda):
     """Esta funcion devuelve todas las sedes"""
+
+    with db.session.no_autoflush:
+        if busqueda:
+            return Sede.query.filter_by(nombre=busqueda).all()
+    return Sede.query.all()
+
+def get_sedes_provincia(id_provincia):
+    """Esta funcion devuelve todas las sedes asociadas a una provincia"""
+
+    with db.session.no_autoflush:
+        if id_provincia:
+            return Sede.query.fiter_by(id_provincia=id_provincia).all()
     return Sede.query.all()
 
 
@@ -31,11 +43,11 @@ def validar_datos_existentes(nombre):
     else:
         return True, ""
     
-def get_sedes_asociadas(id):
+def get_sedes_asociadas(id, busqueda):
     """Devuelve las sedes asociadas a una entidad"""
 
     id_entidad = id
-    sedes = get_sedes()
+    sedes = get_sedes(busqueda)
     sedes_asociadas = []
     for sede in sedes:
         id_sede = sede.id_entidad
@@ -43,9 +55,33 @@ def get_sedes_asociadas(id):
             sedes_asociadas.append(sede)
    
     return sedes_asociadas
+
+def get_sedes_por_provincia(id, id_provincia):
+    """Devuelve las sedes asociadas a una entidad y provincia"""
+
+    id_entidad = id
+    sedes = get_sedes_provincia(id_provincia)
+    sedes_provincia = []
+    for sede in sedes:
+        id_sede = sede.id_entidad
+        if id_sede == id_entidad:
+            sedes_provincia.append(sede)
+    
+    return sedes_provincia
+
 def relacionar_representante_sede(id_representante, id_sede):
     """Esta funcion genera la relacione entre un administrador provincial y una sede"""
     sede = get_sede(id_sede)
     admin = get_usuario(id_representante)
     sede.usuarios.append(admin)
     db.session.commit()
+
+def informacion_sede(usuario_solicitudes):
+    """Esta funcion devuelve la informacion de las sedes para poder mostrar en las solicitudes de un usuario"""
+
+    if usuario_solicitudes:
+        sedes = []
+        for solicitud in usuario_solicitudes:
+            sedes.append(get_sede(solicitud.id_sede))
+        return sedes
+    return None

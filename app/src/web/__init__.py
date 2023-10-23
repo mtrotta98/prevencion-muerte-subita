@@ -13,6 +13,7 @@ from src.web.helpers.send_emails import enviar_email_vencimiento_certificacion
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.entidades import entidad_blueprint
 from src.web.controllers.sedes import sede_blueprint
+from src.web.controllers.solicitudes import solicitud_blueprint
 from src.web.controllers.admin_provincial import admin_provincial
 from src.web.controllers.superusuarios import super_usuario
 from src.web.controllers.representante import representante
@@ -44,6 +45,7 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(admin_provincial)
     app.register_blueprint(super_usuario)
     app.register_blueprint(representante)
+    app.register_blueprint(solicitud_blueprint)
     app.register_blueprint(dea_blueprint)
     
     with app.app_context():
