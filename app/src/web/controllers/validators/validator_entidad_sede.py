@@ -46,3 +46,27 @@ def validar_inputs_sede(nombre, flujo_personas, latitud, longitud, superficie, p
         return False, "El id de la entidad no es numerico"
     else:
         return True, ""
+
+
+def validar_inputs_editar_sede(nombre, flujo_personas, latitud, longitud, superficie, personal_estable, pisos):
+    """Esta funcion valida que los datos de la edicion de una sede sean validos"""
+
+    regex_campo = "^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ]+$"
+    if not (nombre != "" and flujo_personas != "" and latitud != "" and longitud != "" and superficie != "" and personal_estable != "" and pisos != ""):
+        return False, "Todos los datos deben estar completos"
+    elif not (re.search(regex_campo, nombre)):
+        return False, "El nombre debe ser valido"
+    elif not (flujo_personas.isnumeric()):
+        return False, "El flujo de personas debe ser un numero entero"
+    elif not (latitud.isnumeric()):
+        return False, "La latitud debe ser un numero"
+    elif not (longitud.isnumeric()):
+        return False, "La longitud debe ser un numero"
+    elif not (superficie.isnumeric()):
+        return False, "La superficie debe ser un numero"
+    elif not (personal_estable.isnumeric()):
+        return False, "La cantidad de personal estaba debe ser un numero entero"
+    elif not (pisos.isnumeric()):
+        return False, "La cantidad de pisos debe ser un numero entero"
+    else:
+        return True, ""

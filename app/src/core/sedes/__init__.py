@@ -33,6 +33,10 @@ def agregar_sede(data):
     db.session.commit()
     return sede
 
+def editar_sede(data):
+    """Esta funcion edita los datos de una sede"""
+
+    
 
 def validar_datos_existentes(nombre):
     """Esta funcion valida que los datos de alta de sede no existan en la base de datos"""
@@ -42,7 +46,18 @@ def validar_datos_existentes(nombre):
         return False, "La sede ya esta cargada en el sistema."
     else:
         return True, ""
+
+
+def validar_nombre_existentes(nombre):
+    """Esta funcion valida que los datos de edicion de sede no existan en la base de datos"""
+
+    nombre_existente = Sede.query.filter_by(nombre=nombre).first()
+    if nombre_existente > 1:
+        return False, "La sede ya esta cargada en el sistema."
+    else:
+        return True, ""
     
+
 def get_sedes_asociadas(id, busqueda):
     """Devuelve las sedes asociadas a una entidad"""
 
