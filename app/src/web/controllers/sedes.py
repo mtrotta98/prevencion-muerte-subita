@@ -4,10 +4,13 @@ from src.core import sedes
 from src.core import provincias
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 from src.web.controllers.validators import validator_entidad_sede
+from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies, get_jwt_identity
 
 sede_blueprint = Blueprint("sedes", __name__, url_prefix="/sedes")
 
 @sede_blueprint.route("/registro/<id_entidad>")
+@jwt_required()
 def form_sede(id_entidad):
     kwargs = {
         "provincias" : provincias.get_provincias(),
@@ -16,6 +19,7 @@ def form_sede(id_entidad):
     return render_template("sedes/registro_sede.html", **kwargs)
 
 @sede_blueprint.route("/alta/<id_entidad>", methods=["POST"])
+@jwt_required()
 def agregar_sede(id_entidad):
     """Esta funcion se encarga de llamar al metodo correspondiente para dar de alta una sede"""
 

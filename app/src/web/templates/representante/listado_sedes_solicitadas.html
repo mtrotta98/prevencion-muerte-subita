@@ -30,6 +30,7 @@
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Razon</th>
+                <th>Editar</th>
             </tr>
         </thead>
         <tbody>
@@ -42,10 +43,13 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{solicitud['estado']}}
+                                {{info_sedes[contador[0]]['estado']}}
                             </td>
                             <td>
                                 {{solicitud['razon']}}
+                            </td>
+                            <td>
+                                <a class="btn btn-primary">Editar Sede</a>
                             </td>
                         </tr>
                     {% endif %}
@@ -60,10 +64,13 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{solicitud['estado']}}
+                                {{info_sedes[contador[0]]['estado']}}
                             </td>
                             <td>
                                 {{solicitud['razon']}}
+                            </td>
+                            <td>
+                                <a class="btn btn-primary">Editar Sede</a>
                             </td>
                         </tr>
                     {% endif %}
@@ -75,13 +82,16 @@
                     {% if solicitud.estado == 'Rechazada' %}
                         <tr>
                             <td>
-                                {{sede['nombre']}}
+                                {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{solicitud['estado']}}
+                                {{info_sedes[contador[0]]['estado']}}
                             </td>
                             <td>
                                 {{solicitud['razon']}}
+                            </td>
+                            <td>
+                                <a class="btn btn-primary">Editar Sede</a>
                             </td>
                         </tr>
                     {% endif %}

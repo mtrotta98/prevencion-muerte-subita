@@ -3,16 +3,20 @@ import json
 from src.core import entidades
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 from src.web.controllers.validators import validator_entidad_sede
+from flask_jwt_extended import jwt_required, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, set_access_cookies, get_jwt_identity
 
 entidad_blueprint = Blueprint("entidades", __name__, url_prefix="/entidades")
 
 @entidad_blueprint.route("/registro")
+@jwt_required()
 def form_entidad():
     
     return render_template("entidades/registro_entidad.html")
 
 
 @entidad_blueprint.route("/alta", methods=["POST"])
+@jwt_required()
 def agregar_entidad():
     """Esta funcion se encarga de llamar al metodo correspondiente para dar de alta una entidad"""
     
