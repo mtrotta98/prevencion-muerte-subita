@@ -28,9 +28,11 @@
         <thead class="bg-light">
             <tr>
                 <th>Nombre</th>
+                <th>ID</th>
                 <th>Estado</th>
                 <th>Razon</th>
                 <th>Editar</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -43,13 +45,16 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{info_sedes[contador[0]]['estado']}}
+                                {{info_sedes[contador[0]]['id']}}
+                            </td>
+                            <td>
+                                {{solicitud['estado']}}
                             </td>
                             <td>
                                 {{solicitud['razon']}}
                             </td>
                             <td>
-                                <a class="btn btn-primary">Editar Sede</a>
+                                <a href="{{ url_for('sedes.form_editar_sede', id_sede=info_sedes[contador[0]]['id']) }}" class="btn btn-primary">Editar</a>
                             </td>
                         </tr>
                     {% endif %}
