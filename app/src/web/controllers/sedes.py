@@ -2,7 +2,7 @@ import json
 
 from src.core import sedes
 from src.core import provincias
-from flask import Blueprint, render_template, request, flash, redirect, session, abort
+from flask import Blueprint, render_template, request, flash, redirect, session, abort, url_for
 from src.web.controllers.validators import validator_entidad_sede
 from flask_jwt_extended import jwt_required, unset_jwt_cookies
 from flask_jwt_extended import create_access_token, set_access_cookies, get_jwt_identity
@@ -48,7 +48,7 @@ def agregar_sede(id_entidad):
         sede = sedes.agregar_sede(data_sede)
         mensaje_exito =  "La sede se ha cargado con exito."
         flash(mensaje_exito)
-        return redirect("/sedes/registro/<id_entidad>")
+        return redirect(url_for("representante.sedes_asociadas", id=id_entidad))
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
-        return redirect("/sedes/registro/<id_entidad>")
+        return redirect(url_for("sedes.form_sede", id_entidad=id_entidad))
