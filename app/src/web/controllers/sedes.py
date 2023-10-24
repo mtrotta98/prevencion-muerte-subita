@@ -2,7 +2,7 @@ import json
 
 from src.core import sedes
 from src.core import provincias
-from flask import Blueprint, render_template, request, flash, redirect, session, abort
+from flask import Blueprint, render_template, request, flash, redirect, session, abort, url_for
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 from src.web.controllers.validators import validator_entidad_sede
@@ -59,7 +59,6 @@ def agregar_sede(id_entidad):
 def form_editar_sede(id_sede):
      """Esta funcion trae la informacion de la sede a editar"""
      
-     print(id_sede)
      sede = sedes.get_sede(id_sede)
      provincia = provincias.get_provincia(sede.id_provincia)
      kwgars = {
@@ -68,11 +67,13 @@ def form_editar_sede(id_sede):
      }
      return render_template("sedes/editar_sede.html", **kwgars)
 
-@sede_blueprint.route("/editar", methods=["POST"])
+@sede_blueprint.route("/editar/<id_sede>", methods=["POST"])
 @jwt_required()
-def editar_sede():
-         
+def editar_sede(id_sede):
+    
+    id = id_sede
     data_sede = {
+        "id_sede": id,
         "nombre": request.form.get("nombre"),
         "flujo_personas": request.form.get("flujo_personas"),
         "latitud": request.form.get("latitud"),
@@ -83,13 +84,13 @@ def editar_sede():
     }
 
     data_existente, mensaje = sedes.validar_nombre_existente(data_sede["nombre"])
-    inputs_validos, mensaje2 = validator_entidad_sede.validar_inputs_sede(**data_sede)
+    inputs_validos, mensaje2 = validator_entidad_sede.validar_inputs_editar_sede(**data_sede)
 
     if data_existente and inputs_validos:
         sede = sedes.editar_sede(data_sede)
         mensaje_exito =  "La sede se ha editado con exito."
         flash(mensaje_exito)
-        return redirect("/sedes/form_editar/<id_sede>")
+        return redirect(url_for("sedes.form_editar_sede", id_sede=id_sede))
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
-        return redirect("/sedes/form_editar/<id_sede>")
+        return redirect(url_for("sedes.form_editar_sede", id_sede=id_sede))

@@ -48,7 +48,7 @@
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
                   <h5 class="card-title text-center mb-5 fw-light fs-5">Editar Informacion de Sede</h5>
-                  <form action="{{ url_for('sedes.editar_sede', id_entidad=id_entidad) }}" method="POST">
+                  <form action="{{ url_for('sedes.editar_sede', id_sede=sede.id) }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <div class="row">
                       <div class="col-6">
