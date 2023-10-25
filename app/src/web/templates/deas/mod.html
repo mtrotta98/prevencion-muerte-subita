@@ -2,7 +2,7 @@
 <html>
     <head>
         {% block head %}
-        <title>{% block title %} Registro DEA - Sistema Prevencion Muerte Subita {% endblock %}</title>
+        <title>{% block title %} Modificacion DEA - Sistema Prevencion Muerte Subita {% endblock %}</title>
         {% endblock %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -48,7 +48,7 @@
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
                   <h5 class="card-title text-center mb-5 fw-light fs-5">Nuevo DEA</h5>
-                  <form action="{{ url_for('deas.dea_create') }}" method="POST">
+                  <form action="{{ url_for('deas.dea_edit', id = id_dea ) }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                       <div class="form-row">
                         <div class="row">
@@ -87,7 +87,6 @@
                            </div>
                            <br>
                         </div>
-                        <br>
                         <div class="row">
                           <div class="col">
                             <br>
@@ -102,6 +101,7 @@
                             </div>
                           </div>
                           <div class="col">
+                            <br>
                             <div class="form-group col text-center">
                                  {{ form.ultimoMantenimiento.label }} 
                                  {{ form.ultimoMantenimiento(class='date-control')|safe }}

@@ -6,7 +6,12 @@ def get_all():
     return DEA.query.all()
 
 def get_by_id(id):
+    """Retorna un DEA en específico"""
     return DEA.query.filter_by(id=id).first()
+
+def get_by_sede(id_sede):
+    """Retorna los DEA de una sede"""
+    return DEA.query.filter_by(sede_id=id_sede).all()
 
 def save(self):
     """ Salva los cambios"""
@@ -14,8 +19,8 @@ def save(self):
     db.session.commit()
 
 @staticmethod
-def destroy(Responsable):
+def destroy(dea):
     """ Elimina un DEA de la BD. """
-    db.session.delete(Responsable)
+    db.session.delete(dea)
     db.session.commit()
 
