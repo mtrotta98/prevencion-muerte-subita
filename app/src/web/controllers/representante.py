@@ -122,5 +122,5 @@ def carga_ddjj():
         return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
     declaracion = ddjj.agregar_ddjj(data_ddjj)
-    visita = visitas.agregar_visita()
+    visita = visitas.agregar_visita(id_sede)
     return redirect("/usuarios/inicio")
