@@ -91,8 +91,8 @@ def editar_sede(id_sede):
     if data_existente and inputs_validos:
         sede = sedes.editar_sede(data_sede)
         mensaje_exito =  "La sede se ha editado con exito."
-        flash(mensaje_exito)
+        flash(mensaje_exito, "success")
         return redirect(url_for("sedes.form_editar_sede", id_sede=id_sede))
     else:
-        flash(mensaje) if mensaje != "" else flash(mensaje2)
+        flash(mensaje, "error") if mensaje != "" else flash(mensaje2, "error")
         return redirect(url_for("sedes.form_editar_sede", id_sede=id_sede))
