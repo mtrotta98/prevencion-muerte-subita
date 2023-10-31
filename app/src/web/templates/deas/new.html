@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        <title>{% block title %} Registro DEA - Sistema Prevencion Muerte Subita {% endblock %}</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static',filename='style.css') }}"
+        />
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+        />
+    </head>
+    <body>
+
+        {% block content %} 
+        <div id="navbar">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Sistema de Prevencion Muerte Subita</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <div id="main">
+          {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes list-group">
+              {% for message in messages %}
+                <li class="list-group-item">{{ message }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+              <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Nuevo DEA</h5>
+                  <form action="{{ url_for('deas.dea_create', sede_id = sede_id) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                      <div class="form-row">
+                        <div class="row">
+                           <div class="form-group col text-center">
+                               {{ form.denominacion.label }} 
+                               {{ form.denominacion(class='form-control')|safe }}
+                           </div>
+                           <br>
+                           <div class="form-group col text-center">
+                                {{ form.nSerie.label }} 
+                                {{ form.nSerie(class='form-control')|safe }}
+                           </div>
+                           <br>                        
+                        </div>
+                        <div class="row">
+                            <div class="form-group col text-center">
+                                {{ form.marca.label }} 
+                                {{ form.marca(class='form-control')|safe }}
+                           </div>
+                           <div class="form-group col text-center">
+                                {{ form.modelo.label }} 
+                                {{ form.modelo(class='form-control')|safe }}
+                            </div>
+                            <br>
+                           <br>
+                        </div>
+                        <br>
+                        <div class="row">
+                          <div class="col">
+                            <br>
+                            <div class="form-group col text-center">
+                                {{ form.activo.label }} 
+                                {{ form.activo(class='radio-control')|safe }}
+                            </div>
+                            <br>
+                            <div class="form-group col text-center">
+                             {{ form.solidario.label }} 
+                             {{ form.solidario(class='radio-control')|safe }}
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group col text-center">
+                                 {{ form.ultimoMantenimiento.label }} 
+                                 <br>
+                                 {{ form.ultimoMantenimiento(class='date-control')|safe }}
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                        <br>
+                      </div>
+                    <div class="row">
+                     <div class="col text-center"><a href="javascript:history.back()" >
+                         <button type="button" class="btn btn-primary" >Cancelar y volver</button>
+                       </a>
+                     </div>
+                     <div class="col text-center">
+                       <button type="submit" class="btn btn-danger ">Guardar cambios</button>
+                     </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endblock %} 
+    </body>
+    <script>
+      var selectMarca = document.getElementById('marca');
+      var selectModelo = document.getElementById('modelo');
+      selectMarca.innerHTML = '';
+      selectModelo.innerHTML = '';
+      fetch('https://api.claudioraverta.com/deas/')
+                  .then(res => res.json())
+                  .then(data => {
+                      data.forEach(deas => {
+                        let option = new Option(deas.marca, deas.id)
+                        selectMarca.add(option)
+                      });
+                  });
+      
+      
+      selectMarca.addEventListener('change',
+          function(){
+              selectModelo.innerHTML = '';
+              fetch('https://api.claudioraverta.com/deas/'+selectMarca.value +'/modelos/')
+                  .then(res => res.json())
+                  .then(data => {
+                      data.forEach(deas => {
+                        let option = new Option(deas.nombre, deas.nombre)
+                        selectModelo.add(option)
+                      });
+                  });
+          }); 
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+</html>

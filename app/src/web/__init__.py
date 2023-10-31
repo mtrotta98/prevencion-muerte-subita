@@ -10,6 +10,7 @@ from src.core import visitas, sedes, provincias
 from src.web.helpers import handlers
 from src.web.helpers.send_emails import enviar_email_vencimiento_certificacion
 
+from src.web.controllers.deas import dea_blueprint
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.entidades import entidad_blueprint
 from src.web.controllers.sedes import sede_blueprint
@@ -39,6 +40,7 @@ def create_app(env="development", static_folder="static"):
     def hello():
         return redirect("/usuarios/login")
     
+    app.register_blueprint(dea_blueprint)    
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(entidad_blueprint)
     app.register_blueprint(sede_blueprint)

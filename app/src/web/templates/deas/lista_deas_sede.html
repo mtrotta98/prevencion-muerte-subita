@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado Entidades - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                    <h4>Lista de DEAS  -  Sucursal "{{sede.nombre}}"</h4>
+            </div>
+        </caption>
+        <table class="table table-hover table-dark">
+            <tr>
+                <th>Denominacion</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Ultimo mantenimiento</th>
+                <th>Activo</th>
+                <th>Solidario</th>
+                <th>Acciones</th>
+            </tr>
+            {% if(deas != None) %}
+                {% for dea in deas %}
+                <tr>
+                    <td>{{dea.denominacion}}</td>
+                    <td class="marca">{{dea.marca}}</td>
+                    <td>{{dea.modelo}}</td>
+                    <td>{{dea.ultimoMantenimiento}}</td>
+                    <td>
+                        {% if dea.activo %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if dea.solidario %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{url_for('deas.dea_mod', id = dea.id)}}" class="btn btn-warning btn-xs" >Editar</a>
+                        <a href="{{url_for('deas.dea_delete', id = dea.id)}}" class="btn btn-danger btn-xs" onclick="return confirm('¿Estás seguro de eliminar el DEA?')" style="margin-left: 10px">Eliminar</a>
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </table>
+    <br>
+    <div class="col text-center"><a href="javascript:history.back()" >
+        <button type="button" class="btn btn-primary" >Cancelar y volver</button>
+      </a>
+    </div>
+</div>
+<script>
+    var listaMarcas = document.getElementsByClassName("marca");
+    var dir_Marcas = {}
+    fetch('https://api.claudioraverta.com/deas/')
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(deas => {
+                      dir_Marcas[deas.id]=deas.marca;
+                    });
+                });
+    console.log(dir_Marcas)
+    console.log(listaMarcas)
+    let item
+    for (item of listaMarcas) {
+        console.log(item.innerText);
+        item.innerText=dir_Marcas[parseInt(item.innerText)];
+    }
+ 
+</script>
+{% endblock %}
