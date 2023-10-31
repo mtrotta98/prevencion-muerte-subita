@@ -26,14 +26,28 @@
             </div>
         </caption>
         <thead class="bg-light">
-            <tr>
-                <th>Nombre</th>
-                <th>ID</th>
-                <th>Estado</th>
-                <th>Razon</th>
-                <th>Editar</th>
-                <th></th>
-            </tr>
+            {% if tipo == 'Aprobada' %}
+                <tr>
+                    <th>Nombre</th>
+                    <th>Razon Aprobacion</th>
+                    <th>Estado Sede</th>
+                    <th>Cantidad DEA</th>
+                    <th>Editar</th>
+                    <th>Exportar</th>
+                </tr>
+            {% elif tipo == 'Pendiente' %}
+                <tr>
+                    <th>Nombre</th>
+                    <th>Estado Sede</th>
+                    <th>Estado Solicitud</th>
+                </tr>
+            {% else %}
+                <tr>
+                    <th>Nombre</th>
+                    <th>Estado Sede</th>
+                    <th>Razon</th>
+                </tr>
+            {% endif %}
         </thead>
         <tbody>
             {% if tipo == 'Aprobada' %}
@@ -45,16 +59,19 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{info_sedes[contador[0]]['id']}}
-                            </td>
-                            <td>
-                                {{solicitud['estado']}}
-                            </td>
-                            <td>
                                 {{solicitud['razon']}}
                             </td>
                             <td>
+                                {{info_sedes[contador[0]]['estado']}}
+                            </td>
+                            <td>
+                                {{info_sedes[contador[0]]['cantidad_DEA']}}
+                            </td>
+                            <td>
                                 <a href="{{ url_for('sedes.form_editar_sede', id_sede=info_sedes[contador[0]]['id']) }}" class="btn btn-primary">Editar</a>
+                            </td>
+                            <td>
+                                <a href="{{ url_for('exportaciones.generar_pdf', id=info_sedes[contador[0]]['id']) }}" class="btn btn-primary">PDF</a>
                             </td>
                         </tr>
                     {% endif %}
@@ -72,7 +89,7 @@
                                 {{info_sedes[contador[0]]['estado']}}
                             </td>
                             <td>
-                                {{solicitud['razon']}}
+                                {{solicitud.estado}}
                             </td>
                         </tr>
                     {% endif %}

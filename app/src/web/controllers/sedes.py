@@ -83,6 +83,7 @@ def editar_sede(id_sede):
         "superficie": request.form.get("superficie"),
         "personal_estable": request.form.get("personal_estable"),
         "pisos": request.form.get("cantidad_pisos"),
+        "cantidad_DEA": request.form.get("cantidad_dea")
     }
 
     data_existente, mensaje = sedes.validar_nombre_existente(data_sede["nombre"])
