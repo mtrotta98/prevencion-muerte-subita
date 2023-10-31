@@ -56,6 +56,9 @@
                             <td>
                                 <a href="{{ url_for('sedes.form_editar_sede', id_sede=info_sedes[contador[0]]['id']) }}" class="btn btn-primary">Editar</a>
                             </td>
+                            <td>
+                                <a href="{{ url_for('exportaciones.generar_pdf', id=info_sedes[contador[0]]['id']) }}" class="btn btn-primary">PDF</a>
+                            </td>
                         </tr>
                     {% endif %}
                     {% set _ = contador.append(contador.pop() + 1) %}

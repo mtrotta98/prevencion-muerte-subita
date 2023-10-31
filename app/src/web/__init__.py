@@ -18,6 +18,7 @@ from src.web.controllers.admin_provincial import admin_provincial
 from src.web.controllers.superusuarios import super_usuario
 from src.web.controllers.representante import representante
 from src.web.controllers.ciudadanos import ciudadano_blueprint
+from src.web.controllers.exportaciones import exportacion_blueprint
 
 #from src.core.db import db, init_db
 
@@ -46,6 +47,7 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(representante)
     app.register_blueprint(solicitud_blueprint)
     app.register_blueprint(ciudadano_blueprint)
+    app.register_blueprint(exportacion_blueprint)
     
     with app.app_context():
         init_db(app)
