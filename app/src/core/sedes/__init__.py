@@ -48,6 +48,7 @@ def editar_sede(data):
     sede.personal_estable = data['personal_estable'],
     sede.pisos = data['pisos'],
     sede.estado = sede.estado,
+    sede.cantidad_DEA = data['cantidad_DEA']
     db.session.commit()
     return sede
     
