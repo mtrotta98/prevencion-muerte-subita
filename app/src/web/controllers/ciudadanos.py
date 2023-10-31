@@ -1,6 +1,10 @@
-from math import sin, cos, sqrt, atan2, radians
+import pandas as pd
+import numpy as np
+from geopy.geocoders import Nominatim
 from flask import Flask, render_template, request, Blueprint
-from src.core import sedes
+from src.core import sedes, usuarios
+from src.web.helpers.send_emails import enviar_mail_alerta_asistencia
+
 
 ciudadano_blueprint = Blueprint("ciudadanos", __name__, url_prefix="/ciudadanos")
 
@@ -13,24 +17,29 @@ def enviar_notificacion():
     lat_ciudadano = float(request.form["lat"])
     lon_ciudadano = float(request.form["lon"])
     lista_sedes_cercanas = []
-    R = 6373.0
+    R = 6371
+    geoLoc = Nominatim(user_agent="GetLoc")
 
     sedes_posibles = sedes.get_sedes(None)
 
     for sede in sedes_posibles:
-        lat_ciudadano_rad = radians(lat_ciudadano)
-        lon_ciudadano_rad = radians(lon_ciudadano)
+        lat_ciudadano_rad = np.radians(lat_ciudadano)
+        lon_ciudadano_rad = np.radians(lon_ciudadano)
 
-        lat_sede_rad = radians(sede.latitud)
-        lon_sede_rad = radians(sede.longitud)
+        lat_sede_rad = np.radians(float(sede.latitud))
+        lon_sede_rad = np.radians(float(sede.longitud))
 
-        distancia_lat_sede = lat_sede_rad - lat_ciudadano_rad
-        distancia_lon_sede = lon_sede_rad - lon_ciudadano_rad
+        distancia_lat = np.subtract(lat_ciudadano_rad, lat_sede_rad)
+        distancia_lon = np.subtract(lon_ciudadano_rad, lon_sede_rad)
 
-        val1 = sin(distancia_lat_sede / 2)**2 + cos(lat_ciudadano_rad) * cos(lat_sede_rad) * sin(distancia_lon_sede / 2)**2
-        val2 = 2 * atan2(sqrt(val1), sqrt(1 - val1))
+        a = np.add(np.power(np.sin(np.divide(distancia_lat, 2)), 2),
+                   np.multiply(np.cos(lat_sede_rad),
+                               np.multiply(np.cos(lat_ciudadano_rad),
+                                           np.power(np.sin(np.divide(distancia_lon, 2)), 2))))
+        
+        c = np.multiply(2, np.arcsin(np.sqrt(a)))
 
-        distancia_real = R * val2
+        distancia_real = c*R
 
         lista_sedes_cercanas.append({
             "id_sede": sede.id,
@@ -39,5 +48,16 @@ def enviar_notificacion():
 
     lista_ordenada = sorted(lista_sedes_cercanas, key=lambda i: (i["distancia"]))
 
+    sede_notificar = sedes.get_sede(lista_ordenada[0]["id_sede"])
+    representantes = usuarios.get_usuarios_representantes()
+
+    for representante in representantes:
+        for sede in representante.sedes:
+            if sede.id == sede_notificar.id:
+                coords = str(lat_ciudadano) + ", " + str(lon_ciudadano)
+                direccion = str(geoLoc.reverse(coords))
+                lista = direccion.split(", ")
+                direccion_asistencia = lista[1] + ", " + lista[0] + ", " + lista[2]
+                enviar_mail_alerta_asistencia(representante.email, representante.nombre, representante.apellido, direccion_asistencia)
 
     return ""
