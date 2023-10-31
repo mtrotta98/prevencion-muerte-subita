@@ -80,14 +80,15 @@ def dea_edit(id, **kwargs):
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
     dea=deas.get_by_id(id)
+    sede = dea.sede_id
+    if not sede:
+        sede = 1
     if not dea:
         return redirect(url_for('usuarios.inicio'))
     data = request.form     # Recupero el formulario
     form = NewDEAForm(data)   # Creo un formulario de DEA a partir de los datos recibidos (wtforms)
-    #import pdb; pdb.set_trace()
     if (data and form.validate()):  # Valido la información recibida 
         form.populate_obj(dea)     # Relleno los datos del DEA (modelo) a partir de los datos recibidos
-        # Intentar salvar
         try:
             deas.save(dea)        
             flash("Se modificó correctamente el DEA: "+dea.denominacion, "success")
@@ -99,7 +100,8 @@ def dea_edit(id, **kwargs):
             for error in form.errors[field]:
                 flash(error, "error")
         return redirect(url_for("deas.dea_mod"))
-    return dea_list(dea.sede_id)
+    import pdb; pdb.set_trace()
+    return redirect(url_for('deas.dea_list', sede_id=sede))
     
 
 @dea_blueprint.get("/delete/<id>")
@@ -111,8 +113,10 @@ def dea_delete(id):
         return abort(403)
     dea=deas.get_by_id(id)
     sede=dea.sede_id
+    if not sede:
+        sede = 1
     if dea:
         #deas.destroy(dea);
         deas.deactivate(dea);
-    return dea_list(sede)
+    return redirect(url_for('deas.dea_list', sede_id=sede))
 
