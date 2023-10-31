@@ -10,11 +10,12 @@ def get_visitas_aprobadas():
     """Esta funcion devuelve todas las visitas que fueron aprobadas"""
     return Visita.query.filter_by(resultado=True).all()
 
-def agregar_visita():
+def agregar_visita(id_sede):
     """Esta funcion agrega una visita a una sede"""
     fecha = datetime.now().date() + timedelta(days=7)
     data = {
-        "fecha": fecha
+        "fecha": fecha,
+        "id_sede": id_sede,
     }
 
     visita = Visita(**data)

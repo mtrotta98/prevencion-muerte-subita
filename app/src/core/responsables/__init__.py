@@ -6,7 +6,12 @@ def get_all():
     return Responsable.query.all()
 
 def get_by_id(id):
+    """Retorna un responsable en específico"""
     return Responsable.query.filter_by(id=id).first()
+
+def get_by_sede(id_sede):
+    """Retorna los responsables de una sede"""
+    return Responsable.query.filter_by(sede_id=id_sede).all()
 
 def save(self):
     """ Salva los cambios"""

@@ -1,6 +1,7 @@
 from src.core.sedes.sedes import Sede
 from src.core.db import db
 from src.core.usuarios import get_usuario
+from src.core import entidades
 
 
 def get_sedes(busqueda):
@@ -28,11 +29,28 @@ def get_sede(id):
 def agregar_sede(data):
     """Esta funcion da de alta una sede"""
 
+    entidad = entidades.get_entidad(data["id_entidad"])
+    data["id_entidad"] = str(entidad.id)
     sede = Sede(**data)
     db.session.add(sede)
     db.session.commit()
     return sede
 
+def editar_sede(data):
+    """Esta funcion edita los datos de una sede"""
+
+    sede = get_sede(data['id_sede'])
+    sede.latitud = data['latitud'],
+    sede.longitud = data['longitud'],
+    sede.nombre = data['nombre'],
+    sede.flujo_personas = data['flujo_personas'],
+    sede.superficie = data['superficie'],
+    sede.personal_estable = data['personal_estable'],
+    sede.pisos = data['pisos'],
+    sede.estado = sede.estado,
+    db.session.commit()
+    return sede
+    
 
 def validar_datos_existentes(nombre):
     """Esta funcion valida que los datos de alta de sede no existan en la base de datos"""
@@ -42,7 +60,22 @@ def validar_datos_existentes(nombre):
         return False, "La sede ya esta cargada en el sistema."
     else:
         return True, ""
+
+
+def validar_nombre_existente(nombre):
+    """Esta funcion valida que los datos de edicion de sede no existan en la base de datos"""
+
+    sedes = get_sedes("")
+    nombres = []
+    for sede in sedes:
+        if (sede.nombre == nombre):
+            nombres.append(sede)
+    if (len(nombres) > 2):
+        return False, "La sede ya esta cargada en el sistema."
+    else:
+        return True, ""
     
+
 def get_sedes_asociadas(id, busqueda):
     """Devuelve las sedes asociadas a una entidad"""
 

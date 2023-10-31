@@ -43,3 +43,20 @@ def enviar_email_vencimiento_certificacion(receiver, nombre, apellido, nombre_se
     with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
         server.login("d0ee292999b484", "3ab3cd187c026c")
         server.sendmail(sender, receiver, message.as_string())
+
+def enviar_mail_alerta_asistencia(receiver, nombre, apellido, direccion):
+    sender = "nicolastrotta88@gmail.com"
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "multipart test"
+    message["From"] = sender
+    message["To"] = receiver
+
+    text = f"""\
+    Buenos dias {nombre} {apellido} se solicita asistencia medica en la siguiente direccion: {direccion}"""
+
+    part = MIMEText(text, "plain")
+    message.attach(part)
+
+    with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
+        server.login("d0ee292999b484", "3ab3cd187c026c")
+        server.sendmail(sender, receiver, message.as_string())

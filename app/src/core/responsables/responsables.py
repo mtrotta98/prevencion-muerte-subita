@@ -8,6 +8,7 @@ class Responsable(db.Model):
     dni = db.Column(db.String, unique=True, nullable=False)
     email = db.Column(db.String)
     teléfono = db.Column(db.String, nullable=False)
+    sede_id = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
 
 def __init__(self, nombre, apellido, dni, telefono):
     self.nombre = nombre

@@ -1,18 +1,6 @@
 from src.core.db import db
 from src.core.responsables.responsables import Responsable
 
-dea_tiene_responsable = db.Table('dea_tiene_responsable',
-                    db.Column('dea_id', 
-                            db.Integer,
-                            db.ForeignKey('deas.id'),
-                            nullable=False,
-                            primary_key=True,),
-                    db.Column('responsable_id',
-                            db.Integer,
-                            db.ForeignKey('Responsables.id'),
-                            nullable=False,
-                            primary_key=True,),
-                    )
 
 class DEA(db.Model):
     __tablename__ = "deas"
@@ -24,13 +12,7 @@ class DEA(db.Model):
     ultimoMantenimiento = db.Column(db.Date)
     solidario = db.Column(db.Boolean)
     activo = db.Column(db.Boolean)
-    sede_id = db.Column(db.Integer, db.ForeignKey('Sedes.id'))
-    responsables = db.relationship("Responsable", secondary=dea_tiene_responsable, backref="deas")
-
-"""    responsables = db.relationship('Responsable', secondary=dea_tiene_responsable,
-                        backref=db.backref('deas', lazy=True), lazy=True)
-
-"""
+    sede_id = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
 
 
 def __init__(self, denominacion, modelo, marca, nSerie, solidario, activo, sede_id):

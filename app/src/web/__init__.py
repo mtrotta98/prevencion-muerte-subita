@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required
@@ -10,6 +10,7 @@ from src.core import visitas, sedes, provincias
 from src.web.helpers import handlers
 from src.web.helpers.send_emails import enviar_email_vencimiento_certificacion
 
+from src.web.controllers.deas import dea_blueprint
 from src.web.controllers.usuarios import usuario_blueprint
 from src.web.controllers.entidades import entidad_blueprint
 from src.web.controllers.sedes import sede_blueprint
@@ -17,7 +18,7 @@ from src.web.controllers.solicitudes import solicitud_blueprint
 from src.web.controllers.admin_provincial import admin_provincial
 from src.web.controllers.superusuarios import super_usuario
 from src.web.controllers.representante import representante
-from src.web.controllers.deas import dea_blueprint
+from src.web.controllers.ciudadanos import ciudadano_blueprint
 
 #from src.core.db import db, init_db
 
@@ -35,10 +36,10 @@ def create_app(env="development", static_folder="static"):
     jwt = JWTManager(app)
 
     @app.route('/')
-    @jwt_required()
     def hello():
-        return 'Hello, World!'
+        return redirect("/usuarios/login")
     
+    app.register_blueprint(dea_blueprint)    
     app.register_blueprint(usuario_blueprint)
     app.register_blueprint(entidad_blueprint)
     app.register_blueprint(sede_blueprint)
@@ -46,7 +47,8 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(super_usuario)
     app.register_blueprint(representante)
     app.register_blueprint(solicitud_blueprint)
-    app.register_blueprint(dea_blueprint)
+    app.register_blueprint(ciudadano_blueprint)
+
     
     with app.app_context():
         init_db(app)
