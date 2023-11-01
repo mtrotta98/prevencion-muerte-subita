@@ -43,10 +43,9 @@
         </table>
     </table>
     <br>
-    <div class="row">
-        <div class="col text-center"><a href="javascript:history.back()" >
-            <button type="button" class="btn btn-primary" >Cancelar y volver</button>
-          </a>
+    <div class="row">        
+        <div class="col text-center">
+            <a href="{{url_for('sedes.form_editar_sede', id_sede = sede.id)}}" class="btn btn-primary btn-xs" >Volver a la Sede</a>
         </div>
         <div class="col text-center">
             <a href="{{url_for('responsables.responsable_new', sede_id=sede.id)}}" class="btn btn-success btn-xs" >Añadir nuevo Responsable</a>

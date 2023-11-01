@@ -104,15 +104,29 @@
                         </div>
                     </div>
                     </div>
-                    <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Aprobada") }}" class="btn btn-primary">Volver</a>
-                    <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
-                    <a href="{{ url_for('representante.form_ddjj', id_sede=sede.id) }}" class="btn btn-success">DDJJ</a>
-                  </form>
+                    <div class="row">
+                        <div class="col text-center">
+                            <a href="{{ url_for('representante.listado_sedes_solicitadas', tipo="Aprobada") }}" class="btn btn-primary">Volver</a>
+                        </div>
+                        <div class="col text-center">
+                            <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />
+                        </div>
+                        <div class="col text-center">
+                            <a href="{{ url_for('representante.form_ddjj', id_sede=sede.id) }}" class="btn btn-success">DDJJ</a>
+                        </div>
+                        <div class="col text-center">
+                            <a href="{{ url_for('deas.dea_list', sede_id=sede.id) }}" class="btn btn-success">Ver DEA's sede</a>
+                        </div>
+                        <div class="col text-center">
+                            <a href="{{ url_for('responsables.responsable_list', sede_id=sede.id) }}" class="btn btn-success">Ver Responsables sede</a>
+                        </div>  
+                    </div>
+                    </form>
                 </div>
               </div>
             </div>
           </div>
-        {% endblock %}
+        {% endblock %} 
 
     </body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
