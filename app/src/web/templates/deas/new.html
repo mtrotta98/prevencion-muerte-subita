@@ -47,10 +47,11 @@
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
                   <h5 class="card-title text-center mb-5 fw-light fs-5">Nuevo DEA</h5>
-                  <form action="{{ url_for('deas.dea_create', sede_id = sede_id) }}" method="POST">
+                  <form action="{{ url_for('deas.dea_create') }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                       <div class="form-row">
                         <div class="row">
+                          {{ form.sede_id(class='form-control', style="display:none") }} </h2>
                            <div class="form-group col text-center">
                                {{ form.denominacion.label }} 
                                {{ form.denominacion(class='form-control')|safe }}

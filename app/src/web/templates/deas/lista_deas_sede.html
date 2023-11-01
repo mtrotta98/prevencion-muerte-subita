@@ -13,7 +13,7 @@
     <table class="table align-middle mb-0 bg-white caption-top">
         <caption>
             <div class="row">
-                    <h4>Lista de DEAS  -  Sucursal "{{sede.nombre}}"</h4>
+                <h4>Lista de DEAS  -  Sucursal "{{sede.nombre}}"</h4>
             </div>
         </caption>
         <table class="table table-hover table-dark">
@@ -58,9 +58,13 @@
         </table>
     </table>
     <br>
-    <div class="col text-center"><a href="javascript:history.back()" >
-        <button type="button" class="btn btn-primary" >Cancelar y volver</button>
-      </a>
+    <div class="row">
+        <div class="col text-center">
+            <a href="{{url_for('sedes.form_editar_sede', id_sede = sede.id)}}" class="btn btn-primary btn-xs" >Volver a la Sede</a>
+        </div>
+        <div class="col text-center">
+            <a href="{{url_for('deas.dea_new', sede_id = sede.id)}}" class="btn btn-success btn-xs" >Añadir nuevo DEA</a>
+        </div>
     </div>
 </div>
 <script>

@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado Entidades - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                    <h4>Lista de Responsables  -  Sucursal "{{sede.nombre}}"</h4>
+            </div>
+        </caption>
+        <table class="table table-hover table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+            {% if(responsables != None) %}
+                {% for responsable in responsables %}
+                <tr>
+                    <td>{{responsable.nombre}}</td>
+                    <td>{{responsable.apellido}}</td>
+                    <td>{{responsable.dni}}</td>
+                    <td>{{responsable.telefono}}</td>
+                    <td>{{responsable.email}}</td>
+                    <td>
+                        <a href="{{url_for('responsables.responsable_mod', id = responsable.id)}}" class="btn btn-warning btn-xs" >Editar</a>
+                        <a href="{{url_for('responsables.responsable_delete', id = responsable.id)}}" class="btn btn-danger btn-xs" onclick="return confirm('¿Estás seguro de eliminar el DEA?')" style="margin-left: 10px">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </table>
+    <br>
+    <div class="row">        
+        <div class="col text-center">
+            <a href="{{url_for('sedes.form_editar_sede', id_sede = sede.id)}}" class="btn btn-primary btn-xs" >Volver a la Sede</a>
+        </div>
+        <div class="col text-center">
+            <a href="{{url_for('responsables.responsable_new', sede_id=sede.id)}}" class="btn btn-success btn-xs" >Añadir nuevo Responsable</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

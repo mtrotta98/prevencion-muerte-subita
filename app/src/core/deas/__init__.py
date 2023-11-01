@@ -23,8 +23,6 @@ def deactivate(dea):
     dea.activo = False
     save(dea)
 
-
-@staticmethod
 def destroy(dea):
     """ Elimina un DEA de la BD. """
     db.session.delete(dea)
