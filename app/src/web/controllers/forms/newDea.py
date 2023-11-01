@@ -1,6 +1,6 @@
 import datetime
 from wtforms import Form, validators
-from wtforms.fields import StringField, BooleanField, SelectField, DateField
+from wtforms.fields import StringField, BooleanField, SelectField, DateField, IntegerField
 
 
 class NewDEAForm(Form):
@@ -16,3 +16,4 @@ class NewDEAForm(Form):
     solidario = BooleanField('Solidario', default=False)
     ultimoMantenimiento = DateField(u'ultimoMantenimiento',  default=datetime.date.today(), 
                             validators=[validators.DataRequired()])
+    sede_id = IntegerField(u'Sede')

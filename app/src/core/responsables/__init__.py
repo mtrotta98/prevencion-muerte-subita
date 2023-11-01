@@ -18,9 +18,7 @@ def save(self):
     db.session.add(self)
     db.session.commit()
 
-@staticmethod
 def destroy(Responsable):
     """ Elimina un Responsable de la BD. """
     db.session.delete(Responsable)
     db.session.commit()
-

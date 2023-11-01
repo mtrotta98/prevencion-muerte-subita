@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        <title>{% block title %} Modificacion Responsable - Sistema Prevencion Muerte Subita {% endblock %}</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static',filename='style.css') }}"
+        />
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+        />
+    </head>
+    <body>
+
+        {% block content %} 
+        <div id="navbar">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Sistema de Prevencion Muerte Subita</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
+        <div id="main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <p>{{ message }}</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+              <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Editar Responsable de DEA</h5>
+                  <form action="{{ url_for('responsables.responsable_edit', id = id_responsable ) }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <div class="form-row">
+                      <div class="row">
+                         <div class="form-group col text-center">
+                             {{ form.nombre.label }} 
+                             {{ form.nombre(class='form-control')|safe }}
+                         </div>
+                         <br>
+                         <div class="form-group col text-center">
+                              {{ form.apellido.label }} 
+                              {{ form.apellido(class='form-control')|safe }}
+                         </div>
+                         <br>                        
+                      </div>
+                      <div class="row">
+                          <div class="form-group col text-center">
+                              {{ form.email.label }} 
+                              {{ form.email(class='form-control')|safe }}
+                          </div>
+                          <div class="form-group col text-center">
+                                {{ form.dni.label }} 
+                                {{ form.dni(class='form-control')|safe }}
+                          </div>
+                          <br>
+                         <br>
+                      </div>
+                      <br>
+                      <div class="row">
+                          <div class="form-group col text-center">
+                              {{ form.teléfono.label }} 
+                              {{ form.teléfono(class='form-control')|safe }}
+                         </div>
+                         <br>
+                         <br>
+                      </div>
+                      <br>
+                      <br>
+                    </div>
+                    <div class="row">
+                     <div class="col text-center"><a href="javascript:history.back()" >
+                         <button type="button" class="btn btn-primary" >Cancelar y volver</button>
+                       </a>
+                     </div>
+                     <div class="col text-center">
+                       <button type="submit" class="btn btn-danger ">Guardar cambios</button>
+                     </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endblock %}
+
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+</html>

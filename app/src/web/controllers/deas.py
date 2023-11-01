@@ -26,11 +26,12 @@ def dea_new(sede_id):
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
     newDea = NewDEAForm();
+    newDea.sede_id.data = sede_id
     return render_template("deas/new.html",form=newDea, sede_id=sede_id)
 
 @dea_blueprint.route("/add", methods=['POST'])
 @jwt_required()
-def dea_create(sede_id):
+def dea_create():
     usuario_actual = get_jwt_identity()
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
@@ -38,8 +39,7 @@ def dea_create(sede_id):
     dea = deas.DEA()             # Creo un DEA vacío (modelo)
     form = NewDEAForm(data)   # Creo un formulario de DEA a partir de los datos recibidos (wtforms)
     if (data and form.validate()):  # Valido la información recibida 
-        form.populate_obj(dea)     # Relleno los datos del DEA (modelo) a partir de los datos recibidos
-        dea.sede_id = sede_id        
+        form.populate_obj(dea)     # Relleno los datos del DEA (modelo) a partir de los datos recibidos       
         # Intentar salvar
         try:
             deas.save(dea)        
@@ -52,7 +52,7 @@ def dea_create(sede_id):
             for error in form.errors[field]:
                 flash(error, "error")
         return redirect(url_for("deas.dea_new"))
-    return redirect(url_for('usuarios.inicio'))
+    return redirect(url_for('deas.dea_list', sede_id=dea.sede_id))
 
 @dea_blueprint.get("/mod/<id>")
 @jwt_required()
@@ -71,6 +71,7 @@ def dea_mod(id):
     newDea.solidario.data = dea.solidario
     newDea.activo.data = dea.activo
     newDea.ultimoMantenimiento.data = dea.ultimoMantenimiento
+    newDea.sede_id.data = dea.sede_id
     return render_template("deas/mod.html",form=newDea, id_dea=dea.id)
 
 @dea_blueprint.route("/edit/<id>", methods = ["POST", "GET"])
@@ -100,7 +101,6 @@ def dea_edit(id, **kwargs):
             for error in form.errors[field]:
                 flash(error, "error")
         return redirect(url_for("deas.dea_mod"))
-    import pdb; pdb.set_trace()
     return redirect(url_for('deas.dea_list', sede_id=sede))
     
 

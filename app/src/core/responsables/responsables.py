@@ -5,7 +5,7 @@ class Responsable(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     nombre = db.Column(db.String, nullable=False)
     apellido = db.Column(db.String, nullable=False)
-    dni = db.Column(db.String, unique=True, nullable=False)
+    dni = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
     teléfono = db.Column(db.String, nullable=False)
     sede_id = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
