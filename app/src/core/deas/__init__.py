@@ -1,4 +1,5 @@
 from src.core.deas.deas import DEA
+from src.core import sedes
 from src.core.db import db
 
 def get_all():
@@ -28,3 +29,12 @@ def destroy(dea):
     db.session.delete(dea)
     db.session.commit()
 
+def get_sedes_solidarias():
+    """ Esta funcion devuelve las sedes con deas solidarios """
+    sedes_solidarias = []
+    deas = DEA.query.filter_by(activo=True)
+    for dea in deas:
+        if dea.solidario:
+            sede = sedes.get_sede(dea.sede_id)
+            sedes_solidarias.append(sede)
+    return sedes_solidarias
