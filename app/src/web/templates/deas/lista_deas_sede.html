@@ -75,15 +75,11 @@
                 .then(data => {
                     data.forEach(deas => {
                       dir_Marcas[deas.id]=deas.marca;
+                      console.log(deas.marca)
                     });
-                });
-    console.log(dir_Marcas)
-    console.log(listaMarcas)
-    let item
-    for (item of listaMarcas) {
-        console.log(item.innerText);
-        item.innerText=dir_Marcas[parseInt(item.innerText)];
-    }
- 
+                    for (item of listaMarcas) {
+                        item.innerText=dir_Marcas[parseInt(item.innerText)];
+                    }
+                }); 
 </script>
 {% endblock %}
