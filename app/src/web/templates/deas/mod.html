@@ -52,6 +52,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <div class="form-row">
                       <div class="row">
+                        {{ form.sede_id(class='form-control', style="display:none") }} 
                          <div class="form-group col text-center">
                              {{ form.denominacion.label }} 
                              {{ form.denominacion(class='form-control')|safe }}

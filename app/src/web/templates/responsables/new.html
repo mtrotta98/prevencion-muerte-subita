@@ -51,7 +51,7 @@
                   <form action="{{ url_for('responsables.responsable_create') }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <div class="form-row">
-                        {{ form.sede_id(class='form-control', style="display:none") }} </h2>
+                        {{ form.sede_id(class='form-control', style="display:none") }} 
                       <div class="row">
                          <div class="form-group col text-center">
                              {{ form.nombre.label }} 
