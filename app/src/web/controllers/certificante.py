@@ -26,9 +26,7 @@ def listado_visitas():
         sedes_provincias = sedes.get_sedes_provincia(id_provincia)
         for sede in sedes_provincias:
             visita_sede = visitas.get_visita_sede(sede.id)
-            print(visita_sede)
             if visita_sede and visita_sede[0].resultado is None:
-                print("HOLA")
                 listado_visitas.append(visita_sede)
     kwargs = {
         "visitas": listado_visitas,
