@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Solicitudes - Prevencion Muerte Subita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <div class="col-5">
+                    <h4>Lista de Visitas</h4>
+                </div>
+            </div>
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Fecha</th>
+                <th>Resultado</th>
+                <th>Observacion</th>
+                <th>Sede</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for visita in visitas %}
+                {% set contador = [0] %}
+                <tr>
+                    <td>
+                        {{visita[contador[0]]['fecha']}}
+                    </td>
+                    <td>
+                        {{visita[contador[0]]['resultado']}}
+                    </td>
+                    <td>
+                        {{visita[contador[0]]['observacion']}}
+                    </td>
+                    <td>
+                        {{visita[contador[0]]['id_sede']}}
+                    </td>
+                </tr>
+                {% set _ = contador.append(contador.pop() + 1) %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

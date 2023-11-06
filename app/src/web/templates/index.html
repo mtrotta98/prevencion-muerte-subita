@@ -16,6 +16,8 @@
         {% include 'super_usuario/tareas_super_usuario.html' %}
     {% elif rol == 'Representante' %}
         {% include 'representante/tareas_representante.html' %}
+    {% elif rol == 'Usuario Certificante' %}
+        {% include 'certificante/tareas_certificante.html' %}
     {% endif %}
 </div>
 {% endblock %}

@@ -22,3 +22,11 @@ def agregar_visita(id_sede):
     db.session.add(visita)
     db.session.commit()
     return visita
+
+def get_visita_sede(id):
+    """Esta funcion devuelve las visitas de una sede"""
+
+    if id:
+        return Visita.query.filter_by(id_sede = id).all()
+    return Visita.query.all()
+

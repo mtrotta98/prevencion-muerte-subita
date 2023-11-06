@@ -7,10 +7,9 @@ from src.core import sedes
 from src.core import usuarios
 from src.core import provincias
 from src.core import solicitudes
-from src.web.controllers.validators import validator_usuario, validator_permission
+from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 from src.core import ddjj
 from src.core import visitas
-from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 
 representante = Blueprint("representante", __name__, url_prefix="/representante")
 
