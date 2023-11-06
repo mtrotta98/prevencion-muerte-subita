@@ -17,6 +17,31 @@
                     <h4>Lista de Visitas</h4>
                 </div>
             </div>
+            <div class="col-5 ms-auto">
+                <div class="row">
+                    <div class="col-12">
+                        <form
+                            class="d-flex"
+                            method="GET"
+                            action="{{ url_for('certificante.listado_visitas') }}"
+                        >
+                            <select
+                                class="form-control select-input me-2"
+                                aria-label="Buscar por provincia"
+                                name="provincia"
+                                id="provincia"
+                            >
+                                {% for provincia in provincias %}
+                                    <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="btn btn-outline-success" type="submit">
+                                Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </caption>
         <thead class="bg-light">
             <tr>

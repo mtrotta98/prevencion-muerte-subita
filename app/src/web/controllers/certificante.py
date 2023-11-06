@@ -5,6 +5,7 @@ from flask_jwt_extended import get_jwt_identity
 from src.core import usuarios
 from src.core import sedes
 from src.core import visitas
+from src.core import provincias
 from src.web.controllers.validators import validator_usuario, validator_permission
 
 certificante_blueprint = Blueprint("certificante", __name__, url_prefix="/certificante")
@@ -20,14 +21,18 @@ def listado_visitas():
     
     listado_visitas = []
     provincias_usuario = usuario.provincias
-    for provincia in provincias_usuario:
-        sedes_provincias = sedes.get_sedes_provincia(provincia.id)
+    id_provincia = request.args.get("provincia") if request.args.get("provincia", type=str) != "" else None
+    if id_provincia != None:
+        sedes_provincias = sedes.get_sedes_provincia(id_provincia)
         for sede in sedes_provincias:
             visita_sede = visitas.get_visita_sede(sede.id)
-            if visita_sede:
+            print(visita_sede)
+            if visita_sede and visita_sede[0].resultado is None:
+                print("HOLA")
                 listado_visitas.append(visita_sede)
     kwargs = {
         "visitas": listado_visitas,
+        "provincias": provincias_usuario,
         "nombre": usuario.nombre,
         "apellido": usuario.apellido
     }
