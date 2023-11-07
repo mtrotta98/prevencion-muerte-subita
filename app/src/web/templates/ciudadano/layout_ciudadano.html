@@ -65,12 +65,6 @@
       bot1.value = pos.lat
       bot2.value = pos.lng
 
-      var varBe = {{var1 | tojson}}
-      for(i=0; i < varBe.length; i++){
-        console.log(varBe[i][0])
-        console.log(varBe[i][1])
-      }
-
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
