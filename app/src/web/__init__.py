@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 from flask import Flask, render_template, redirect
 from flask_wtf.csrf import CSRFProtect
 from flask_jwt_extended import JWTManager
@@ -86,7 +87,8 @@ def create_app(env="development", static_folder="static"):
             for visita in visitas_aprobadas:
                 sede_visitada = sedes.get_sede(visita.id_sede)
                 provincia_sede = provincias.get_provincia(sede_visitada.id_provincia)
-                fecha_vencimiento = visita.fecha + timedelta(days=365)
+                dias_venci = provincia_sede.vencimiento * 365
+                fecha_vencimiento = visita.fecha + timedelta(days=dias_venci)
                 fecha_actual = datetime.now().date()
                 if fecha_vencimiento == fecha_actual:
                     visita.resultado = False
@@ -99,7 +101,7 @@ def create_app(env="development", static_folder="static"):
                 
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=verificar_certificaciones, trigger="interval", seconds=30) # 86400
+    scheduler.add_job(func=verificar_certificaciones, trigger=CronTrigger(hour=8, minute=30)) # 17 50
     scheduler.start()
 
     app.register_error_handler(403, handlers.not_authorized_error)

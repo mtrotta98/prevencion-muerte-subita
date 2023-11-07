@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from geopy.geocoders import Nominatim
 from flask import Flask, render_template, request, Blueprint
-from src.core import sedes, usuarios
+from src.core import sedes, responsables, deas
 from src.web.helpers.send_emails import enviar_mail_alerta_asistencia
 
 
@@ -20,7 +20,7 @@ def enviar_notificacion():
     R = 6371
     geoLoc = Nominatim(user_agent="GetLoc")
 
-    sedes_posibles = sedes.get_sedes(None)
+    sedes_posibles = deas.get_sedes_solidarias()
 
     for sede in sedes_posibles:
         lat_ciudadano_rad = np.radians(lat_ciudadano)
@@ -49,15 +49,13 @@ def enviar_notificacion():
     lista_ordenada = sorted(lista_sedes_cercanas, key=lambda i: (i["distancia"]))
 
     sede_notificar = sedes.get_sede(lista_ordenada[0]["id_sede"])
-    representantes = usuarios.get_usuarios_representantes()
+    responsables_deas = responsables.get_all()
 
-    for representante in representantes:
-        for sede in representante.sedes:
-            if sede.id == sede_notificar.id:
-                coords = str(lat_ciudadano) + ", " + str(lon_ciudadano)
-                direccion = str(geoLoc.reverse(coords))
-                lista = direccion.split(", ")
-                direccion_asistencia = lista[1] + ", " + lista[0] + ", " + lista[2]
-                enviar_mail_alerta_asistencia(representante.email, representante.nombre, representante.apellido, direccion_asistencia)
-
+    for responsable in responsables_deas:
+        if responsable.sede_id == sede_notificar.id:
+            coords = str(lat_ciudadano) + ", " + str(lon_ciudadano)
+            direccion = str(geoLoc.reverse(coords))
+            lista = direccion.split(", ")
+            direccion_asistencia = lista[1] + ", " + lista[0] + ", " + lista[2]
+            enviar_mail_alerta_asistencia(responsable.email, responsable.nombre, responsable.apellido, direccion_asistencia)
     return ""
