@@ -7,10 +7,9 @@ from src.core import sedes
 from src.core import usuarios
 from src.core import provincias
 from src.core import solicitudes
-from src.web.controllers.validators import validator_usuario, validator_permission
+from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 from src.core import ddjj
 from src.core import visitas
-from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 
 representante = Blueprint("representante", __name__, url_prefix="/representante")
 
@@ -42,24 +41,19 @@ def sedes_asociadas(id):
     if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
         return abort(403)
     
-    """data_provincia = request.args.getlist("busquedaProvincia" if request.args.get("busquedaProvincia", type=str) != "" else None)"""
     nombre_sede = request.args.get("busquedaSede" if request.args.get("busquedaSede", type=str) != "" else None)
     id_entidad = int(id)
-    """if data_provincia:
-        for provincia in data_provincia:
-            print(provincia)
-            id_provincia = provincia"""
-    
     sedes_asociadas = sedes.get_sedes_asociadas(id_entidad, nombre_sede)
-    """sedes_provincias = sedes.get_sedes_por_provincia(id_entidad, id_provincia)"""
+    solicitudes_usuario = solicitudes.solicitudes_usuario(usuario)
+
     kwargs = {
         "sedes_asociadas": sedes_asociadas,
-        """"sedes_provincias": sedes_provincias,"""
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
         "id_usuario": usuario.id,
         "id_entidad": id_entidad,
-        "provincias": provincias.get_provincias()
+        "provincias": provincias.get_provincias(),
+        "solicitudes_usuario": solicitudes_usuario
     }
     return render_template("/representante/listado_sedes_asociadas.html", **kwargs)
 

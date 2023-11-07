@@ -59,3 +59,17 @@ def enviar_notificacion():
             direccion_asistencia = lista[1] + ", " + lista[0] + ", " + lista[2]
             enviar_mail_alerta_asistencia(responsable.email, responsable.nombre, responsable.apellido, direccion_asistencia)
     return ""
+
+@ciudadano_blueprint.route("/ver_mapa")
+def ver_mapa():
+
+    lista_coordenadas = []
+    lista_sedes = sedes.get_sedes("")
+    for sede in lista_sedes:
+        lista_coordenadas.append((sede.latitud, sede.longitud))
+
+    kwgars = {
+        "lista_coordenadas": lista_coordenadas
+    }
+
+    return render_template("/ciudadano/ver_mapa.html", **kwgars)

@@ -12,12 +12,12 @@ def get_sedes(busqueda):
             return Sede.query.filter_by(nombre=busqueda).all()
     return Sede.query.all()
 
-def get_sedes_provincia(id_provincia):
+def get_sedes_provincia(id):
     """Esta funcion devuelve todas las sedes asociadas a una provincia"""
 
     with db.session.no_autoflush:
-        if id_provincia:
-            return Sede.query.fiter_by(id_provincia=id_provincia).all()
+        if id:
+            return Sede.query.filter_by(id_provincia=id).all()
     return Sede.query.all()
 
 
@@ -119,3 +119,4 @@ def informacion_sede(usuario_solicitudes):
             sedes.append(get_sede(solicitud.id_sede))
         return sedes
     return None
+

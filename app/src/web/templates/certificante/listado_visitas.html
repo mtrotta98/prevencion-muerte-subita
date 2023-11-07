@@ -14,7 +14,7 @@
         <caption>
             <div class="row">
                 <div class="col-5">
-                    <h4>Lista de Solicitudes</h4>
+                    <h4>Lista de Visitas</h4>
                 </div>
             </div>
             <div class="col-5 ms-auto">
@@ -23,18 +23,17 @@
                         <form
                             class="d-flex"
                             method="GET"
-                            action="{{ url_for('admin_provincial.listado_solicitudes') }}"
+                            action="{{ url_for('certificante.listado_visitas') }}"
                         >
                             <select
                                 class="form-control select-input me-2"
-                                aria-label="Buscar por activo"
-                                name="tipo"
-                                id="tipo"
+                                aria-label="Buscar por provincia"
+                                name="provincia"
+                                id="provincia"
                             >
-                                <option value="">----Seleccione una opcion----</option>
-                                <option value="Pendiente">Pendiente</option>
-                                <option value="Aprobada">Aprobada</option>
-                                <option value="Rechazada">Rechazada</option>
+                                {% for provincia in provincias %}
+                                    <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                                {% endfor %}
                             </select>
                             <button class="btn btn-outline-success" type="submit">
                                 Buscar
@@ -46,40 +45,30 @@
         </caption>
         <thead class="bg-light">
             <tr>
-                <th>Administrador</th>
+                <th>Fecha</th>
+                <th>Resultado</th>
+                <th>Observacion</th>
                 <th>Sede</th>
-                <th>Estado Solicitud</th>
-                <th>Razon</th>
-                <th>Ver</th>
             </tr>
         </thead>
         <tbody>
-            {% for solicitud in solicitudes %}
+            {% for visita in visitas %}
+                {% set contador = [0] %}
                 <tr>
                     <td>
-                        {{solicitud['Nombre']}} {{solicitud['Apellido']}}
+                        {{visita[contador[0]]['fecha']}}
                     </td>
                     <td>
-                        {{solicitud['sede']}}
+                        {{visita[contador[0]]['resultado']}}
                     </td>
                     <td>
-                        {{solicitud['Estado']}}
+                        {{visita[contador[0]]['observacion']}}
                     </td>
                     <td>
-                        {% if solicitud['Estado'] != 'Pendiente' %}
-                            {{solicitud['Razon']}}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if solicitud['Estado'] == 'Pendiente' %}
-                            <a href="{{ url_for('admin_provincial.info_solicitud', id=solicitud['id_solicitud']) }}" class="btn btn-primary">Ver Mas</a>
-                        {% else %}
-                            Evaluada
-                        {% endif %}
+                        {{visita[contador[0]]['id_sede']}}
                     </td>
                 </tr>
+                {% set _ = contador.append(contador.pop() + 1) %}
             {% endfor %}
         </tbody>
     </table>

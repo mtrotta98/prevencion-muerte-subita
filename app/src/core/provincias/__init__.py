@@ -6,3 +6,8 @@ def get_provincias():
 
 def get_provincia(id):
     return Provincia.query.filter_by(id=id).first()
+
+def get_provincia_nombre(nombre):
+    """Esta funcion de vuelve una provincia por nombre"""
+
+    return Provincia.query.filter_by(nombre=nombre).first()

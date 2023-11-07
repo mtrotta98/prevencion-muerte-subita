@@ -36,4 +36,18 @@ def usuario_tipo_solicitudes(usuario, tipo):
             if solicitud.estado == tipo:
                 solicitudes_tipo.append(solicitud)
         return solicitudes_tipo
-    return None    
+    return None
+
+def registrar_solicitud(id_usuario, id_sede):
+    """Esta funcion genera una solicitud de un usuario representante a una sede"""
+
+    data = {
+        "id_usuario": id_usuario,
+        "id_sede": id_sede,
+        "estado": "Pendiente",
+    }
+
+    solicitud = Solicitud(**data)
+    db.session.add(solicitud)
+    db.session.commit()
+    return solicitud
