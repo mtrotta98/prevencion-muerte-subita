@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort
+from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort, url_for
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 
@@ -23,14 +23,4 @@ def registrar_solicitud(id_entidad, id_sede):
     sedes_asociadas = sedes.get_sedes_asociadas(id_entidad, nombre_sede)
     solicitudes_usuario = solicitudes.solicitudes_usuario(usuario)
 
-    kwargs = {
-        "sedes_asociadas": sedes_asociadas,
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido,
-        "id_usuario": usuario.id,
-        "id_entidad": id_entidad,
-        "id_sede": id_sede,
-        "provincias": provincias.get_provincias(),
-        "solicitudes_usuario": solicitudes_usuario
-    }
-    return render_template("/representante/listado_sedes_asociadas.html", **kwargs)
+    return redirect(url_for("representante.sedes_asociadas", id=id_entidad))

@@ -66,7 +66,14 @@ def ver_mapa():
     lista_coordenadas = []
     lista_sedes = sedes.get_sedes("")
     for sede in lista_sedes:
-        lista_coordenadas.append((sede.latitud, sede.longitud))
+        solidario = "No"
+        deas_sede = deas.get_by_sede(sede.id)
+        if deas_sede:
+            for dea in deas_sede:
+                if dea.solidario:
+                    solidario = "Si"
+                    break
+        lista_coordenadas.append((sede.latitud, sede.longitud, sede.nombre, sede.cantidad_DEA, solidario))
 
     kwgars = {
         "lista_coordenadas": lista_coordenadas
