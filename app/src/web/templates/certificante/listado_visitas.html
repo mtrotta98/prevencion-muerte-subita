@@ -45,10 +45,10 @@
         </caption>
         <thead class="bg-light">
             <tr>
+                <th>Nombre Sede</th>
+                <th>Direccion</th>
                 <th>Fecha</th>
-                <th>Resultado</th>
-                <th>Observacion</th>
-                <th>Sede</th>
+                <th>Cargar Visita</th>
             </tr>
         </thead>
         <tbody>
@@ -56,21 +56,23 @@
                 {% set contador = [0] %}
                 <tr>
                     <td>
+                        {{info_sedes[contador[0]]['nombre']}}
+                    </td>
+                    <td>
+                        {{direcciones[contador[0]]}}
+                    </td>
+                    <td>
                         {{visita[contador[0]]['fecha']}}
                     </td>
                     <td>
-                        {{visita[contador[0]]['resultado']}}
-                    </td>
-                    <td>
-                        {{visita[contador[0]]['observacion']}}
-                    </td>
-                    <td>
-                        {{visita[contador[0]]['id_sede']}}
+                        <a href="" class="btn btn-primary">Cargar</a>
                     </td>
                 </tr>
                 {% set _ = contador.append(contador.pop() + 1) %}
             {% endfor %}
         </tbody>
     </table>
+    <br>
+    <a href="{{ url_for('usuarios.inicio') }}" class="btn btn-primary">Inicio</a>
 </div>
 {% endblock %}

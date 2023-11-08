@@ -67,9 +67,11 @@ def listado_sedes_solicitadas(tipo):
     usuario = usuarios.get_usuario(usuario_actual)
     usuario_solicitudes = solicitudes.usuario_tipo_solicitudes(usuario, tipo)
     info_sedes = sedes.informacion_sede(usuario_solicitudes)
+    direcciones = sedes.get_direccion(info_sedes)
     kwargs = {
         "solicitudes":  usuario_solicitudes,
-        "info_sedes": info_sedes,  
+        "info_sedes": info_sedes,
+        "direcciones": direcciones,
         "tipo": tipo
     }
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)

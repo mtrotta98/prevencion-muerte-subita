@@ -21,9 +21,16 @@ def listado_visitas():
     
     listado_visitas = []
     provincias_usuario = usuario.provincias
-    id_provincia = request.args.get("provincia") if request.args.get("provincia", type=str) != "" else None
+    sedes_provincias = []
+    direcciones = []
+    provincia = request.args.get("provincia") if request.args.get("provincia", type=str) != "" else None
+    if provincia is None:
+        id_provincia = 1
+    else:
+        id_provincia = provincia
     if id_provincia != None:
         sedes_provincias = sedes.get_sedes_provincia(id_provincia)
+        direcciones = sedes.get_direccion(sedes_provincias)
         for sede in sedes_provincias:
             visita_sede = visitas.get_visita_sede(sede.id)
             if visita_sede and visita_sede[0].resultado is None:
@@ -31,6 +38,8 @@ def listado_visitas():
     kwargs = {
         "visitas": listado_visitas,
         "provincias": provincias_usuario,
+        "info_sedes": sedes_provincias,
+        "direcciones": direcciones,
         "nombre": usuario.nombre,
         "apellido": usuario.apellido
     }

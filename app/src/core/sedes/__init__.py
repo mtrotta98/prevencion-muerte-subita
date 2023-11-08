@@ -3,6 +3,8 @@ from src.core.db import db
 from src.core.usuarios import get_usuario
 from src.core import entidades
 
+from geopy.geocoders import Nominatim
+
 
 def get_sedes(busqueda):
     """Esta funcion devuelve todas las sedes"""
@@ -120,3 +122,15 @@ def informacion_sede(usuario_solicitudes):
         return sedes
     return None
 
+def get_direccion(sedes):
+    """Esta funcion devuelve la direccion de una sede"""
+
+    if sedes:
+        direcciones = []
+        geolocator = Nominatim(user_agent="__main__")
+        for sede in sedes:
+            location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
+            direccion = location.raw['address'].get('road')
+            direcciones.append(direccion)
+        return direcciones
+    return None
