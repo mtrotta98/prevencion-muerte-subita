@@ -5,6 +5,7 @@ from src.web.controllers.validators.validator_permission import has_permission
 from src.core import deas
 from src.core import sedes
 from src.core import usuarios
+from src.core import roles
 from src.web.controllers.forms.newDea import NewDEAForm
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -15,22 +16,24 @@ dea_blueprint = Blueprint("deas", __name__, url_prefix="/deas")
 def dea_list(sede_id):
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
     dea_list=deas.get_by_sede(sede_id)
     sede=sedes.get_sede(sede_id)
-    return render_template("deas/lista_deas_sede.html", deas=dea_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido)
+    return render_template("deas/lista_deas_sede.html", deas=dea_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 @dea_blueprint.get("/new/<sede_id>")
 @jwt_required()
 def dea_new(sede_id):
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
     newDea = NewDEAForm();
     newDea.sede_id.data = sede_id
-    return render_template("deas/new.html",form=newDea, sede_id=sede_id, nombre=usuario.nombre, apellido=usuario.apellido)
+    return render_template("deas/new.html",form=newDea, sede_id=sede_id, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 @dea_blueprint.route("/add", methods=['POST'])
 @jwt_required()
@@ -62,6 +65,7 @@ def dea_create():
 def dea_mod(id):
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
     dea=deas.get_by_id(id)
@@ -76,7 +80,7 @@ def dea_mod(id):
     newDea.activo.data = dea.activo
     newDea.ultimoMantenimiento.data = dea.ultimoMantenimiento
     newDea.sede_id.data = dea.sede_id
-    return render_template("deas/mod.html",form=newDea, id_dea=dea.id, nombre=usuario.nombre, apellido=usuario.apellido)
+    return render_template("deas/mod.html",form=newDea, id_dea=dea.id, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 @dea_blueprint.route("/edit/<id>", methods = ["POST", "GET"])
 @jwt_required()

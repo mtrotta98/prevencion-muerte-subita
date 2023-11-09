@@ -23,7 +23,7 @@
         <div id="navbar">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Sistema de Prevencion Muerte Subita</a>
+                    <a class="navbar-brand" href="{{ url_for('usuarios.inicio') }}">Sistema de Prevencion Muerte Subita</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -33,7 +33,7 @@
                           <li class="nav-item dropdown">
                             <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                               data-bs-toggle="dropdown" aria-expanded="false">
-                              {{nombre}} {{apellido}}
+                              {{nombre}} {{apellido}} ({{rol}})
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                               <li><a class="dropdown-item" href="#">Perfil</a></li>

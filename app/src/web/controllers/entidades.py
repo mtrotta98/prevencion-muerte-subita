@@ -1,6 +1,6 @@
 import json
 
-from src.core import entidades, usuarios
+from src.core import entidades, usuarios, roles
 from flask import Blueprint, render_template, request, flash, redirect, session, abort
 from src.web.controllers.validators.validator_permission import has_permission
 from src.web.controllers.validators import validator_entidad_sede
@@ -14,12 +14,14 @@ entidad_blueprint = Blueprint("entidades", __name__, url_prefix="/entidades")
 def form_entidad():
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_alta_entidad")):
         return abort(403)
     
     kwargs = {
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
+        "rol": rol.nombre,
     }
 
     return render_template("entidades/registro_entidad.html", **kwargs)

@@ -8,6 +8,7 @@ from src.core import sedes
 from src.core import usuarios
 from src.core import provincias
 from src.core import solicitudes
+from src.core import roles
 from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 from src.core import ddjj
 from src.core import visitas
@@ -20,6 +21,7 @@ def listado_entidades_existentes():
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
         return abort(403)
     busqueda = request.args.get("busqueda" if request.args.get("busqueda", type=str) != "" else None)
@@ -27,7 +29,8 @@ def listado_entidades_existentes():
     kwargs = {
         "lista_entidades": lista_entidades,
         "nombre": usuario.nombre,
-        "apellido": usuario.apellido
+        "apellido": usuario.apellido,
+        "rol": rol.nombre
     }
     return render_template("representante/listado_entidades_existentes.html", **kwargs)
 
@@ -39,6 +42,7 @@ def sedes_asociadas(id):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
         return abort(403)
     
@@ -54,7 +58,8 @@ def sedes_asociadas(id):
         "id_usuario": usuario.id,
         "id_entidad": id_entidad,
         "provincias": provincias.get_provincias(),
-        "solicitudes_usuario": solicitudes_usuario
+        "solicitudes_usuario": solicitudes_usuario,
+        "rol": rol.nombre,
     }
     return render_template("/representante/listado_sedes_asociadas.html", **kwargs)
 
@@ -66,6 +71,7 @@ def listado_sedes_solicitadas(tipo):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_estado_solicitudes")):
         return abort(403)
     usuario_solicitudes = solicitudes.usuario_tipo_solicitudes(usuario, tipo)
@@ -78,6 +84,7 @@ def listado_sedes_solicitadas(tipo):
         "tipo": tipo,
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
+        "rol": rol.nombre
     }
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)
 
@@ -89,10 +96,12 @@ def form_ddjj(id_sede):
     if not (validator_permission.has_permission(usuario_actual, "representante_ddjj")):
         return abort(403)
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     kwargs = {
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
         "id_sede": id_sede,
+        "rol": rol.nombre
     }
     return render_template("representante/form_ddjj.html", **kwargs)
 

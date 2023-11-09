@@ -25,10 +25,12 @@ def form_usuario():
     if not (validator_permission.has_permission(usuario_actual, "super_usuario_alta_admins_prov")):
         return abort(403)
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     kwargs = {
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
-        "provincias": provincias.get_provincias()
+        "provincias": provincias.get_provincias(),
+        "rol": rol.nombre,
     }
     return render_template("super_usuario/alta_admin_provincial.html", **kwargs)
 
