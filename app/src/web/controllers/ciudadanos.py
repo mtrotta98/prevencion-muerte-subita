@@ -48,17 +48,46 @@ def enviar_notificacion():
 
     lista_ordenada = sorted(lista_sedes_cercanas, key=lambda i: (i["distancia"]))
 
-    sede_notificar = sedes.get_sede(lista_ordenada[0]["id_sede"])
-    responsables_deas = responsables.get_all()
+    sedes_notificar = []
+    lista_coordenadas = []
+
+    for i in range(3):
+        sedes_notificar.append(sedes.get_sede(lista_ordenada[i]["id_sede"]))
+
+    for sede in sedes_notificar:
+        lista_coordenadas.append((sede.latitud, sede.longitud, sede.nombre, sede.cantidad_DEA, "si"))
+    
+    responsables_deas = responsables.get_responsables_aviso(sedes_notificar)
 
     for responsable in responsables_deas:
-        if responsable.sede_id == sede_notificar.id:
-            coords = str(lat_ciudadano) + ", " + str(lon_ciudadano)
-            direccion = str(geoLoc.reverse(coords))
-            lista = direccion.split(", ")
-            direccion_asistencia = lista[1] + ", " + lista[0] + ", " + lista[2]
-            enviar_mail_alerta_asistencia(responsable.email, responsable.nombre, responsable.apellido, direccion_asistencia)
-    return ""
+        coords = str(lat_ciudadano) + ", " + str(lon_ciudadano)
+        direccion = str(geoLoc.reverse(coords))
+        lista = direccion.split(", ") 
+        direccion_asistencia = lista[1] + ", " + lista[0] + ", " + lista[2]
+        enviar_mail_alerta_asistencia(responsable.email, responsable.nombre, responsable.apellido, direccion_asistencia)
+
+    return lista_coordenadas
+
+@ciudadano_blueprint.route("/ver_mapa")
+def ver_mapa():
+
+    lista_coordenadas = []
+    lista_sedes = sedes.get_sedes("")
+    for sede in lista_sedes:
+        solidario = "No"
+        deas_sede = deas.get_by_sede(sede.id)
+        if deas_sede:
+            for dea in deas_sede:
+                if dea.solidario:
+                    solidario = "Si"
+                    break
+        lista_coordenadas.append((sede.latitud, sede.longitud, sede.nombre, sede.cantidad_DEA, solidario))
+
+    kwgars = {
+        "lista_coordenadas": lista_coordenadas
+    }
+
+    return render_template("/ciudadano/ver_mapa.html", **kwgars)
 
 @ciudadano_blueprint.route("/ver_mapa")
 def ver_mapa():

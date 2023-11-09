@@ -33,6 +33,7 @@ def agregar_sede(data):
 
     entidad = entidades.get_entidad(data["id_entidad"])
     data["id_entidad"] = str(entidad.id)
+    data["cantidad_DEA"] = 0
     sede = Sede(**data)
     db.session.add(sede)
     db.session.commit()
