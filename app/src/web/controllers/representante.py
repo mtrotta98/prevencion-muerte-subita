@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort, url_for
+from src.web.controllers.validators.validator_permission import has_permission
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 
@@ -65,6 +66,8 @@ def listado_sedes_solicitadas(tipo):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    if not (has_permission(usuario_actual, "representante_estado_solicitudes")):
+        return abort(403)
     usuario_solicitudes = solicitudes.usuario_tipo_solicitudes(usuario, tipo)
     info_sedes = sedes.informacion_sede(usuario_solicitudes)
     direcciones = sedes.get_direccion(info_sedes)
@@ -72,7 +75,9 @@ def listado_sedes_solicitadas(tipo):
         "solicitudes":  usuario_solicitudes,
         "info_sedes": info_sedes,
         "direcciones": direcciones,
-        "tipo": tipo
+        "tipo": tipo,
+        "nombre": usuario.nombre,
+        "apellido": usuario.apellido,
     }
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)
 

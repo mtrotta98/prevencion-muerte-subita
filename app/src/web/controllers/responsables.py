@@ -4,6 +4,7 @@ from flask import url_for
 from src.web.controllers.validators.validator_permission import has_permission
 from src.core import responsables
 from src.core import sedes
+from src.core import usuarios
 from src.web.controllers.forms.newResp import NewRespForm
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -13,28 +14,30 @@ responsable_blueprint = Blueprint("responsables", __name__, url_prefix="/respons
 @jwt_required()
 def responsable_list(sede_id):
     usuario_actual = get_jwt_identity()
-    if not (has_permission(usuario_actual, "representante_alta_dea")):
+    usuario = usuarios.get_usuario(usuario_actual)
+    if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
     responsable_list=responsables.get_by_sede(sede_id)
     sede=sedes.get_sede(sede_id)
-    return render_template("responsables/lista_resp_sede.html", responsables=responsable_list, sede=sede)
+    return render_template("responsables/lista_resp_sede.html", responsables=responsable_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido)
 
 
 @responsable_blueprint.get("/new/<sede_id>")
 @jwt_required()
 def responsable_new(sede_id):
     usuario_actual = get_jwt_identity()
-    if not (has_permission(usuario_actual, "representante_alta_dea")):
+    usuario = usuarios.get_usuario(usuario_actual)
+    if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
     newResp = NewRespForm();
     newResp.sede_id.data = sede_id
-    return render_template("responsables/new.html",form=newResp)
+    return render_template("responsables/new.html",form=newResp, nombre=usuario.nombre, apellido=usuario.apellido)
 
 @responsable_blueprint.route("/add", methods = ["POST"])
 @jwt_required()
 def responsable_create():
     usuario_actual = get_jwt_identity()
-    if not (has_permission(usuario_actual, "representante_alta_dea")):
+    if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
     data = request.form     # Recupero el formulario
     responsable = responsables.Responsable()             
@@ -59,7 +62,8 @@ def responsable_create():
 @jwt_required()
 def responsable_mod(id):
     usuario_actual = get_jwt_identity()
-    if not (has_permission(usuario_actual, "representante_alta_dea")):
+    usuario = usuarios.get_usuario(usuario_actual)
+    if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
     responsable=responsables.get_by_id(id)
     if not responsable:
@@ -71,13 +75,13 @@ def responsable_mod(id):
     newResp.email.data = responsable.email
     newResp.dni.data = responsable.dni
     newResp.sede_id.data = responsable.sede_id
-    return render_template("responsables/mod.html",form=newResp, id_responsable=responsable.id)
+    return render_template("responsables/mod.html",form=newResp, id_responsable=responsable.id, nombre=usuario.nombre, apellido=usuario.apellido)
 
 @responsable_blueprint.route("/edit/<id>", methods = ["POST", "GET"])
 @jwt_required()
 def responsable_edit(id, **kwargs):
     usuario_actual = get_jwt_identity()
-    if not (has_permission(usuario_actual, "representante_alta_dea")):
+    if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
     responsable=responsables.get_by_id(id)
     sede = responsable.sede_id
@@ -107,7 +111,7 @@ def responsable_edit(id, **kwargs):
 @jwt_required()
 def responsable_delete(id):
     usuario_actual = get_jwt_identity()
-    if not (has_permission(usuario_actual, "representante_alta_dea")):
+    if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
     responsable=responsables.get_by_id(id)
     sede=responsable.sede_id
