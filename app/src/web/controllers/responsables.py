@@ -111,8 +111,6 @@ def responsable_delete(id):
         return abort(403)
     responsable=responsables.get_by_id(id)
     sede=responsable.sede_id
-    if not sede:
-        sede = 1
     if responsable:
         responsables.destroy(responsable);
     return redirect(url_for('responsables.responsable_list', sede_id=sede))

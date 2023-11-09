@@ -17,7 +17,7 @@ def get_sedes_provincia(id_provincia):
 
     with db.session.no_autoflush:
         if id_provincia:
-            return Sede.query.fiter_by(id_provincia=id_provincia).all()
+            return Sede.query.filter_by(id_provincia=id_provincia).all()
     return Sede.query.all()
 
 

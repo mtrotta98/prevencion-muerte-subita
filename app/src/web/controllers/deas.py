@@ -50,8 +50,8 @@ def dea_create():
     else:
         for field in form.errors:
             for error in form.errors[field]:
-                flash(error, "error")
-        return redirect(url_for("deas.dea_new"))
+                flash(field + ": " + error, "error")
+        return redirect(url_for('deas.dea_new', sede_id=data['sede_id']))
     return redirect(url_for('deas.dea_list', sede_id=dea.sede_id))
 
 @dea_blueprint.get("/mod/<id>")
@@ -99,8 +99,8 @@ def dea_edit(id, **kwargs):
     else:
         for field in form.errors:
             for error in form.errors[field]:
-                flash(error, "error")
-        return redirect(url_for("deas.dea_mod"))
+                flash(field + ": " + error, "error")
+        return redirect(url_for('deas.dea_mod', sede_id=data['sede_id']))
     return redirect(url_for('deas.dea_list', sede_id=sede))
     
 
@@ -113,8 +113,6 @@ def dea_delete(id):
         return abort(403)
     dea=deas.get_by_id(id)
     sede=dea.sede_id
-    if not sede:
-        sede = 1
     if dea:
         #deas.destroy(dea);
         deas.deactivate(dea);
