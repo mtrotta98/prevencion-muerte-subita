@@ -23,6 +23,7 @@ from src.web.controllers.ciudadanos import ciudadano_blueprint
 from src.web.controllers.exportaciones import exportacion_blueprint
 from src.web.controllers.responsables import responsable_blueprint
 from src.web.controllers.certificante import certificante_blueprint
+from src.web.controllers.eventosMS import eventosMS_blueprint
 
 #from src.core.db import db, init_db
 
@@ -55,6 +56,7 @@ def create_app(env="development", static_folder="static"):
     app.register_blueprint(exportacion_blueprint)
     app.register_blueprint(responsable_blueprint)
     app.register_blueprint(certificante_blueprint)
+    app.register_blueprint(eventosMS_blueprint)
     
     with app.app_context():
         init_db(app)

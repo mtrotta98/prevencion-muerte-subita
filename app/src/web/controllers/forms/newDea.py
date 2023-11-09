@@ -14,6 +14,6 @@ class NewDEAForm(Form):
                              validators.input_required(message='Numero de serie es requerido')])
     activo = BooleanField('Activo', default=False)
     solidario = BooleanField('Solidario', default=False)
-    ultimoMantenimiento = DateField(u'ultimoMantenimiento',  default=datetime.date.today(), 
+    ultimoMantenimiento = DateField(u'Ultimo Mantenimiento',  default=datetime.date.today(), 
                             validators=[validators.DataRequired()])
     sede_id = IntegerField(u'Sede')
