@@ -9,9 +9,21 @@
 {% endblock %} 
 
 {% block content %} 
-<div class="table-responsive col-9">
+<div class="table-responsive col-11">
     <table class="table align-middle mb-0 bg-white caption-top">
         <caption>
+            <div id="main">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-dismissible fade show">
+                        <p class="flash {{category}}">{{ message }}</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
             <div class="row">
                 <div class="col-5">
                     <h4>Sedes Asociadas a Entidad</h4>
@@ -37,29 +49,29 @@
         </caption>
         <thead class="bg-light">
             <tr>
-                <th>Latitud</th>
-                <th>Longitud</th>
                 <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Numero Edificio</th>
                 <th>Flujo de Personas</th>
                 <th>Superficie</th>
                 <th>Personal Estable</th>
                 <th>Pisos</th>
                 <th>Estado</th>
-                <th>Provincia</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
+            {% set contador = [0] %}
             {% for sede in sedes_asociadas %}
                 <tr>
                     <td>
-                        {{sede['latitud']}}
-                    </td>
-                    <td>
-                        {{sede['longitud']}}
-                    </td>
-                    <td>
                         {{sede['nombre']}}
+                    </td>
+                    <td>
+                        {{direcciones[contador[0]][0]}}
+                    </td>
+                    <td>
+                        {{direcciones[contador[0]][1]}}
                     </td>
                     <td>
                         {{sede['flujo_personas']}}
@@ -77,12 +89,10 @@
                         {{sede['estado']}}
                     </td>
                     <td>
-                        {{sede['id_provincia']}}
-                    </td>
-                    <td>
                         <a href="{{ url_for('solicitudes.registrar_solicitud', id_entidad=id_entidad, id_sede=sede['id']) }}" class="btn btn-primary">Administrar</a>
                     </td>
                 </tr>
+                {% set _ = contador.append(contador.pop() + 1) %}
             {% endfor %}
         </tbody>
     </table>

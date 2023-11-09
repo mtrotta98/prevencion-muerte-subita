@@ -30,6 +30,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Direccion</th>
+                    <th>Numero Edificio</th>
                     <th>Razon Aprobacion</th>
                     <th>Estado Sede</th>
                     <th>Cantidad DEA</th>
@@ -40,6 +41,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Direccion</th>
+                    <th>Numero Edificio</th>
                     <th>Estado Sede</th>
                     <th>Estado Solicitud</th>
                 </tr>
@@ -47,6 +49,7 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Direccion</th>
+                    <th>Numero Edificio</th>
                     <th>Estado Sede</th>
                     <th>Razon</th>
                 </tr>
@@ -62,7 +65,10 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{direcciones[contador[0]]}}
+                                {{direcciones[contador[0]][0]}}
+                            </td>
+                            <td>
+                                {{direcciones[contador[0]][1]}}
                             </td>
                             <td>
                                 {{solicitud['razon']}}
@@ -92,7 +98,10 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{direcciones[contador[0]]}}
+                                {{direcciones[contador[0]][0]}}
+                            </td>
+                            <td>
+                                {{direcciones[contador[0]][1]}}
                             </td>
                             <td>
                                 {{info_sedes[contador[0]]['estado']}}
@@ -113,7 +122,10 @@
                                 {{info_sedes[contador[0]]['nombre']}}
                             </td>
                             <td>
-                                {{direcciones[contador[0]]}}
+                                {{direcciones[contador[0]][0]}}
+                            </td>
+                            <td>
+                                {{direcciones[contador[0]][1]}}
                             </td>
                             <td>
                                 {{info_sedes[contador[0]]['estado']}}

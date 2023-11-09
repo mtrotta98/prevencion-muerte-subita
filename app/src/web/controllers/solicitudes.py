@@ -14,13 +14,26 @@ solicitud_blueprint = Blueprint("solicitudes", __name__, url_prefix="/solicitude
 def registrar_solicitud(id_entidad, id_sede):
     """Esta funcion registra una solicitud de administrar sede, hecha por un representante"""
 
+    sede_id = int(id_sede)
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
-    solicitudes.registrar_solicitud(usuario.id, id_sede)
-
-    nombre_sede = request.args.get("busquedaSede" if request.args.get("busquedaSede", type=str) != "" else None)
-    id_entidad = int(id_entidad)
-    sedes_asociadas = sedes.get_sedes_asociadas(id_entidad, nombre_sede)
     solicitudes_usuario = solicitudes.solicitudes_usuario(usuario)
+    print(solicitudes_usuario)
+    ok = True
+    if solicitudes_usuario:
+        for solicitud in solicitudes_usuario:
+            if solicitud.id_sede == sede_id:
+                ok = False
+                break
+    
+    if ok:
+        solicitudes.registrar_solicitud(usuario.id, id_sede)
+        mensaje_exito =  "La solicitud se cargo con exito."
+        flash(mensaje_exito, "success")
+        return redirect(url_for("representante.sedes_asociadas", id=id_entidad))
+    else:
+        mensaje_error = "Ya existe un solicitud creada por este usuario para la sede"
+        flash(mensaje_error, "error")
+        return redirect(url_for("representante.sedes_asociadas", id=id_entidad))
 
-    return redirect(url_for("representante.sedes_asociadas", id=id_entidad))
+    
