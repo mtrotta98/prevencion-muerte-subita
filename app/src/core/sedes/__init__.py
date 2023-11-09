@@ -3,6 +3,8 @@ from src.core.db import db
 from src.core.usuarios import get_usuario
 from src.core import entidades
 
+from geopy.geocoders import Nominatim
+
 
 def get_sedes(busqueda):
     """Esta funcion devuelve todas las sedes"""
@@ -12,12 +14,12 @@ def get_sedes(busqueda):
             return Sede.query.filter_by(nombre=busqueda).all()
     return Sede.query.all()
 
-def get_sedes_provincia(id_provincia):
+def get_sedes_provincia(id):
     """Esta funcion devuelve todas las sedes asociadas a una provincia"""
 
     with db.session.no_autoflush:
-        if id_provincia:
-            return Sede.query.filter_by(id_provincia=id_provincia).all()
+        if id:
+            return Sede.query.filter_by(id_provincia=id).all()
     return Sede.query.all()
 
 
@@ -31,6 +33,7 @@ def agregar_sede(data):
 
     entidad = entidades.get_entidad(data["id_entidad"])
     data["id_entidad"] = str(entidad.id)
+    data["cantidad_DEA"] = 0
     sede = Sede(**data)
     db.session.add(sede)
     db.session.commit()
@@ -118,4 +121,17 @@ def informacion_sede(usuario_solicitudes):
         for solicitud in usuario_solicitudes:
             sedes.append(get_sede(solicitud.id_sede))
         return sedes
+    return None
+
+def get_direccion(sedes):
+    """Esta funcion devuelve la direccion de una sede"""
+
+    if sedes:
+        direcciones = []
+        geolocator = Nominatim(user_agent="__main__")
+        for sede in sedes:
+            location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
+            direccion = location.raw['address'].get('road')
+            direcciones.append(direccion)
+        return direcciones
     return None
