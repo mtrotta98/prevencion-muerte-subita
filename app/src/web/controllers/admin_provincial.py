@@ -46,6 +46,7 @@ def info_solicitud(id):
     if not (validator_permission.has_permission(usuario_actual, "administrador_provincial_autorizaciones")):
         return abort(403)
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     solicitud = solicitudes.get_solicitud(id)
     id_admin = solicitud.id_usuario
     id_sede = solicitud.id_sede
@@ -60,6 +61,7 @@ def info_solicitud(id):
         "nombre_sede":data_sede.nombre,
         "rs_entidad": data_entidad.razon_social,
         "cuit_entidad": data_entidad.cuit,
+        "rol": rol.nombre
     }
     return render_template("admin_provincial/info_solicitud.html", **kwargs)
 

@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort, url_for
+from src.web.controllers.validators.validator_permission import has_permission
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 
@@ -7,6 +8,7 @@ from src.core import sedes
 from src.core import usuarios
 from src.core import provincias
 from src.core import solicitudes
+from src.core import roles
 from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 from src.core import ddjj
 from src.core import visitas
@@ -19,6 +21,7 @@ def listado_entidades_existentes():
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
         return abort(403)
     busqueda = request.args.get("busqueda" if request.args.get("busqueda", type=str) != "" else None)
@@ -26,7 +29,8 @@ def listado_entidades_existentes():
     kwargs = {
         "lista_entidades": lista_entidades,
         "nombre": usuario.nombre,
-        "apellido": usuario.apellido
+        "apellido": usuario.apellido,
+        "rol": rol.nombre
     }
     return render_template("representante/listado_entidades_existentes.html", **kwargs)
 
@@ -38,6 +42,7 @@ def sedes_asociadas(id):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (validator_permission.has_permission(usuario_actual, "representante_solicitar_administracion")):
         return abort(403)
     
@@ -55,7 +60,8 @@ def sedes_asociadas(id):
         "id_usuario": usuario.id,
         "id_entidad": id_entidad,
         "provincias": provincias.get_provincias(),
-        "solicitudes_usuario": solicitudes_usuario
+        "solicitudes_usuario": solicitudes_usuario,
+        "rol": rol.nombre,
     }
     return render_template("/representante/listado_sedes_asociadas.html", **kwargs)
 
@@ -67,6 +73,9 @@ def listado_sedes_solicitadas(tipo):
 
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
+    if not (has_permission(usuario_actual, "representante_estado_solicitudes")):
+        return abort(403)
     usuario_solicitudes = solicitudes.usuario_tipo_solicitudes(usuario, tipo)
     info_sedes = sedes.informacion_sede(usuario_solicitudes)
     direcciones = sedes.get_direcciones(info_sedes)
@@ -74,7 +83,10 @@ def listado_sedes_solicitadas(tipo):
         "solicitudes":  usuario_solicitudes,
         "info_sedes": info_sedes,
         "direcciones": direcciones,
-        "tipo": tipo
+        "tipo": tipo,
+        "nombre": usuario.nombre,
+        "apellido": usuario.apellido,
+        "rol": rol.nombre
     }
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)
 
@@ -86,10 +98,12 @@ def form_ddjj(id_sede):
     if not (validator_permission.has_permission(usuario_actual, "representante_ddjj")):
         return abort(403)
     usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     kwargs = {
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
         "id_sede": id_sede,
+        "rol": rol.nombre
     }
     return render_template("representante/form_ddjj.html", **kwargs)
 
@@ -115,10 +129,12 @@ def carga_ddjj():
     id_sede = request.form.get("id_sede") if request.form.get("id_sede") else None
     data_ddjj["id_sede"] = id_sede
     
-    if not ddjj.verificar_ddjj_existente(id_sede):
-        flash("Ya existen una declaracion jurada para la sede seleccionada")
+    if not ddjj.verificar_ddjj_existente(id_sede) and not visitas.verificar_visita_aprobada(id_sede):
+        flash("Ya existen una declaracion jurada para la sede seleccionada o ya esta certificada")
         return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
     declaracion = ddjj.agregar_ddjj(data_ddjj)
     visita = visitas.agregar_visita(id_sede)
+    sedes.sede_a_cardioasistida(id_sede)
+
     return redirect("/usuarios/inicio")

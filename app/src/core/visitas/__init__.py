@@ -33,3 +33,12 @@ def get_visita_sede(id):
         return Visita.query.filter_by(id_sede = id).all()
     return Visita.query.all()
 
+def verificar_visita_aprobada(id_sede):
+    """ Esta funcion devuelve si la sede ya tiene una visita aprobada """
+    visitas = get_visita_sede(id_sede)
+    if visitas:
+        for visita in visitas:
+            if visita.resultado is not None and not visita.resultado:
+                return True
+    return False
+

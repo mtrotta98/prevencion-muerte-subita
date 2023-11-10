@@ -54,7 +54,14 @@ def editar_sede(data):
     sede.cantidad_DEA = data['cantidad_DEA']
     db.session.commit()
     return sede
-    
+
+
+def sede_a_cardioasistida(id):
+    """ Esta funcion cambia el estado de la sede a cardioasistida """
+    sede = get_sede(id)
+    sede.estado = "espacio cardioasistido"
+    db.session.commit()
+    return ""
 
 def validar_datos_existentes(nombre):
     """Esta funcion valida que los datos de alta de sede no existan en la base de datos"""

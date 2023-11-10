@@ -5,6 +5,8 @@ from src.web.controllers.validators.validator_permission import has_permission
 from src.core import provincias
 from src.core import sedes
 from src.core import eventosms
+from src.core import usuarios
+from src.core import roles
 from src.web.controllers.forms.newEventoMS import NewEventoMSForm
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
@@ -14,16 +16,20 @@ eventosMS_blueprint = Blueprint("eventosMS", __name__, url_prefix="/eventosMS")
 @jwt_required()
 def eventos_sede(sede_id):
     usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_eventos")):
         return abort(403)
     eventos_list=eventosms.get_by_sede(sede_id)
     sede=sedes.get_sede(sede_id)
-    return render_template("eventosMS/lista_eventos_sede.html", eventos=eventos_list, sede=sede)
+    return render_template("eventosMS/lista_eventos_sede.html", eventos=eventos_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 @eventosMS_blueprint.get("/prov/<provincia_id>")
 @jwt_required()
 def eventos_provincia(provincia_id):
     usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "admin_eventos")):
         return abort(403)
     list_sede = sedes.get_sedes_provincia(provincia_id)
@@ -32,18 +38,20 @@ def eventos_provincia(provincia_id):
         for evento in eventosms.get_by_sede(sede.id):
             eventos_list.append(evento)
     provincia=provincias.get_provincia(provincia_id)
-    return render_template("eventosMS/lista_eventos_provincia.html", eventos=eventos_list, provincia=provincia)
+    return render_template("eventosMS/lista_eventos_provincia.html", eventos=eventos_list, provincia=provincia, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 
 @eventosMS_blueprint.get("/new/<sede_id>")
 @jwt_required()
 def evento_new(sede_id):
     usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_eventos")):
         return abort(403)
     newEvento = NewEventoMSForm();
     newEvento.sede_id.data = sede_id
-    return render_template("eventosMS/new.html",form=newEvento, sede_id=sede_id)
+    return render_template("eventosMS/new.html",form=newEvento, sede_id=sede_id, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 @eventosMS_blueprint.route("/add", methods=['POST'])
 @jwt_required()
@@ -74,6 +82,8 @@ def evento_create():
 @jwt_required()
 def evento_detail(id):
     usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     if not ((has_permission(usuario_actual, "representante_eventos")) or (has_permission(usuario_actual, "admin_eventos"))):
         return abort(403)
     evento=eventosms.get_by_id(id)
@@ -92,7 +102,7 @@ def evento_detail(id):
     eventoForm.tiempoRCP.data = evento.tiempoRCP
     eventoForm.descripcion.data = evento.descripcion
     eventoForm.sede_id.data = evento.sede_id    
-    return render_template("eventosMS/detail.html",form=eventoForm)
+    return render_template("eventosMS/detail.html",form=eventoForm, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
    
 
 @eventosMS_blueprint.get("/delete/<id>")
