@@ -9,36 +9,36 @@
 {% endblock %} 
 
 {% block content %} 
-<div class="table-responsive col-6">
+<div class="table-responsive col-8">
     <table class="table align-middle mb-0 bg-white caption-top">
         <caption>
             <div class="row">
                 <div class="col-5">
                     <h4>Lista de Visitas</h4>
                 </div>
-            </div>
-            <div class="col-5 ms-auto">
-                <div class="row">
-                    <div class="col-12">
-                        <form
-                            class="d-flex"
-                            method="GET"
-                            action="{{ url_for('certificante.listado_visitas') }}"
-                        >
-                            <select
-                                class="form-control select-input me-2"
-                                aria-label="Buscar por provincia"
-                                name="provincia"
-                                id="provincia"
+                <div class="col-5 ms-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <form
+                                class="d-flex"
+                                method="GET"
+                                action="{{ url_for('certificante.listado_visitas') }}"
                             >
-                                {% for provincia in provincias %}
-                                    <option value={{provincia.id}}>{{provincia.nombre}}</option>
-                                {% endfor %}
-                            </select>
-                            <button class="btn btn-outline-success" type="submit">
-                                Buscar
-                            </button>
-                        </form>
+                                <select
+                                    class="form-control select-input me-2"
+                                    aria-label="Buscar por provincia"
+                                    name="provincia"
+                                    id="provincia"
+                                >
+                                    {% for provincia in provincias %}
+                                        <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                                <button class="btn btn-outline-success" type="submit">
+                                    Buscar
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,7 +46,8 @@
         <thead class="bg-light">
             <tr>
                 <th>Nombre Sede</th>
-                <th>Direccion</th>
+                <th>Calle</th>
+                <th>Numero Edificio</th>
                 <th>Fecha</th>
                 <th>Cargar Visita</th>
             </tr>
@@ -59,13 +60,16 @@
                         {{info_sedes[contador[0]]['nombre']}}
                     </td>
                     <td>
-                        {{direcciones[contador[0]]}}
+                        {{direcciones[contador[0]][0]}}
+                    </td>
+                    <td>
+                        {{direcciones[contador[0]][1]}}
                     </td>
                     <td>
                         {{visita[contador[0]]['fecha']}}
                     </td>
                     <td>
-                        <a href="" class="btn btn-primary">Cargar</a>
+                        <a href="{{ url_for('visitas.form_cargar_visita', id_visita=visita[contador[0]]['id']) }}" class="btn btn-primary">Formulario</a>
                     </td>
                 </tr>
                 {% set _ = contador.append(contador.pop() + 1) %}
