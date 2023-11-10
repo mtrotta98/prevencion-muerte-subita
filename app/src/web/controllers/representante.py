@@ -127,10 +127,12 @@ def carga_ddjj():
     id_sede = request.form.get("id_sede") if request.form.get("id_sede") else None
     data_ddjj["id_sede"] = id_sede
     
-    if not ddjj.verificar_ddjj_existente(id_sede):
-        flash("Ya existen una declaracion jurada para la sede seleccionada")
+    if not ddjj.verificar_ddjj_existente(id_sede) and not visitas.verificar_visita_aprobada(id_sede):
+        flash("Ya existen una declaracion jurada para la sede seleccionada o ya esta certificada")
         return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
     declaracion = ddjj.agregar_ddjj(data_ddjj)
     visita = visitas.agregar_visita(id_sede)
+    sedes.sede_a_cardioasistida(id_sede)
+
     return redirect("/usuarios/inicio")
