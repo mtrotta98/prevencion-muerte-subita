@@ -21,13 +21,14 @@ def generar_pdf(id):
     # Obtener los datos
     sede = sedes.get_sede(id)
     deas_sede = deas.get_by_sede(id)
+    direccion = sedes.get_direccion(sede)
 
     # Crear un objeto PDF
     output = BytesIO()
     p = canvas.Canvas(output, pagesize=letter)
 
     # Agregar datos al PDF
-    texto = f'Nombre: {sede.nombre}, Latitud: {sede.latitud}, Longitud: {sede.longitud}, Flujo de Personas: {sede.flujo_personas}, Personal: {sede.personal_estable}, Piso: {sede.pisos}, Estado: {sede.estado}, DEAS de la Sede:'
+    texto = f'Nombre: {sede.nombre}, Calle: {direccion[0]}, Numero: {direccion[1]}, Flujo de Personas: {sede.flujo_personas}, Personal: {sede.personal_estable}, Piso: {sede.pisos}, Estado: {sede.estado}, DEAS de la Sede:'
     
     for dea in deas_sede:
         texto += f',Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nSerie}, Ultimo Mantenimiento: {dea.ultimoMantenimiento}, Solidario: {dea.solidario}, Activo: {dea.activo}'

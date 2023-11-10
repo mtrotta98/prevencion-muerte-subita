@@ -59,7 +59,14 @@ def editar_sede(data):
 def sede_a_cardioasistida(id):
     """ Esta funcion cambia el estado de la sede a cardioasistida """
     sede = get_sede(id)
-    sede.estado = "espacio cardioasistido"
+    sede.estado = "Espacio cardioasistido"
+    db.session.commit()
+    return ""
+
+def sede_a_cardioasistida_certificada(id):
+    """ Esta funcion cambia el estado de la sede a cardioasistida certificada"""
+    sede = get_sede(id)
+    sede.estado = "Espacio cardioasistido certificado"
     db.session.commit()
     return ""
 
@@ -130,15 +137,35 @@ def informacion_sede(usuario_solicitudes):
         return sedes
     return None
 
-def get_direccion(sedes):
-    """Esta funcion devuelve la direccion de una sede"""
+def get_direccion(sede):
+    """Esta funcion devuelve la direccion de una sola sede"""
+
+    if sede:
+        direccion = []
+        geolocator = Nominatim(user_agent="__main__")
+        location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
+        direccion.append(location.raw['address'].get('road'))
+        if location.raw['address'].get('house_number'):
+                direccion.append(location.raw['address'].get('house_number'))
+        else:
+                direccion.append("No posee numero")
+        return direccion
+    return None
+
+def get_direcciones(sedes):
+    """Esta funcion devuelve la direccion de una coleccion de sedes"""
 
     if sedes:
         direcciones = []
         geolocator = Nominatim(user_agent="__main__")
         for sede in sedes:
+            direccion = []
             location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
-            direccion = location.raw['address'].get('road')
+            direccion.append(location.raw['address'].get('road'))
+            if location.raw['address'].get('house_number'):
+                direccion.append(location.raw['address'].get('house_number'))
+            else:
+                direccion.append("No posee numero")
             direcciones.append(direccion)
         return direcciones
     return None

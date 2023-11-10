@@ -59,6 +59,18 @@
             } ,
             mapTypeId: google.maps.MapTypeId.TERRAIN
         }); 
+
+        // Agregar un marcador en la posición actual
+        var marker = new google.maps.Marker({
+            position: centro,
+            map: map,
+            title: "Estoy aquí",
+            icon: {
+                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png", // URL de tu imagen
+                scaledSize: new google.maps.Size(50, 50) // tamaño de la imagen
+            }
+        });
+
         for(i=0; i < lista_coord.length; i++){
             var ubicacion = {lat: lista_coord[i][0], lng: lista_coord[i][1]}
             var datos_sede = {nombre: lista_coord[i][2], cantidad_DEA: lista_coord[i][3],solidario: lista_coord[i][4]}

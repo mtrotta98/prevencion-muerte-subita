@@ -31,7 +31,7 @@ def listado_visitas():
         id_provincia = provincia
     if id_provincia != None:
         sedes_provincias = sedes.get_sedes_provincia(id_provincia)
-        direcciones = sedes.get_direccion(sedes_provincias)
+        direcciones = sedes.get_direcciones(sedes_provincias)
         for sede in sedes_provincias:
             visita_sede = visitas.get_visita_sede(sede.id)
             if visita_sede and visita_sede[0].resultado is None:

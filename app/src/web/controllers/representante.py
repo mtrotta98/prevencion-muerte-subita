@@ -49,10 +49,12 @@ def sedes_asociadas(id):
     nombre_sede = request.args.get("busquedaSede" if request.args.get("busquedaSede", type=str) != "" else None)
     id_entidad = int(id)
     sedes_asociadas = sedes.get_sedes_asociadas(id_entidad, nombre_sede)
+    direcciones = sedes.get_direcciones(sedes_asociadas)
     solicitudes_usuario = solicitudes.solicitudes_usuario(usuario)
 
     kwargs = {
         "sedes_asociadas": sedes_asociadas,
+        "direcciones": direcciones,
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
         "id_usuario": usuario.id,
@@ -76,7 +78,7 @@ def listado_sedes_solicitadas(tipo):
         return abort(403)
     usuario_solicitudes = solicitudes.usuario_tipo_solicitudes(usuario, tipo)
     info_sedes = sedes.informacion_sede(usuario_solicitudes)
-    direcciones = sedes.get_direccion(info_sedes)
+    direcciones = sedes.get_direcciones(info_sedes)
     kwargs = {
         "solicitudes":  usuario_solicitudes,
         "info_sedes": info_sedes,
