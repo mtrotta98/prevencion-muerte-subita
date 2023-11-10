@@ -43,7 +43,7 @@
                               <label class="form-label">Resultado de Visita</label>
                               <select class="form-control" name="resultado" required>
                                 <option value="true" {% if resultado %} selected {% endif %}>Visita Aprobada</option>
-                                <option value="false" {% if not resultado %} selected {% endif %}>Visita Desaprobada</option>
+                                <option value="false" {% if not resultado %} {% endif %}>Visita Desaprobada</option>
                               </select>
                           </div>
                       </div>

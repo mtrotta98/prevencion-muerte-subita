@@ -82,7 +82,7 @@ def evaluacion_solicitud():
     solicitudes.actualizar_solicitud(data_solicitud)
 
     solicitud = solicitudes.get_solicitud(id_soli)
-    if estado == "Aceptada":
+    if estado == "Aprobada":
         id_admin = solicitud.id_usuario
         id_sede = solicitud.id_sede
         sedes.relacionar_representante_sede(id_admin, id_sede)

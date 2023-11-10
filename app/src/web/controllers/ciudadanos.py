@@ -138,7 +138,7 @@ def mapa_alerta():
         sedes_notificar.append(sedes.get_sede(lista_ordenada[i]["id_sede"]))
 
     for sede in sedes_notificar:
-        lista_coordenadas.append((sede.latitud, sede.longitud, sede.nombre, sede.cantidad_DEA, "si", "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"))
+        lista_coordenadas.append((sede.latitud, sede.longitud, sede.nombre, sede.cantidad_DEA, "si", "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"))
 
     kwgars = {
         "lista_coordenadas": lista_coordenadas
