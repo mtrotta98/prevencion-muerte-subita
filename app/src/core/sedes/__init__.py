@@ -63,6 +63,13 @@ def sede_a_cardioasistida(id):
     db.session.commit()
     return ""
 
+def sede_a_cardioasistida_certificada(id):
+    """ Esta funcion cambia el estado de la sede a cardioasistida certificada"""
+    sede = get_sede(id)
+    sede.estado = "espacio cardioasistido certificado"
+    db.session.commit()
+    return ""
+
 def validar_datos_existentes(nombre):
     """Esta funcion valida que los datos de alta de sede no existan en la base de datos"""
 

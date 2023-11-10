@@ -42,10 +42,9 @@ def registrar_visita(id_visita):
             "observacion": request.form.get("observacion")
         }
     visita_actual = visitas.get_visita_id(id_visita)
-    visita_sede = sedes.get_sede(visita_actual.id_sede)
     if resultado == "true":
-        estado = sedes.cambiar_estado_sede(visita_sede, "Espacio Cardioasistido Certificado")
+        estado = sedes.sede_a_cardioasistida_certificada(visita_actual.id_sede)
     visita = visitas.agregar_visita(data)
     mensaje_exito =  "La visita se ha cargado con exito."
     flash(mensaje_exito, "success")
-    return redirect(url_for("visitas.form_cargar_visita", id_visita=id_visita))
+    return redirect(url_for("certificante.listado_visitas"))
