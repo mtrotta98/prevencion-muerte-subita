@@ -41,10 +41,10 @@
                       <div class="col-6">
                           <div class="mb-3">
                               <label class="form-label">Resultado de Visita</label>
-                              <select class="form-control" name="resultado">
+                              <select class="form-control" name="resultado" required>
                                 <option value="true" {% if resultado %} selected {% endif %}>Visita Aprobada</option>
                                 <option value="false" {% if not resultado %} selected {% endif %}>Visita Desaprobada</option>
-                              </select required>
+                              </select>
                           </div>
                       </div>
                       <div class="col-6">

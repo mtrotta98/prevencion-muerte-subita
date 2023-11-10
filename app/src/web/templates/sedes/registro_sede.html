@@ -113,11 +113,12 @@
                           </div>
                       </div>
                       <div class="col-6" id="selectProv">
-                            <select multiple class="selectpicker" name="prov" id="prov" required>
-                                {% for provincia in provincias %}
-                                    <option value={{provincia.id}}>{{provincia.nombre}}</option>
-                                {% endfor %}
-                            </select>
+                        <label class="form-label">Provincia</label>
+                          <select class="form-control select-input me-2" name="prov" id="prov" required>
+                              {% for provincia in provincias %}
+                                  <option value={{provincia.id}}>{{provincia.nombre}}</option>
+                              {% endfor %}
+                          </select>
                       </div>
                     </div>
                     <input class="btn btn-primary btn-login text-uppercase fw-bold" type="submit" value="Aceptar" />

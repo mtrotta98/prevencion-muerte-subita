@@ -59,14 +59,14 @@ def editar_sede(data):
 def sede_a_cardioasistida(id):
     """ Esta funcion cambia el estado de la sede a cardioasistida """
     sede = get_sede(id)
-    sede.estado = "espacio cardioasistido"
+    sede.estado = "Espacio cardioasistido"
     db.session.commit()
     return ""
 
 def sede_a_cardioasistida_certificada(id):
     """ Esta funcion cambia el estado de la sede a cardioasistida certificada"""
     sede = get_sede(id)
-    sede.estado = "espacio cardioasistido certificado"
+    sede.estado = "Espacio cardioasistido certificado"
     db.session.commit()
     return ""
 
