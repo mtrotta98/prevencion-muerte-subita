@@ -2,6 +2,8 @@ import json
 
 from src.core import sedes
 from src.core import provincias
+from src.core import usuarios
+from src.core import roles
 from flask import Blueprint, render_template, request, flash, redirect, session, abort, url_for
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
@@ -14,9 +16,15 @@ sede_blueprint = Blueprint("sedes", __name__, url_prefix="/sedes")
 @sede_blueprint.route("/registro/<id_entidad>")
 @jwt_required()
 def form_sede(id_entidad):
+    usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
     kwargs = {
         "provincias" : provincias.get_provincias(),
-        "id_entidad": id_entidad
+        "id_entidad": id_entidad,
+        "nombre": usuario.nombre,
+        "apellido": usuario.apellido,
+        "rol": rol.nombre,
     }
     return render_template("sedes/registro_sede.html", **kwargs)
 
@@ -59,15 +67,20 @@ def agregar_sede(id_entidad):
 @sede_blueprint.route("/form_editar/<id_sede>")
 @jwt_required()
 def form_editar_sede(id_sede):
-     """Esta funcion trae la informacion de la sede a editar"""
-     
-     sede = sedes.get_sede(id_sede)
-     provincia = provincias.get_provincia(sede.id_provincia)
-     kwgars = {
-         "sede": sede,
-         "provincia": provincia 
-     }
-     return render_template("sedes/editar_sede.html", **kwgars)
+    """Esta funcion trae la informacion de la sede a editar"""
+    usuario_actual = get_jwt_identity()
+    usuario = usuarios.get_usuario(usuario_actual)
+    rol = roles.get_rol(usuario.id_rol)
+    sede = sedes.get_sede(id_sede)
+    provincia = provincias.get_provincia(sede.id_provincia)
+    kwgars = {
+        "sede": sede,
+        "provincia": provincia,
+        "nombre": usuario.nombre,
+        "apellido": usuario.apellido,
+        "rol": rol.nombre
+    }
+    return render_template("sedes/editar_sede.html", **kwgars)
 
 @sede_blueprint.route("/editar/<id_sede>", methods=["POST"])
 @jwt_required()

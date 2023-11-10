@@ -2,7 +2,7 @@
 <html>
     <head>
         {% block head %}
-        <title>{% block title %} Registro DEA - Sistema Prevencion Muerte Subita {% endblock %}</title>
+        <title>{% block title %} Registro Evento Muerte Subita {% endblock %}</title>
         {% endblock %}
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -61,20 +61,53 @@
             <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
-                  <h5 class="card-title text-center mb-5 fw-light fs-5">Nuevo DEA</h5>
-                  <form action="{{ url_for('deas.dea_create') }}" method="POST">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Nuevo evento de muerte súbita</h5>
+                  <form action="{{ url_for('eventosMS.evento_create') }}" method="POST">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                       <div class="form-row">
                         <div class="row">
                           {{ form.sede_id(class='form-control', style="display:none") }} 
                            <div class="form-group col text-center">
-                               {{ form.denominacion.label }} 
-                               {{ form.denominacion(class='form-control')|safe }}
+                               {{ form.fecha.label }} 
+                               <br>
+                               {{ form.fecha(class='date-control')|safe }}
                            </div>
                            <br>
                            <div class="form-group col text-center">
-                                {{ form.nSerie.label }} 
-                                {{ form.nSerie(class='form-control')|safe }}
+                                {{ form.edad.label }} 
+                                {{ form.edad(class='form-control')|safe }}
+                           </div>
+                           <br>                           
+                           <div class="form-group col text-center">
+                               {{ form.sexo.label }} 
+                               {{ form.sexo(class='form-control')|safe }}
+                           </div>
+                           <div class="form-group col text-center">
+                               {{ form.sobrevive.label }}  
+                               {{ form.sobrevive(class='radio-control')|safe }}
+                           </div>
+                           <br>
+                        <br>                        
+                        </div>
+                        <br><br>
+                        <div class="row">
+                           <br>                           
+                           <div class="form-group col text-center">
+                                {{ form.descripcion.label }} 
+                                {{ form.descripcion(class='form-control')|safe }}
+                            </div>
+                           <br>                        
+                        </div>
+                        <br><br><br>
+                        <div class="row">
+                           <div class="form-group col text-center">
+                               {{ form.usoDea.label }} 
+                               {{ form.usoDea(class='radio-control', onclick="checkApi(this)")|safe }}
+                           </div>
+                           <br>
+                           <div class="form-group col text-center">
+                                {{ form.usosDEA.label }} 
+                                {{ form.usosDEA(class='form-control')|safe }}
                            </div>
                            <br>                        
                         </div>
@@ -88,29 +121,19 @@
                                 {{ form.modelo(class='form-control')|safe }}
                             </div>
                             <br>
-                           <br>
                         </div>
-                        <br>
+                        <br><br><br>
                         <div class="row">
-                          <div class="col">
-                            <br>
-                            <div class="form-group col text-center">
-                                {{ form.activo.label }} 
-                                {{ form.activo(class='radio-control')|safe }}
-                            </div>
-                            <br>
-                            <div class="form-group col text-center">
-                             {{ form.solidario.label }} 
-                             {{ form.solidario(class='radio-control')|safe }}
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group col text-center">
-                                 {{ form.ultimoMantenimiento.label }} 
-                                 <br>
-                                 {{ form.ultimoMantenimiento(class='date-control')|safe }}
-                            </div>
-                          </div>
+                           <div class="form-group col text-center">
+                               {{ form.usoRCP.label }} 
+                               {{ form.usoRCP(class='radio-control')|safe }}
+                           </div>
+                           <br>
+                           <div class="form-group col text-center">
+                                {{ form.tiempoRCP.label }} 
+                                {{ form.tiempoRCP(class='form-control')|safe }}
+                           </div>
+                           <br>                        
                         </div>
                         <br>
                         <br>
@@ -132,28 +155,35 @@
         {% endblock %} 
     </body>
     <script>
+      var useDea = document.getElementById('usoDea');
       var selectMarca = document.getElementById('marca');
       var selectModelo = document.getElementById('modelo');
       selectMarca.innerHTML = '';
       selectModelo.innerHTML = '';
-      fetch('https://api.claudioraverta.com/deas/')
-                  .then(res => res.json())
-                  .then(data => {
-                      data.forEach(deas => {
-                        let option = new Option(deas.marca, deas.id)
-                        selectMarca.add(option)
-                      });
-                  fetch('https://api.claudioraverta.com/deas/'+selectMarca.value +'/modelos/')
-                    .then(res => res.json())
-                    .then(data2 => {
-                        data2.forEach(deasm => {
-                          let option2 = new Option(deasm.nombre, deasm.nombre)
-                          selectModelo.add(option2)
-                        });
-                    });
-                });
+          function checkApi(checkbox){
+            if (checkbox.checked){
+                fetch('https://api.claudioraverta.com/deas/')
+                           .then(res => res.json())
+                           .then(data => {
+                               data.forEach(deas => {
+                                 let option = new Option(deas.marca, deas.id)
+                                 selectMarca.add(option)
+                               });
+                               fetch('https://api.claudioraverta.com/deas/'+selectMarca.value +'/modelos/')
+                                 .then(res => res.json())
+                                 .then(data2 => {
+                                     data2.forEach(deasm => {
+                                       let option2 = new Option(deasm.nombre, deasm.nombre)
+                                       selectModelo.add(option2)
+                                     });
+                                 });
+                           });
+            }else{
+              selectMarca.innerHTML = '';
+              selectModelo.innerHTML = '';              
+            }
       
-      
+      }; 
       selectMarca.addEventListener('change',
           function(){
               selectModelo.innerHTML = '';

@@ -6,6 +6,7 @@ from src.core import usuarios
 from src.core import sedes
 from src.core import visitas
 from src.core import provincias
+from src.core import roles
 from src.web.controllers.validators import validator_usuario, validator_permission
 
 certificante_blueprint = Blueprint("certificante", __name__, url_prefix="/certificante")
@@ -18,7 +19,7 @@ def listado_visitas():
     usuario = usuarios.get_usuario(usuario_actual)
     if not (validator_permission.has_permission(usuario_actual, "usuario_certificante_listado_visitas")):
         return abort(403)
-    
+    rol = roles.get_rol(usuario.id_rol)
     listado_visitas = []
     provincias_usuario = usuario.provincias
     sedes_provincias = []
@@ -41,6 +42,7 @@ def listado_visitas():
         "info_sedes": sedes_provincias,
         "direcciones": direcciones,
         "nombre": usuario.nombre,
-        "apellido": usuario.apellido
+        "apellido": usuario.apellido,
+        "rol": rol.nombre
     }
     return render_template("certificante/listado_visitas.html", **kwargs)

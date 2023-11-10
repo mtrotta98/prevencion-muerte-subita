@@ -23,10 +23,25 @@
         <div id="navbar">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Sistema de Prevencion Muerte Subita</a>
+                    <a class="navbar-brand" href="{{ url_for('usuarios.inicio') }}">Sistema de Prevencion Muerte Subita</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                      <ul class="navbar-nav ms-auto d-lg-inline-flex">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{nombre}} {{apellido}} ({{rol}})
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('usuarios.logout') }}">Cerrar Sesion</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -52,11 +67,7 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <div class="form-row">
                       <div class="row">
-<<<<<<< HEAD
-                        {{ form.sede_id(class='form-control', style="display:none") }} </h2>
-=======
                         {{ form.sede_id(class='form-control', style="display:none") }} 
->>>>>>> aff22081cc37b9a90ba8e0770652b9f55d2d2fbd
                          <div class="form-group col text-center">
                              {{ form.denominacion.label }} 
                              {{ form.denominacion(class='form-control')|safe }}

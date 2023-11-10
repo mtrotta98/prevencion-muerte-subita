@@ -85,6 +85,7 @@
                 },
                 success: function(data){
                     alert("Se envio una alerta a los espacios con asistencia mas cercanos")
+                    window.location.href = "{{ url_for('ciudadanos.mapa_alerta') }}"
                 },
                 error: function(err){
                     console.log(err);

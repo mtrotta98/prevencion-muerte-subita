@@ -22,3 +22,16 @@ def destroy(Responsable):
     """ Elimina un Responsable de la BD. """
     db.session.delete(Responsable)
     db.session.commit()
+
+def get_responsables_aviso(lista_sedes):
+    """ Devuelve los responsables de un grupo de sedes """
+    lista_id_sedes = []
+    responsables_aviso = []
+    for sede in lista_sedes:
+        lista_id_sedes.append(sede.id)
+    all_responsables = get_all()
+    for responsable in all_responsables:
+        if responsable.sede_id in lista_id_sedes:
+            responsables_aviso.append(responsable)
+    return responsables_aviso
+

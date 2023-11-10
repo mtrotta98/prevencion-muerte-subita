@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado provincial de Eventos de Muerte Súbita
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <h4>Lista de Eventos Muerte Subita  -  Provincia "{{provincia.nombre}}"</h4>
+            </div>
+        </caption>
+
+        <table class="table table-hover table-dark">
+            <tr>
+                <th>Fecha</th>
+                <th>Edad</th>
+                <th>Sobrevive</th>
+                <th>Uso DEA</th>
+                <th>Uso RCP</th>
+                <th>Acciones</th>
+            </tr>
+            {% if(eventos != None) %}
+                {% for evento in eventos %}
+                <tr>
+                    <td>{{evento.fecha}}</td>
+                    <td>{{evento.edad}}</td>
+                    <td>
+                        {% if evento.sobrevive %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if evento.usoDea %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if evento.usoRCP %}
+                            Si
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{url_for('eventosMS.evento_detail', id = evento.id)}}" class="btn btn-warning btn-xs" >Ver Detalle</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </table>
+    <br>
+    <div class="row">
+        <div class="col text-center"><a href="javascript:history.back()" >
+            <button type="button" class="btn btn-primary" >Volver</button>
+          </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
