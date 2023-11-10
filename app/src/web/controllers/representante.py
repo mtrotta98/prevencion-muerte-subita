@@ -122,11 +122,12 @@ def carga_ddjj():
         "cantidad_dea": request.form.get("cant_deas") if request.form.get("cant_deas") else None,
     }
 
+    id_sede = request.form.get("id_sede") if request.form.get("id_sede") else None
+
     if not validator_ddjj.validator(**data_ddjj):
         flash("Todos los datos deben estar marcados con SI para cargar la declaracion jurada")
-        return redirect("/representante/ddjj")
+        return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
-    id_sede = request.form.get("id_sede") if request.form.get("id_sede") else None
     data_ddjj["id_sede"] = id_sede
     
     if not ddjj.verificar_ddjj_existente(id_sede) and not visitas.verificar_visita_aprobada(id_sede):

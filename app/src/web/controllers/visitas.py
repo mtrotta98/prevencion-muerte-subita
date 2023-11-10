@@ -44,7 +44,7 @@ def registrar_visita(id_visita):
     visita_actual = visitas.get_visita_id(id_visita)
     if resultado == "true":
         estado = sedes.sede_a_cardioasistida_certificada(visita_actual.id_sede)
-    visita = visitas.agregar_visita(data)
+    visita = visitas.modificar_visita(data)
     mensaje_exito =  "La visita se ha cargado con exito."
     flash(mensaje_exito, "success")
     return redirect(url_for("certificante.listado_visitas"))

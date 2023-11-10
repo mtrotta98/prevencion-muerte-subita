@@ -9,19 +9,19 @@
 {% endblock %}
 
         {% block content %}
-        <div id="main">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <p>{{ message }}</p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-        </div>
             <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+              <div id="main">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <p>{{ message }}</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+              </div>
               <div class="card border-0 shadow rounded-3 my-5">
                 <div class="card-body p-4 p-sm-5">
                   <h5 class="card-title text-center mb-5 fw-light fs-5">Declaracion Jurada</h5>
