@@ -18,9 +18,11 @@ def dea_list(sede_id):
     usuario = usuarios.get_usuario(usuario_actual)
     rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_alta_dea")):
+        return abort(403)    
+    sede=sedes.get_sede(sede_id)
+    if not sedes.is_representante(sede_id,usuario_actual):
         return abort(403)
     dea_list=deas.get_by_sede(sede_id)
-    sede=sedes.get_sede(sede_id)
     return render_template("deas/lista_deas_sede.html", deas=dea_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 @dea_blueprint.get("/new/<sede_id>")
@@ -41,9 +43,14 @@ def dea_create():
     usuario_actual = get_jwt_identity()
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
+    
     data = request.form     # Recupero el formulario
     dea = deas.DEA()             # Creo un DEA vacío (modelo)
     form = NewDEAForm(data)   # Creo un formulario de DEA a partir de los datos recibidos (wtforms)
+    sede_id=data['sede_id']
+    import pdb; pdb.set_trace()
+    if not sedes.is_representante(sede_id,usuario_actual):
+        return abort(403)    
     if (data and form.validate()):  # Valido la información recibida 
         form.populate_obj(dea)     # Relleno los datos del DEA (modelo) a partir de los datos recibidos       
         # Intentar salvar
@@ -89,9 +96,9 @@ def dea_edit(id, **kwargs):
     if not (has_permission(usuario_actual, "representante_alta_dea")):
         return abort(403)
     dea=deas.get_by_id(id)
-    sede = dea.sede_id
-    if not sede:
-        sede = 1
+    sede = dea.sede_id    
+    if not sedes.is_representante(sede,usuario_actual):
+        return abort(403)
     if not dea:
         return redirect(url_for('usuarios.inicio'))
     data = request.form     # Recupero el formulario
@@ -121,6 +128,8 @@ def dea_delete(id):
         return abort(403)
     dea=deas.get_by_id(id)
     sede=dea.sede_id
+    if not sedes.is_representante(sede,usuario_actual):
+        return abort(403)
     if dea:
         #deas.destroy(dea);
         deas.deactivate(dea);

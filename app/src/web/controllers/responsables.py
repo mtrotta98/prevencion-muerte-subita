@@ -19,6 +19,8 @@ def responsable_list(sede_id):
     rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_responsables")):
         return abort(403)
+    if not sedes.is_representante(sede_id,usuario_actual):
+        return abort(403)
     responsable_list=responsables.get_by_sede(sede_id)
     sede=sedes.get_sede(sede_id)
     return render_template("responsables/lista_resp_sede.html", responsables=responsable_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
@@ -45,6 +47,8 @@ def responsable_create():
     data = request.form     # Recupero el formulario
     responsable = responsables.Responsable()             
     form = NewRespForm(data)   # Creo un formulario a partir de los datos recibidos (wtforms)
+    if not sedes.is_representante(data['sede_id'],usuario_actual):
+        return abort(403)
     if (data and form.validate()):  # Valido la información recibida 
         form.populate_obj(responsable)     # Relleno a partir de los datos recibidos
         # Intentar salvar
@@ -58,7 +62,7 @@ def responsable_create():
         for field in form.errors:
             for error in form.errors[field]:
                 flash(error, "error")
-        return redirect(url_for("responsables.responsable_new"))
+        return redirect(url_for("responsables.responsable_new", sede_id=data['sede_id']))
     return redirect(url_for('responsables.responsable_list', sede_id=responsable.sede_id))
 
 @responsable_blueprint.get("/mod/<id>")
@@ -89,8 +93,8 @@ def responsable_edit(id, **kwargs):
         return abort(403)
     responsable=responsables.get_by_id(id)
     sede = responsable.sede_id
-    if not sede:
-        sede = 1
+    if not sedes.is_representante(sede,usuario_actual):
+        return abort(403)
     if not responsable:
         return redirect(url_for('usuarios.inicio'))
     data = request.form     # Recupero el formulario
@@ -119,6 +123,8 @@ def responsable_delete(id):
         return abort(403)
     responsable=responsables.get_by_id(id)
     sede=responsable.sede_id
+    if not sedes.is_representante(sede,usuario_actual):
+        return abort(403)
     if responsable:
         responsables.destroy(responsable);
     return redirect(url_for('responsables.responsable_list', sede_id=sede))

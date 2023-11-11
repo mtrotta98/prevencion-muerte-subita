@@ -20,6 +20,8 @@ def eventos_sede(sede_id):
     rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "representante_eventos")):
         return abort(403)
+    if not sedes.is_representante(sede_id,usuario_actual):
+        return abort(403)
     eventos_list=eventosms.get_by_sede(sede_id)
     sede=sedes.get_sede(sede_id)
     return render_template("eventosMS/lista_eventos_sede.html", eventos=eventos_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
@@ -32,6 +34,7 @@ def eventos_provincia(provincia_id):
     rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "admin_eventos")):
         return abort(403)
+    
     list_sede = sedes.get_sedes_provincia(provincia_id)
     eventos_list =[]
     for sede in list_sede:
@@ -62,6 +65,8 @@ def evento_create():
     data = request.form     # Recupero el formulario
     evento = eventosms.eventoMS()  # Creo un Registro vacío (modelo)
     form = NewEventoMSForm(data)   # Creo un formulario a partir de los datos recibidos (wtforms)
+    if not sedes.is_representante(data['sede_id'],usuario_actual):
+        return abort(403)
     if (data and form.validate()):  # Valido la información recibida 
         form.populate_obj(evento)     # Relleno los datos recibidos       
         # Intentar salvar
@@ -89,6 +94,8 @@ def evento_detail(id):
     evento=eventosms.get_by_id(id)
     if not evento:
         return redirect(url_for('usuarios.inicio'))
+    if not sedes.is_representante(evento.sede_id,usuario_actual):
+        return abort(403)
     eventoForm = NewEventoMSForm();
     eventoForm.marca.data = evento.marca
     eventoForm.modelo.data = evento.modelo
