@@ -69,6 +69,87 @@
       handleLocationError(true, infoWindow, map.getCenter());
     });
   </script>
+
+<script>
+  let audioRCP= document.createElement("audio")
+  let audioDEA = document.createElement("audio")
+  audioRCP.setAttribute("src", "/public/media/RCP_MERGE.wav")
+  audioDEA.setAttribute("src", "/public/media/DEA_USO.wav")
+  let soundRCP = false
+  let soundDEA = false
+  let deaButton = document.getElementById("reproductor_DEA");
+  let rcpButton = document.getElementById("reproductor_RCP");
+  let rcpText = document.getElementById("reproductor_RCP_txt")
+
+  function DEAPlay(){
+    if (soundRCP){
+      audioRCP.pause()
+      soundRCP = false
+      rcpButton.classList.replace('bg-dark','bg-danger')  
+      rcpButton.style.color = "black"
+      rcpText.textContent = "Asistencia RCP"
+    }    
+    audioDEA.play()
+    soundDEA = true
+    deaButton.classList.replace('bg-danger','bg-dark')
+    deaButton.style.color = "red"
+  }
+  function RCPPlay(){
+    if (soundDEA){
+      audioDEA.pause()
+      soundDEA = false
+      deaButton.classList.replace('bg-dark','bg-danger')  
+      deaButton.style.color = "black"
+    }
+    rcpText.textContent = "Asistencia RCP (ritmo de compresion)"
+    audioRCP.play()
+    soundRCP = true
+    rcpButton.classList.replace('bg-danger','bg-dark')
+    rcpButton.style.color = "red"    
+  }
+
+
+  rcpButton.addEventListener("click", function(e) {
+    if (soundRCP) {
+      audioRCP.pause()
+      soundRCP = false
+      rcpButton.classList.replace('bg-dark','bg-danger')  
+      rcpButton.style.color = "black"
+    rcpText.textContent = "Asistencia RCP"
+    }else{
+      RCPPlay()
+    }
+  });
+  rcpButton.addEventListener("dblclick", function(e) {
+    audioRCP.load()
+    RCPPlay()
+  });
+
+  deaButton.addEventListener("click", function(e) {
+    if (soundDEA) {
+      audioDEA.pause()
+      soundDEA = false
+      deaButton.classList.replace('bg-dark','bg-danger')  
+      deaButton.style.color = "black"
+    }else{
+      DEAPlay()
+    }
+  });
+  deaButton.addEventListener("dblclick", function(e) {
+    audioDEA.load()
+    DEAPlay()
+  });
+
+  audioRCP.addEventListener("ended",function(e){
+    audioRCP.setAttribute("src", "/public/media/RCP_RITMO.wav")
+    rcpText.textContent = "Asistencia RCP (ritmo de compresion)"
+    audioRCP.play()
+  });
+  audioDEA.addEventListener("ended",function(e){
+    audioDEA.load()
+  });
+  </script>
+
   <script>
     $("#enviar").on("click", function(e) {
             e.preventDefault();
@@ -92,6 +173,7 @@
                 }
             })
         })
+
   </script>
 </body>
 
