@@ -88,8 +88,8 @@ def validar_nombre_existente(nombre):
     for sede in sedes:
         if (sede.nombre == nombre):
             nombres.append(sede)
-    if (len(nombres) > 2):
-        return False, "La sede ya esta cargada en el sistema."
+    if (len(nombres) == 1):
+        return False, "El nombre ingresado ya pertenece a otra sede."
     else:
         return True, ""
     

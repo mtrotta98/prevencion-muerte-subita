@@ -87,6 +87,7 @@ def form_editar_sede(id_sede):
 def editar_sede(id_sede):
     
     id = id_sede
+    sede_a_editar = sedes.get_sede(id_sede)
     data_sede = {
         "id_sede": id,
         "nombre": request.form.get("nombre"),
@@ -99,7 +100,11 @@ def editar_sede(id_sede):
         "cantidad_DEA": request.form.get("cantidad_dea")
     }
 
-    data_existente, mensaje = sedes.validar_nombre_existente(data_sede["nombre"])
+    if data_sede["nombre"] == sede_a_editar.nombre:
+        data_existente = True
+        mensaje = ""
+    else:
+        data_existente, mensaje = sedes.validar_nombre_existente(data_sede["nombre"])
     inputs_validos, mensaje2 = validator_entidad_sede.validar_inputs_editar_sede(**data_sede)
 
     if data_existente and inputs_validos:
