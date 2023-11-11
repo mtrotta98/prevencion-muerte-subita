@@ -26,7 +26,7 @@ def listado_visitas():
     direcciones = []
     provincia = request.args.get("provincia") if request.args.get("provincia", type=str) != "" else None
     if provincia is None:
-        id_provincia = 1
+        id_provincia = provincias_usuario[0].id
     else:
         id_provincia = provincia
     if id_provincia != None:

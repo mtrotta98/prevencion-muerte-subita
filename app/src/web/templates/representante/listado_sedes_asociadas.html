@@ -32,12 +32,6 @@
                     <div class="row">
                         <div class="col-12">
                             <form class="d-flex" method="GET" action="{{ url_for('representante.sedes_asociadas', id=id_entidad) }}">
-                                <select class="form-control select-input me-2" type="search" placeholder="Buscar por Provincia" aria-label="Buscar por provincia"
-                                    name="busquedaProvincia" id="busquedaProvincia">
-                                    {% for provincia in provincias %}
-                                        <option value={{provincia.id}}>{{provincia.nombre}}</option>
-                                    {% endfor %}
-                                </select>
                                 <input class="form-control me-2" type="search" placeholder="Buscar por Nombre" aria-label="Buscar por Nombre" 
                                 id="busquedaSede" name="busquedaSede" />
                                 <button class="btn btn-outline-success" type="submit">Buscar</button>
