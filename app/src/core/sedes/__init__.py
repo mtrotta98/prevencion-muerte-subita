@@ -173,6 +173,6 @@ def get_direcciones(sedes):
 def is_representante(id_sede,id_user):
     """Retorna true si el usuario cuyo ID se recibe es representante de esta sede"""
     for user in get_sede(id_sede).usuarios:
-        if user.id == id_user:
+        if str(user.id) == str(id_user):
             return True
     return False

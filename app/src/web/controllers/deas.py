@@ -48,7 +48,6 @@ def dea_create():
     dea = deas.DEA()             # Creo un DEA vacío (modelo)
     form = NewDEAForm(data)   # Creo un formulario de DEA a partir de los datos recibidos (wtforms)
     sede_id=data['sede_id']
-    import pdb; pdb.set_trace()
     if not sedes.is_representante(sede_id,usuario_actual):
         return abort(403)    
     if (data and form.validate()):  # Valido la información recibida 

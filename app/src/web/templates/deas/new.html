@@ -47,13 +47,14 @@
         </div>
 
         <div id="main">
-          {% with messages = get_flashed_messages() %}
+          {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-            <ul class="flashes list-group">
-              {% for message in messages %}
-                <li class="list-group-item">{{ message }}</li>
+              {% for category, message in messages %}
+              <div class="alert alert-dismissible fade show">
+                  <p class="flash {{category}}">{{ message }}</p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
               {% endfor %}
-            </ul>
             {% endif %}
           {% endwith %}
         </div>

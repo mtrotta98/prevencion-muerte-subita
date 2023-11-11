@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, request, flash, redirect, abort
 from flask import url_for
 from src.web.controllers.validators.validator_permission import has_permission
 from src.core import provincias
+from src.core import deas
+from src.core import responsables
 from src.core import sedes
 from src.core import eventosms
 from src.core import usuarios
@@ -26,22 +28,20 @@ def eventos_sede(sede_id):
     sede=sedes.get_sede(sede_id)
     return render_template("eventosMS/lista_eventos_sede.html", eventos=eventos_list, sede=sede, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
-@eventosMS_blueprint.get("/prov/<provincia_id>")
+@eventosMS_blueprint.get("/prov")
 @jwt_required()
-def eventos_provincia(provincia_id):
+def eventos_provincia():
     usuario_actual = get_jwt_identity()
     usuario = usuarios.get_usuario(usuario_actual)
     rol = roles.get_rol(usuario.id_rol)
     if not (has_permission(usuario_actual, "admin_eventos")):
         return abort(403)
-    
-    list_sede = sedes.get_sedes_provincia(provincia_id)
     eventos_list =[]
-    for sede in list_sede:
-        for evento in eventosms.get_by_sede(sede.id):
-            eventos_list.append(evento)
-    provincia=provincias.get_provincia(provincia_id)
-    return render_template("eventosMS/lista_eventos_provincia.html", eventos=eventos_list, provincia=provincia, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
+    for provincia in usuario.provincias:
+        for sede in sedes.get_sedes_provincia(provincia.id):
+            for evento in eventosms.get_by_sede(sede.id):
+                eventos_list.append(evento)
+    return render_template("eventosMS/lista_eventos_provincia.html", eventos=eventos_list, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 
 
 @eventosMS_blueprint.get("/new/<sede_id>")
@@ -67,6 +67,9 @@ def evento_create():
     form = NewEventoMSForm(data)   # Creo un formulario a partir de los datos recibidos (wtforms)
     if not sedes.is_representante(data['sede_id'],usuario_actual):
         return abort(403)
+    if not (deas.get_by_sede(data['sede_id']) and responsables.get_by_sede(data['sede_id'])):
+        flash("Error. Se debe contar con, al menos, un DEA y un Responsable en la sede para cargar eventos." , "error")
+        return redirect(url_for('eventosMS.eventos_sede', sede_id=data['sede_id']))
     if (data and form.validate()):  # Valido la información recibida 
         form.populate_obj(evento)     # Relleno los datos recibidos       
         # Intentar salvar
@@ -94,7 +97,7 @@ def evento_detail(id):
     evento=eventosms.get_by_id(id)
     if not evento:
         return redirect(url_for('usuarios.inicio'))
-    if not sedes.is_representante(evento.sede_id,usuario_actual):
+    if ((has_permission(usuario_actual, "representante_eventos")) and not (sedes.is_representante(evento.sede_id,usuario_actual))):
         return abort(403)
     eventoForm = NewEventoMSForm();
     eventoForm.marca.data = evento.marca
