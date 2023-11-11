@@ -31,7 +31,7 @@ def generar_pdf(id):
     texto = f'Nombre: {sede.nombre}, Calle: {direccion[0]}, Numero: {direccion[1]}, Flujo de Personas: {sede.flujo_personas}, Personal: {sede.personal_estable}, Piso: {sede.pisos}, Estado: {sede.estado}, DEAS de la Sede:'
     
     for dea in deas_sede:
-        texto += f',Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nSerie}, Ultimo Mantenimiento: {dea.ultimoMantenimiento}, Solidario: {dea.solidario}, Activo: {dea.activo}'
+        texto += f', Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nSerie}, Ultimo Mantenimiento: {dea.ultimoMantenimiento}, Solidario: {dea.solidario}, Activo: {dea.activo}'
     
     lineas = texto.split(', ')
 
