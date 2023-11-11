@@ -10,6 +10,18 @@
 
 {% block content %} 
 <div class="table-responsive col-6">
+    <div id="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible fade show">
+                <p class="flash {{category}}">{{ message }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
     <table class="table align-middle mb-0 bg-white caption-top">
         <caption>
             <div class="row">
