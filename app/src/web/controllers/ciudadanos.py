@@ -149,21 +149,4 @@ def mapa_alerta():
 
 @ciudadano_blueprint.route("/informacion")
 def informacion():
-
-    lista_coordenadas = []
-    lista_sedes = sedes.get_sedes("")
-    for sede in lista_sedes:
-        solidario = "No"
-        deas_sede = deas.get_by_sede(sede.id)
-        if deas_sede:
-            for dea in deas_sede:
-                if dea.solidario:
-                    solidario = "Si"
-                    break
-        lista_coordenadas.append((sede.latitud, sede.longitud, sede.nombre, sede.cantidad_DEA, solidario, "http://maps.google.com/mapfiles/ms/icons/red-dot.png"))
-
-    kwgars = {
-        "lista_coordenadas": lista_coordenadas
-    }
-
-    return render_template("/ciudadano/ver_mapa.html", **kwgars)
+    return render_template("/ciudadano/informacion.html")

@@ -77,17 +77,28 @@ def listado_sedes_solicitadas(tipo):
     if not (has_permission(usuario_actual, "representante_estado_solicitudes")):
         return abort(403)
     usuario_solicitudes = solicitudes.usuario_tipo_solicitudes(usuario, tipo)
-    info_sedes = sedes.informacion_sede(usuario_solicitudes)
-    direcciones = sedes.get_direcciones(info_sedes)
-    kwargs = {
-        "solicitudes":  usuario_solicitudes,
-        "info_sedes": info_sedes,
-        "direcciones": direcciones,
-        "tipo": tipo,
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido,
-        "rol": rol.nombre
-    }
+    if (usuario_solicitudes):
+        info_sedes = sedes.informacion_sede(usuario_solicitudes)
+        direcciones = sedes.get_direcciones(info_sedes)
+        kwargs = {
+            "solicitudes":  usuario_solicitudes,
+            "info_sedes": info_sedes,
+            "direcciones": direcciones,
+            "tipo": tipo,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
+            "rol": rol.nombre
+        }
+    else:
+        kwargs = {
+            "solicitudes":  "",
+            "info_sedes": "",
+            "direcciones": "",
+            "tipo": tipo,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido,
+            "rol": rol.nombre
+        }
     return render_template("/representante/listado_sedes_solicitadas.html", **kwargs)
 
 
