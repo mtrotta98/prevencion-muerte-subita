@@ -2,8 +2,11 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+port = 587
+smtp_server = "smtp-mail.outlook.com"
+sender = "nicolastrotta88@outlook.com.ar"
+
 def enviar_email_alta_admin_prov(data_usuario):
-    sender = "nicolastrotta88@gmail.com"
     receiver = data_usuario["email"]
     nombre = data_usuario["nombre"]
     apellido = data_usuario["apellido"]
@@ -11,7 +14,7 @@ def enviar_email_alta_admin_prov(data_usuario):
     contrasenia = data_usuario["contraseña"]
 
     message = MIMEMultipart("alternative")
-    message["Subject"] = "multipart test"
+    message["Subject"] = "Registro admin provincial"
     message["From"] = sender
     message["To"] = receiver
 
@@ -23,14 +26,14 @@ def enviar_email_alta_admin_prov(data_usuario):
     part = MIMEText(text, "plain")
     message.attach(part)
 
-    with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
-        server.login("eff9de5c2d2573", "4b08ba2521c0a7")
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.starttls()
+        server.login(sender, "Sym280615")
         server.sendmail(sender, receiver, message.as_string())
 
 def enviar_email_vencimiento_certificacion(receiver, nombre, apellido, nombre_sede):
-    sender = "nicolastrotta88@gmail.com"
     message = MIMEMultipart("alternative")
-    message["Subject"] = "multipart test"
+    message["Subject"] = "Vencimiento certificacion"
     message["From"] = sender
     message["To"] = receiver
 
@@ -40,14 +43,14 @@ def enviar_email_vencimiento_certificacion(receiver, nombre, apellido, nombre_se
     part = MIMEText(text, "plain")
     message.attach(part)
 
-    with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
-        server.login("eff9de5c2d2573", "4b08ba2521c0a7")
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.starttls()
+        server.login(sender, "Sym280615")
         server.sendmail(sender, receiver, message.as_string())
 
 def enviar_mail_alerta_asistencia(receiver, nombre, apellido, direccion):
-    sender = "nicolastrotta88@gmail.com"
     message = MIMEMultipart("alternative")
-    message["Subject"] = "multipart test"
+    message["Subject"] = "Alerta Asistencia"
     message["From"] = sender
     message["To"] = receiver
 
@@ -57,6 +60,7 @@ def enviar_mail_alerta_asistencia(receiver, nombre, apellido, direccion):
     part = MIMEText(text, "plain")
     message.attach(part)
 
-    with smtplib.SMTP("sandbox.smtp.mailtrap.io", 2525) as server:
-        server.login("eff9de5c2d2573", "4b08ba2521c0a7")
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.starttls()
+        server.login(sender, "Sym280615")
         server.sendmail(sender, receiver, message.as_string())
