@@ -28,15 +28,37 @@ def generar_pdf(id):
     p = canvas.Canvas(output, pagesize=letter)
 
     # Agregar datos al PDF
-    texto = f'Nombre: {sede.nombre}, Calle: {direccion[0]}, Numero: {direccion[1]}, Flujo de Personas: {sede.flujo_personas}, Personal: {sede.personal_estable}, Piso: {sede.pisos}, Estado: {sede.estado}, DEAS de la Sede:'
+    texto = f'Nombre:  {sede.nombre}, Calle:  {direccion[0]}, Numero:  {direccion[1]}, Flujo de Personas:  {sede.flujo_personas}, Personal:  {sede.personal_estable}, Piso:  {sede.pisos}, Estado:  {sede.estado}, DEAS de la Sede:'
     
     for dea in deas_sede:
-        texto += f', Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nSerie}, Ultimo Mantenimiento: {dea.ultimoMantenimiento}, Solidario: {dea.solidario}, Activo: {dea.activo}'
+        if dea.solidario:
+            solidario = "Si"
+        else:
+            solidario = "No"
+        if dea.activo:
+            activo = "Si"
+        else:
+            activo = "No"
+        texto += f', , Denominacion:  {dea.denominacion}, Marca:  {dea.marca}, Modelo:  {dea.modelo}, Nro. de Serie:  {dea.nSerie}, Ultimo Mantenimiento:  {dea.ultimoMantenimiento}, Solidario:  {solidario}, Activo:  {activo}'
     
     lineas = texto.split(', ')
 
     for i, linea in enumerate(lineas):
-        p.drawString(100, 750 - i * 15, linea)
+        if i == lineas.index('DEAS de la Sede:'):
+            p.drawString(100, 750 - i * 15, '')
+            i += 1
+        if ':' in linea:
+            if ': ' in linea:
+                key, value = linea.split(': ', 1)
+            else:
+                key, value = linea, ''
+            p.setFont("Helvetica-Bold", 12)
+            p.drawString(100, 750 - i * 15, key + ': ')
+            p.setFont("Helvetica", 12)
+            p.drawString(100 + len(key) * 6, 750 - i * 15, value)
+        else:
+            p.setFont("Helvetica", 12)
+            p.drawString(100, 750 - i * 15, linea)
     
     # Finalizar el PDF
     p.showPage()
