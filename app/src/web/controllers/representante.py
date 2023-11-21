@@ -12,6 +12,7 @@ from src.core import roles
 from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 from src.core import ddjj
 from src.core import visitas
+from src.core import deas
 
 representante = Blueprint("representante", __name__, url_prefix="/representante")
 
@@ -143,6 +144,12 @@ def carga_ddjj():
     
     if not ddjj.verificar_ddjj_existente(id_sede) and not visitas.verificar_visita_aprobada(id_sede):
         flash("Ya existen una declaracion jurada para la sede seleccionada o ya esta certificada")
+        return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
+    
+    deas_sede = deas.get_deas_sede(id_sede)
+    cant_deas_form = int(data_ddjj["cantidad_dea"])
+    if cant_deas_form != len(deas_sede):
+        flash("La cantidad de DEAS no coincide con la cantidad que posee la sede.")
         return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
     declaracion = ddjj.agregar_ddjj(data_ddjj)
