@@ -81,6 +81,9 @@ def listado_sedes_solicitadas(tipo):
     if (usuario_solicitudes):
         info_sedes = sedes.informacion_sede(usuario_solicitudes)
         direcciones = sedes.get_direcciones(info_sedes)
+        cantidad_deas_sede = []
+        for sede in info_sedes:
+            cantidad_deas_sede.append(len(deas.get_deas_sede(sede.id)))
         kwargs = {
             "solicitudes":  usuario_solicitudes,
             "info_sedes": info_sedes,
@@ -88,7 +91,8 @@ def listado_sedes_solicitadas(tipo):
             "tipo": tipo,
             "nombre": usuario.nombre,
             "apellido": usuario.apellido,
-            "rol": rol.nombre
+            "rol": rol.nombre,
+            "cantidad_deas_sede": cantidad_deas_sede
         }
     else:
         kwargs = {

@@ -77,7 +77,7 @@
                                 {{info_sedes[contador[0]]['estado']}}
                             </td>
                             <td>
-                                {{info_sedes[contador[0]]['cantidad_DEA']}}
+                                {{cantidad_deas_sede[contador[0]]}}
                             </td>
                             <td>
                                 <a href="{{ url_for('sedes.form_editar_sede', id_sede=info_sedes[contador[0]]['id']) }}" class="btn btn-primary">Editar</a>

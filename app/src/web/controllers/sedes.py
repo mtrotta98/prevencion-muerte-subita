@@ -4,6 +4,7 @@ from src.core import sedes
 from src.core import provincias
 from src.core import usuarios
 from src.core import roles
+from src.core import deas
 from flask import Blueprint, render_template, request, flash, redirect, session, abort, url_for
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
@@ -73,12 +74,14 @@ def form_editar_sede(id_sede):
     rol = roles.get_rol(usuario.id_rol)
     sede = sedes.get_sede(id_sede)
     provincia = provincias.get_provincia(sede.id_provincia)
+    cantidad_deas = len(deas.get_deas_sede(id_sede))
     kwgars = {
         "sede": sede,
         "provincia": provincia,
         "nombre": usuario.nombre,
         "apellido": usuario.apellido,
-        "rol": rol.nombre
+        "rol": rol.nombre,
+        "cantidad_deas": cantidad_deas
     }
     return render_template("sedes/editar_sede.html", **kwgars)
 
