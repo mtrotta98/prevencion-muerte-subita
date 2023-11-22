@@ -28,7 +28,7 @@ def generar_pdf(id):
     p = canvas.Canvas(output, pagesize=letter)
 
     # Agregar datos al PDF
-    texto = f'Nombre:  {sede.nombre}, Calle:  {direccion[0]}, Numero:  {direccion[1]}, Flujo de Personas:  {sede.flujo_personas}, Personal:  {sede.personal_estable}, Piso:  {sede.pisos}, Estado:  {sede.estado}, DEAS de la Sede:'
+    texto = f'Nombre: {sede.nombre}, Calle: {direccion[0]}, Numero: {direccion[1]}, Flujo de Personas: {sede.flujo_personas}, Personal: {sede.personal_estable}, Piso: {sede.pisos}, Estado: {sede.estado}, DEAS de la Sede: '
     
     for dea in deas_sede:
         if dea.solidario:
@@ -39,12 +39,15 @@ def generar_pdf(id):
             activo = "Si"
         else:
             activo = "No"
-        texto += f', , Denominacion:  {dea.denominacion}, Marca:  {dea.marca}, Modelo:  {dea.modelo}, Nro. de Serie:  {dea.nSerie}, Ultimo Mantenimiento:  {dea.ultimoMantenimiento}, Solidario:  {solidario}, Activo:  {activo}'
+        texto += f', , Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nSerie}, Ultimo Mantenimiento: {dea.ultimoMantenimiento}, Solidario: {solidario}, Activo: {activo}'
     
     lineas = texto.split(', ')
 
+    # Determinar la longitud máxima de la clave
+    max_key_length = max(len(linea.split(': ')[0]) for linea in lineas if ': ' in linea)
+                         
     for i, linea in enumerate(lineas):
-        if i == lineas.index('DEAS de la Sede:'):
+        if i == lineas.index('DEAS de la Sede: '):
             p.drawString(100, 750 - i * 15, '')
             i += 1
         if ':' in linea:
@@ -55,7 +58,7 @@ def generar_pdf(id):
             p.setFont("Helvetica-Bold", 12)
             p.drawString(100, 750 - i * 15, key + ': ')
             p.setFont("Helvetica", 12)
-            p.drawString(100 + len(key) * 6, 750 - i * 15, value)
+            p.drawString(100 + max_key_length * 7, 750 - i * 15, value)
         else:
             p.setFont("Helvetica", 12)
             p.drawString(100, 750 - i * 15, linea)

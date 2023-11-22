@@ -3,6 +3,7 @@ from src.core.db import db
 from src.core.usuarios import get_usuario
 from src.core import entidades
 
+
 from geopy.geocoders import Nominatim
 
 

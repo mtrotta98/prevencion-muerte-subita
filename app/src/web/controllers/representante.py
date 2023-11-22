@@ -12,6 +12,7 @@ from src.core import roles
 from src.web.controllers.validators import validator_usuario, validator_permission, validator_ddjj
 from src.core import ddjj
 from src.core import visitas
+from src.core import deas
 
 representante = Blueprint("representante", __name__, url_prefix="/representante")
 
@@ -80,6 +81,9 @@ def listado_sedes_solicitadas(tipo):
     if (usuario_solicitudes):
         info_sedes = sedes.informacion_sede(usuario_solicitudes)
         direcciones = sedes.get_direcciones(info_sedes)
+        cantidad_deas_sede = []
+        for sede in info_sedes:
+            cantidad_deas_sede.append(len(deas.get_deas_sede(sede.id)))
         kwargs = {
             "solicitudes":  usuario_solicitudes,
             "info_sedes": info_sedes,
@@ -87,7 +91,8 @@ def listado_sedes_solicitadas(tipo):
             "tipo": tipo,
             "nombre": usuario.nombre,
             "apellido": usuario.apellido,
-            "rol": rol.nombre
+            "rol": rol.nombre,
+            "cantidad_deas_sede": cantidad_deas_sede
         }
     else:
         kwargs = {
@@ -143,6 +148,12 @@ def carga_ddjj():
     
     if not ddjj.verificar_ddjj_existente(id_sede) and not visitas.verificar_visita_aprobada(id_sede):
         flash("Ya existen una declaracion jurada para la sede seleccionada o ya esta certificada")
+        return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
+    
+    deas_sede = deas.get_deas_sede(id_sede)
+    cant_deas_form = int(data_ddjj["cantidad_dea"])
+    if cant_deas_form != len(deas_sede):
+        flash("La cantidad de DEAS no coincide con la cantidad que posee la sede.")
         return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
     declaracion = ddjj.agregar_ddjj(data_ddjj)

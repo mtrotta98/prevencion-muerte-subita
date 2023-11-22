@@ -38,3 +38,15 @@ def get_sedes_solidarias():
             sede = sedes.get_sede(dea.sede_id)
             sedes_solidarias.append(sede)
     return sedes_solidarias
+
+def get_deas_sede(id):
+    """Retorna los deas de una sede"""
+
+    id_sede = int(id)
+    deas_sede = []
+    for dea in get_all():
+        if dea.sede_id == id_sede:
+            deas_sede.append(dea)
+
+    return deas_sede
+
