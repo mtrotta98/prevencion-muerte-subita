@@ -160,11 +160,15 @@ def get_direcciones(sedes):
         geolocator = Nominatim(user_agent="__main__")
         for sede in sedes:
             direccion = []
-            location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
-            direccion.append(location.raw['address'].get('road'))
-            if location.raw['address'].get('house_number'):
-                direccion.append(location.raw['address'].get('house_number'))
-            else:
+            try:
+                location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
+                direccion.append(location.raw['address'].get('road'))
+                if location.raw['address'].get('house_number'):
+                    direccion.append(location.raw['address'].get('house_number'))
+                else:
+                    direccion.append("No posee numero")
+            except:
+                direccion.append('Sin nombre')
                 direccion.append("No posee numero")
             direcciones.append(direccion)
         return direcciones

@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Listado Mantenimientos de DEA
+{% endblock %} 
+
+{%block head %} 
+    {{ super() }} 
+{% endblock %} 
+
+{% block content %} 
+<div class="table-responsive col-6">
+    <div id="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-dismissible fade show">
+                <p class="flash {{category}}">{{ message }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+    <table class="table align-middle mb-0 bg-white caption-top">
+        <caption>
+            <div class="row">
+                <h4>Lista de Mantenimientos DEA  -  Sucursal </h4>
+            </div>
+        </caption>
+
+        <table class="table table-hover table-dark">
+            <tr>
+                <th>Fecha</th>
+                <th>Descripcion</th>
+                <th>Acciones</th>
+            </tr>
+            {% if(eventos != None) %}
+                {% for evento in eventos %}
+                <tr>
+                    <td>{{evento.fecha}}</td>
+                    <td>{{evento.descripcion}}</td>
+                    <td>
+                        <a href="{{url_for('eventosMant.evento_delete', id = evento.id)}}" class="btn btn-danger btn-xs" onclick="return confirm('¿Estás seguro de eliminar el Registro?')" style="margin-left: 10px">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </table>
+    <br>
+    <div class="row">
+        <div class="col text-center">
+            <a href="{{url_for('deas.dea_list', sede_id = sede_id)}}" class="btn btn-primary btn-xs" >Volver</a>
+        </div>
+        <div class="col text-center">
+            <a href="{{url_for('eventosMant.evento_new', dea_id = dea.id)}}" class="btn btn-success btn-xs" >Añadir nuevo evento</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
