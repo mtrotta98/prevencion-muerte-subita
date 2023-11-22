@@ -9,3 +9,4 @@ numpy
 pandas
 geopy
 reportlab
+wtforms_components

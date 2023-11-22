@@ -61,6 +61,7 @@
                     </td>
                     <td>
                         <a href="{{url_for('deas.dea_mod', id = dea.id)}}" class="btn btn-warning btn-xs" >Editar</a>
+                        <a href="{{url_for('eventosMant.eventos_dea', dea_id = dea.id)}}" class="btn btn-success btn-xs" >Ver Eventos</a>
                         <a href="{{url_for('deas.dea_delete', id = dea.id)}}" class="btn btn-danger btn-xs" onclick="return confirm('¿Estás seguro de eliminar el DEA?')" style="margin-left: 10px">Eliminar</a>
                         
                     </td>

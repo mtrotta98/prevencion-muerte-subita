@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+        <title>{% block title %} Registro Matenimiento DEA {% endblock %}</title>
+        {% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+        rel="stylesheet"
+        href="{{ url_for('static',filename='style.css') }}"
+        />
+        <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"
+        />
+    </head>
+    <body>
+
+        {% block content %} 
+        <div id="navbar">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{{ url_for('usuarios.inicio') }}">Sistema de Prevencion Muerte Subita</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                      <ul class="navbar-nav ms-auto d-lg-inline-flex">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link mx-2 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            {{nombre}} {{apellido}} ({{rol}})
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('usuarios.logout') }}">Cerrar Sesion</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div id="main">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+              <div class="alert alert-dismissible fade show">
+                  <p class="flash {{category}}">{{ message }}</p>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+              <div class="card border-0 shadow rounded-3 my-5">
+                <div class="card-body p-4 p-sm-5">
+                  <h5 class="card-title text-center mb-5 fw-light fs-5">Registrar mantenimiento DEA</h5>
+                  <form action="{{ url_for('eventosMant.evento_create') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                      <div class="form-row">
+                        <div class="row">
+                            <div class="form-group col text-center">
+                                <label id="marca">Marca: {{ dea.marca }}</label>
+                           </div>
+                           <div class="form-group col text-center">
+                                <label id="modelo">Modelo: {{ dea.modelo }}</label>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="row">
+                          {{ form.dea_id(class='form-control', style="display:none") }} 
+                           <div class="form-group col text-center">
+                               {{ form.fecha.label }} 
+                               <br>
+                               {{ form.fecha(class='date-control')|safe }}
+                           </div>
+                           <br>
+                           <div class="form-group col text-center">
+                            {{ form.descripcion.label }} 
+                            {{ form.descripcion(class='form-control')|safe }}
+                           </div>
+                           <br>
+                        <br>                        
+                        </div>
+                        <br><br><br>
+                        <br>
+                        <br>
+                      </div>
+                    <div class="row">
+                     <div class="col text-center"><a href="javascript:history.back()" >
+                         <button type="button" class="btn btn-primary" >Cancelar y volver</button>
+                       </a>
+                     </div>
+                     <div class="col text-center">
+                       <button type="submit" class="btn btn-danger ">Guardar cambios</button>
+                     </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endblock %} 
+    </body>
+    <script>
+      var selectMarca = document.getElementById('marca');
+      var selectModelo = document.getElementById('modelo');
+      var originMarca = selectMarca.textContent
+      var originModelo = selectModelo.textContent
+      
+      if (parseInt(selectMarca.textContent)>0){
+        fetch('https://api.claudioraverta.com/deas/')
+                    .then(res => res.json())
+                    .then(data => {
+                        data.forEach(deas => {
+                          //let option = new Option(deas.marca, deas.id)
+                          if (deas.id == originMarca){
+                            selectMarca.textContent = deas.marca
+                          }
+                        });
+                    });
+      
+        fetch('https://api.claudioraverta.com/deas/'+originMarca +'/modelos/')
+                    .then(res => res.json())
+                    .then(data => {
+                        data.forEach(deas => {
+                          //let option = new Option(deas.nombre, deas.nombre)
+                          if (deas.nombre == originModelo){
+                            selectModelo.textContent = deas.nombre
+                          }
+                        });
+                    }); 
+    }else{
+      selectMarca.textContent =  "Desconocido";
+      selectModelo.textContent = "Desconocido";
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+</html>

@@ -23,4 +23,4 @@ def __init__(self, sede_id, fecha, sexo, edad, descripcion):
     self.sede_id = sede_id
     self.sexo = sexo
     self.edad = edad
-    self.usoRCP = descripcion
+    self.descripcion = descripcion
