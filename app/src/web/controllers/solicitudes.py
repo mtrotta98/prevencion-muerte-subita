@@ -9,7 +9,7 @@ from src.core import provincias
 
 solicitud_blueprint = Blueprint("solicitudes", __name__, url_prefix="/solicitudes")
 
-@solicitud_blueprint.route("/registro/<id_entidad><id_sede>")
+@solicitud_blueprint.route("/registro/<id_entidad>/<id_sede>")
 @jwt_required()
 def registrar_solicitud(id_entidad, id_sede):
     """Esta funcion registra una solicitud de administrar sede, hecha por un representante"""
