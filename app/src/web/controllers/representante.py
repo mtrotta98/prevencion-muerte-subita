@@ -153,11 +153,13 @@ def carga_ddjj():
     deas_sede = deas.get_deas_sede(id_sede)
     cant_deas_form = int(data_ddjj["cantidad_dea"])
     if cant_deas_form != len(deas_sede):
-        flash("La cantidad de DEAS no coincide con la cantidad que posee la sede.")
+        flash("La cantidad de DEAS no coincide con la cantidad que posee la sede")
         return redirect(url_for("representante.form_ddjj", id_sede=id_sede))
     
     declaracion = ddjj.agregar_ddjj(data_ddjj)
     visita = visitas.agregar_visita(id_sede)
     sedes.sede_a_cardioasistida(id_sede)
 
-    return redirect("/usuarios/inicio")
+    mensaje = "Se cargo con exito la declaracion jurada"
+    flash(mensaje, "success")
+    return redirect(url_for("sedes.form_editar_sede", id_sede=id_sede))
