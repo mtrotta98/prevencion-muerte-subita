@@ -10,6 +10,10 @@ def get_usuarios_representantes():
     """Esta funcion devuelve todos los usuarios representantes"""
     return Usuario.query.filter_by(id_rol=2).all()
 
+def get_usuarios_certificantes():
+    """ Esta funcion devuelve los usuarios certificantes """
+    return Usuario.query.filter_by(id_rol=3).all()
+
 def get_usuario(id):
     """Esta funcion devuelve un usuario por su id"""
     return Usuario.query.filter_by(id=id).first()

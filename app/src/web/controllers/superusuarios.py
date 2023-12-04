@@ -1,5 +1,6 @@
 import uuid
 import smtplib
+import psycopg2
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -75,3 +76,30 @@ def alta_admin():
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/super_usuario/form_alta")
+    
+@super_usuario.route("/ETL")
+def ejecucion_etl():
+    """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
+    conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
+    cur = conexion.cursor()
+
+    usuarios_representantes = usuarios.get_usuarios_representantes()
+    usuarios_certificantes = usuarios.get_usuarios_certificantes()
+
+    for us_repre in usuarios_representantes:
+        query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento) VALUES (%s, %s, %s);'
+        data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento)
+
+        cur.execute(query_insert_user_prov, data_insert_user_prov)
+
+    for us_cert in usuarios_certificantes:
+        query_insert_user_prov = 'INSERT INTO public."Certificantes" (nombre, apellido, fecha_nacimiento) VALUES (%s, %s, %s);'
+        data_insert_user_prov = (us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento)
+
+        cur.execute(query_insert_user_prov, data_insert_user_prov)
+
+    conexion.commit()
+
+    conexion.close()
+
+    return redirect("/usuarios/inicio")
