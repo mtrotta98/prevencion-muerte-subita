@@ -37,6 +37,11 @@ for i in range(10):
 
     for data_select in cur.fetchall():
         id_usuario = data_select[0]
+        id_sede = random.randint(1, 1000000)
+        query_insert_user_sede = 'INSERT INTO public."Usuario_Sede" (id_usuario, id_sede) VALUES (%s, %s);'
+        data_insert_user_sede = (id_usuario, id_sede)
+
+        cur.execute(query_insert_user_sede, data_insert_user_sede)
     
     conexion.commit()
 
