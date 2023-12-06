@@ -11,3 +11,4 @@ geopy
 reportlab
 wtforms_components
 Faker
+requests
