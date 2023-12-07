@@ -87,14 +87,14 @@ def ejecucion_etl():
     usuarios_certificantes = usuarios.get_usuarios_certificantes()
 
     for us_repre in usuarios_representantes:
-        query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento) VALUES (%s, %s, %s);'
-        data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento)
+        query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento, año_nacimiento, mes_nacimiento, id_sede) VALUES (%s, %s, %s, %s, %s, %s);'
+        data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento, us_repre.fecha_nacimiento.year, us_repre.fecha_nacimiento.month, us_repre.id_sede)
 
         cur.execute(query_insert_user_prov, data_insert_user_prov)
 
     for us_cert in usuarios_certificantes:
-        query_insert_user_prov = 'INSERT INTO public."Certificantes" (nombre, apellido, fecha_nacimiento) VALUES (%s, %s, %s);'
-        data_insert_user_prov = (us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento)
+        query_insert_user_prov = 'INSERT INTO public."Certificantes" (nombre, apellido, fecha_nacimiento, nombre_provincia) VALUES (%s, %s, %s, %s);'
+        data_insert_user_prov = (us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento, us_cert.provincias[0].nombre)
 
         cur.execute(query_insert_user_prov, data_insert_user_prov)
 
