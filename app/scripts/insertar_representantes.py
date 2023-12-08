@@ -11,13 +11,13 @@ lista_permisos = []
 conexion = psycopg2.connect(host="localhost", database="prevencion_muerte_subita_db", user="postgres", password="proyecto")
 cur = conexion.cursor()
 
-for i in range(10):
+for i in range(100000):
 
     id_rol =  2
     nombre = fake.first_name()
     apellido = fake.last_name()
     email = fake.email()
-    usuario = fake.first_name() + "." + fake.last_name() + str(random.randint(0, 100))
+    usuario = fake.first_name() + "." + fake.last_name() + str(random.randint(0, 10000))
     fecha_nacimiento = fake.date_between(start_date="-40y", end_date="-20y")
     id_publico = fake.uuid4()
     contraseña = generate_password_hash(fake.word() + "." + fake.word() + random.choice(lista_chars), method="sha256")
@@ -37,7 +37,7 @@ for i in range(10):
 
     for data_select in cur.fetchall():
         id_usuario = data_select[0]
-        id_sede = random.randint(1, 1000000)
+        id_sede = random.randint(1, 46112)
         query_insert_user_sede = 'INSERT INTO public."Usuario_Sede" (id_usuario, id_sede) VALUES (%s, %s);'
         data_insert_user_sede = (id_usuario, id_sede)
 

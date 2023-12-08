@@ -2,6 +2,7 @@ from faker import Faker
 import random
 import psycopg2
 import pandas as pd
+import os
 
 
 fake = Faker('es_ES')
@@ -16,7 +17,7 @@ cur.execute('SELECT id, nombre FROM public."Provincias"')
 for data_prov in cur.fetchall():
     lista_provincias.append(data_prov)
 
-file_path = "C:/Users/nicol/OneDrive/Escritorio/prevencion-muerte-subita/app/scripts/localidades.xlsx"
+file_path = str(os.getcwd()) + "\localidades.xlsx"
 
 df = pd.read_excel(file_path,engine='openpyxl',dtype=object,header=None)
 
