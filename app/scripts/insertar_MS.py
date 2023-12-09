@@ -9,12 +9,15 @@ import loremipsum
 conexion = psycopg2.connect(host="localhost", database="prevencion_muerte_subita_db", user="postgres", password="proyecto")
 cur = conexion.cursor()
 
-query_select = 'SELECT id FROM public."Sedes"'
-cur.execute(query_select)
+modelos = []
+modelos.append()
+res = requests.get('https://api.claudioraverta.com/deas/')
+marcas = json.loads(res.text)
+for marca in marcas:
+    res = requests.get('https://api.claudioraverta.com/deas/'+str(marca)+'/modelos/')
+    modelos.append(json.loads(res.text))
 
 def loadDea():
-    res = requests.get('https://api.claudioraverta.com/deas/')
-    marcas = json.loads(res.text)
     marca = random.randit(1, marcas.count)
     res = requests.get('https://api.claudioraverta.com/deas/'+str(marca)+'/modelos/')
     modelos = json.loads(res.text)
@@ -24,6 +27,9 @@ def loadDea():
 def loadResp():
     return None
 
+
+query_select = 'SELECT id FROM public."Sedes"'
+cur.execute(query_select)
 for sede in cur.fetchall():
     insertDeas = False;
     id_dea=1
@@ -42,8 +48,6 @@ for sede in cur.fetchall():
         query = 'INSERT INTO public."Responsables" (id, nombre, apellido, dni, email, teléfono, sede_id) VALUES (%s, %s, %s, %s, %s, %s, %s, );'
         data = (responsable.id, responsable.nombre, responsable.apellido, responsable.dni, responsable.email, responsable.teléfono, responsable.sede_id)
         cur.execute(query, data)
-        
-
     
     conexion.commit()
 
