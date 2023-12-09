@@ -33,7 +33,7 @@ class Sede(db.Model):
     estado = db.Column(db.String(100), nullable=False)
     id_provincia = db.Column(db.Integer, db.ForeignKey("Provincias.id"))
     id_entidad = db.Column(db.Integer, db.ForeignKey("Entidades.id"))
-    cantidad_DEA = db.Column(db.Integer, nullable=False)
+    cantidad_DEA = db.Column(db.Integer, nullable=True)
 
     usuarios = db.relationship("Usuario", secondary=Usuario_Sede, backref="sedes")
 
