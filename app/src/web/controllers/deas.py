@@ -80,11 +80,11 @@ def dea_mod(id):
     newDea = NewDEAForm();
     newDea.marca.choices =[(dea.marca, dea.marca)]
     newDea.modelo.choices =[(dea.modelo, dea.modelo)]
-    newDea.nSerie.data = dea.nSerie
+    newDea.nserie.data = dea.nserie
     newDea.denominacion.data = dea.denominacion
     newDea.solidario.data = dea.solidario
     newDea.activo.data = dea.activo
-    newDea.ultimoMantenimiento.data = dea.ultimoMantenimiento
+    newDea.ultimomantenimiento.data = dea.ultimomantenimiento
     newDea.sede_id.data = dea.sede_id
     return render_template("deas/mod.html",form=newDea, id_dea=dea.id, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
 

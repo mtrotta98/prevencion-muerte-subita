@@ -9,13 +9,15 @@ class eventoMS(db.Model):
     sexo =db.Column(db.Integer, nullable=False)
     edad = db.Column(db.Integer, nullable=False)
     sobrevive = db.Column(db.Boolean)
-    usoDea = db.Column(db.Boolean)
-    usosDEA = db.Column(db.Integer)
-    usoRCP = db.Column(db.Boolean)
-    tiempoRCP = db.Column(db.Integer)
+    usodea = db.Column(db.Boolean)
+    usosdea = db.Column(db.Integer)
+    usorcp = db.Column(db.Boolean)
+    tiemporcp = db.Column(db.Integer)
     modelo = db.Column(db.String)
     marca = db.Column(db.Integer)
     descripcion =db.Column(db.String(250), nullable=False)
+    nombre = db.Column(db.String)
+    apellido = db.Column(db.String)
 
 
 def __init__(self, sede_id, fecha, sexo, edad, descripcion):
