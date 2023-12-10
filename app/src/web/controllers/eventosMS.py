@@ -2,7 +2,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, abort
 from flask import url_for
 from src.web.controllers.validators.validator_permission import has_permission
-from src.core import provincias
 from src.core import deas
 from src.core import responsables
 from src.core import sedes
@@ -106,12 +105,14 @@ def evento_detail(id):
     eventoForm.edad.data = evento.edad
     eventoForm.sexo.data = eventoForm.sexo.choices[evento.sexo-1][1]
     eventoForm.sobrevive.data = evento.sobrevive
-    eventoForm.usoDea.data = evento.usoDea
-    eventoForm.usoRCP.data = evento.usoRCP
-    eventoForm.usosDEA.data = evento.usosDEA
-    eventoForm.tiempoRCP.data = evento.tiempoRCP
+    eventoForm.nombre.data = evento.nombre
+    eventoForm.apellido.data = evento.apellido
+    eventoForm.usodea.data = evento.usodea
+    eventoForm.usorcp.data = evento.usorcp
+    eventoForm.usosdea.data = evento.usosdea
+    eventoForm.tiemporcp.data = evento.tiemporcp
     eventoForm.descripcion.data = evento.descripcion
-    eventoForm.sede_id.data = evento.sede_id    
+    eventoForm.sede_id.data = evento.sede_id
     return render_template("eventosMS/detail.html",form=eventoForm, nombre=usuario.nombre, apellido=usuario.apellido, rol=rol.nombre)
    
 

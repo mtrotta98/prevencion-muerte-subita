@@ -39,7 +39,7 @@ def generar_pdf(id):
             activo = "Si"
         else:
             activo = "No"
-        texto += f', , Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nSerie}, Ultimo Mantenimiento: {dea.ultimoMantenimiento}, Solidario: {solidario}, Activo: {activo}'
+        texto += f', , Denominacion: {dea.denominacion}, Marca: {dea.marca}, Modelo: {dea.modelo}, Nro. de Serie: {dea.nserie}, Ultimo Mantenimiento: {dea.ultimomantenimiento}, Solidario: {solidario}, Activo: {activo}'
     
     lineas = texto.split(', ')
 

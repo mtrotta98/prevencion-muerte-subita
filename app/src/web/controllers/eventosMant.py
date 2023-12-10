@@ -68,7 +68,7 @@ def evento_create():
                 flash(field + ": " + error, "error")
         return redirect(url_for('eventosMant.evento_new', dea_id=data['dea_id']))
     # Actualizo el DEA (no es la manera correcta)
-    dea.ultimoMantenimiento = evento.fecha
+    dea.ultimomantenimiento = evento.fecha
     deas.save(dea)
     return redirect(url_for('eventosMant.eventos_dea', dea_id=evento.dea_id))
 

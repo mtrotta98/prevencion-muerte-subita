@@ -94,6 +94,19 @@
                         <div class="row">
                            <br>                           
                            <div class="form-group col text-center">
+                                {{ form.nombre.label }} 
+                                {{ form.nombre(class='form-control')|safe }}
+                            </div>                           
+                            <div class="form-group col text-center">
+                                 {{ form.apellido.label }} 
+                                 {{ form.apellido(class='form-control')|safe }}
+                             </div>
+                           <br>                        
+                        </div>
+                        <br><br>
+                        <div class="row">
+                           <br>                           
+                           <div class="form-group col text-center">
                                 {{ form.descripcion.label }} 
                                 {{ form.descripcion(class='form-control')|safe }}
                             </div>
@@ -102,13 +115,13 @@
                         <br><br><br>
                         <div class="row">
                            <div class="form-group col text-center">
-                               {{ form.usoDea.label }} 
-                               {{ form.usoDea(class='radio-control', onclick="checkApi(this)")|safe }}
+                               {{ form.usodea.label }} 
+                               {{ form.usodea(class='radio-control', onclick="checkApi(this)")|safe }}
                            </div>
                            <br>
                            <div class="form-group col text-center">
-                                {{ form.usosDEA.label }} 
-                                {{ form.usosDEA(class='form-control')|safe }}
+                                {{ form.usosdea.label }} 
+                                {{ form.usosdea(class='form-control')|safe }}
                            </div>
                            <br>                        
                         </div>
@@ -126,13 +139,13 @@
                         <br><br><br>
                         <div class="row">
                            <div class="form-group col text-center">
-                               {{ form.usoRCP.label }} 
-                               {{ form.usoRCP(class='radio-control')|safe }}
+                               {{ form.usorcp.label }} 
+                               {{ form.usorcp(class='radio-control')|safe }}
                            </div>
                            <br>
                            <div class="form-group col text-center">
-                                {{ form.tiempoRCP.label }} 
-                                {{ form.tiempoRCP(class='form-control')|safe }}
+                                {{ form.tiemporcp.label }} 
+                                {{ form.tiemporcp(class='form-control')|safe }}
                            </div>
                            <br>                        
                         </div>
@@ -156,7 +169,7 @@
         {% endblock %} 
     </body>
     <script>
-      var useDea = document.getElementById('usoDea');
+      var useDea = document.getElementById('usodea');
       var selectMarca = document.getElementById('marca');
       var selectModelo = document.getElementById('modelo');
       selectMarca.innerHTML = '';
