@@ -45,13 +45,14 @@ def generar_datos():
 
     nombre = fake.company()
     flujo_personas = random.randint(200, 5000)
-    superficie = random.random()
+    superficie = random.uniform(100, 10000)
     personal_estable = random.randint(20, 2000)
     pisos = random.randint(1, 10)
     estado = 'En proceso de ser cardioasistido'
     id_entidad = random.randint(1, 100000)
+    fecha_creacion = fake.date_between(start_date="-40y", end_date="-5y")
     
-    return nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad
+    return nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad, fecha_creacion
 
 def buscar_nombre_provincia(numero):
     diccionario_provincias = {1: 'Buenos Aires', 2: 'Catamarca', 3: 'Chaco', 4: 'Chubut', 5: 'Cordoba', 6: 'Corrientes', 7: 'Entre Rios', 8: 'Formosa', 9: 'Jujuy', 10: 'La Pampa', 11: 'La Rioja', 12: 'Mendoza', 13: 'Misiones', 14: 'Neuquen', 15: 'Rio Negro', 16: 'Salta', 17: 'San Juan', 18: 'San Luis', 19: 'Santa Cruz', 20: 'Santa Fe', 21: 'Santiago del Estero', 22: 'Tierra del Fuego', 23: 'Tucuman'}
@@ -81,11 +82,11 @@ for i in range(1000000):
         print(f"id_provincia: {id_provincia}")  # Imprime el valor de id_provincia
     
     if id_provincia is not None:
-        nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad = generar_datos()
+        nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad, fecha_creacion = generar_datos()
         
-        query_insert = 'INSERT INTO public."Sedes" (latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+        query_insert = 'INSERT INTO public."Sedes" (latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
 
-        data_sede = (latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad)
+        data_sede = (latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion)
     
         cur.execute(query_insert, data_sede)
 

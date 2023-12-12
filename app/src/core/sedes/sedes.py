@@ -34,11 +34,12 @@ class Sede(db.Model):
     id_provincia = db.Column(db.Integer, db.ForeignKey("Provincias.id"))
     id_entidad = db.Column(db.Integer, db.ForeignKey("Entidades.id"))
     cantidad_DEA = db.Column(db.Integer, nullable=True)
+    fecha_creacion = db.Column(db.Date)
 
     usuarios = db.relationship("Usuario", secondary=Usuario_Sede, backref="sedes")
 
 
-def __init__(self, latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado):
+def __init__(self, latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, fecha_creacion):
     self.latitud = latitud
     self.longitud = longitud
     self.nombre = nombre
@@ -47,3 +48,4 @@ def __init__(self, latitud, longitud, nombre, flujo_personas, superficie, person
     self.personal_estable = personal_estable
     self.pisos = pisos
     self.estado = estado
+    self.fecha_creacion = fecha_creacion
