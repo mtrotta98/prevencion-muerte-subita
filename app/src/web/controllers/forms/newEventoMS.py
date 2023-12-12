@@ -14,12 +14,15 @@ class NewEventoMSForm(Form):
     sexo = SelectField(u'Sexo aparente', validate_choice=False, coerce=int,
                          validators=[validators.input_required(message='Indique un sexo aparente')], choices=[('1', 'Masculino'),('2', 'Femenino'),('3', 'Otro')])
     sobrevive = BooleanField('Sobrevive', default=False)
-    usoDea = BooleanField('Se utilizó DEA ', default=False)
-    usosDEA = IntegerField(u'Cantidad de descargas DEA', default=0)
-    usoRCP = BooleanField('Se aplicó RCP ', default=False)
-    tiempoRCP = IntegerField(u'Cantidad de minutos RCP', default=0)
+    usodea = BooleanField('Se utilizó DEA ', default=False)
+    usosdea = IntegerField(u'Cantidad de descargas DEA', default=0)
+    usorcp = BooleanField('Se aplicó RCP ', default=False)
+    tiemporcp = IntegerField(u'Cantidad de minutos RCP', default=0)
     marca = SelectField(u'Marca', validate_choice=False, coerce=int, choices=[('0', 'Negativo')])
     modelo = SelectField(u'Modelo', validate_choice=False, choices=[('0', 'Negativo')])
     descripcion = StringField(u'Descripcion del evento', validators=[
                              validators.input_required(message='Se requiere una descipción')])
+    nombre = StringField(u'Nombre del afectado', default="Desconocido")
+    apellido = StringField(u'Apellido del afectado', default="Desconocido")
+    
  

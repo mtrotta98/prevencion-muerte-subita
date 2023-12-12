@@ -17,13 +17,13 @@ cur.execute('SELECT id, nombre FROM public."Provincias"')
 for data_prov in cur.fetchall():
     lista_provincias.append(data_prov)
 
-for i in range(10):
+for i in range(100000):
 
     id_rol =  3
     nombre = fake.first_name()
     apellido = fake.last_name()
     email = fake.email()
-    usuario = fake.first_name() + "." + fake.last_name() + str(random.randint(0, 100))
+    usuario = fake.first_name() + "." + fake.last_name() + str(random.randint(0, 10000))
     fecha_nacimiento = fake.date_between(start_date="-40y", end_date="-20y")
     id_publico = fake.uuid4()
     contraseña = generate_password_hash(fake.word() + "." + fake.word() + random.choice(lista_chars), method="sha256")
@@ -44,13 +44,11 @@ for i in range(10):
     for data_select in cur.fetchall():
         id_usuario = data_select[0]
 
-    cant_provs = random.randint(1, 3)
-    for cant in range(cant_provs):
-        id_provincia = random.choice(lista_provincias)[0]
-        query_insert_user_prov = 'INSERT INTO public."Usuario_Provincia" (id_usuario, id_provincia) VALUES (%s, %s);'
-        data_insert_user_prov = (id_usuario, id_provincia)
+    id_provincia = random.choice(lista_provincias)[0]
+    query_insert_user_prov = 'INSERT INTO public."Usuario_Provincia" (id_usuario, id_provincia) VALUES (%s, %s);'
+    data_insert_user_prov = (id_usuario, id_provincia)
 
-        cur.execute(query_insert_user_prov, data_insert_user_prov)
+    cur.execute(query_insert_user_prov, data_insert_user_prov)
     
     conexion.commit()
 
