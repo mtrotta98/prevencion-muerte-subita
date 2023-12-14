@@ -181,3 +181,16 @@ def is_representante(id_sede,id_user):
         if str(user.id) == str(id_user):
             return True
     return False
+
+def get_localidad(sede):
+    """Esta funcion devuelve la localidad de una sola sede"""
+    if sede:
+        from geopy.geocoders import Nominatim
+        geolocator = Nominatim(user_agent="__main__")
+        location = geolocator.reverse(f"{sede.latitud}, {sede.longitud}")
+        if 'address' in location.raw:
+            if 'village' in location.raw['address']:
+                return location.raw['address']['village']
+            if 'town' in location.raw['address']:
+                return location.raw['address']['town']
+    return "Undefined"
