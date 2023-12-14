@@ -84,7 +84,8 @@ def alta_admin():
     else:
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/super_usuario/form_alta")
-    
+
+@super_usuario.route("/ETL_EMS")   
 def ejecucion_etl_EMS():
     conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
     cur = conexion.cursor()
