@@ -85,8 +85,7 @@ def alta_admin():
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/super_usuario/form_alta")
     
-@jwt_required()
-def exportEMS():
+def ejecucion_etl_EMS():
     conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
     cur = conexion.cursor()
     sexos={
@@ -125,15 +124,13 @@ def exportEMS():
         conexion.commit()
     conexion.close()
 
-
-@super_usuario.route("/ETL")
-def ejecucion_etl():
+@super_usuario.route("/ETL_representantes")
+def ejecucion_etl_representantes():
     """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
     conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
     cur = conexion.cursor()
 
     usuarios_representantes = usuarios.get_usuarios_representantes()
-    usuarios_certificantes = usuarios.get_usuarios_certificantes()
 
     for us_repre in usuarios_representantes:
         if len(us_repre.sedes) > 0:
@@ -142,31 +139,55 @@ def ejecucion_etl():
 
             cur.execute(query_insert_user_prov, data_insert_user_prov)
 
+    conexion.commit()
+
+    conexion.close()
+
+    return redirect("/usuarios/inicio")
+
+@super_usuario.route("/ETL_certificantes")
+def ejecucion_etl_certificantes():
+    """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
+    conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
+    cur = conexion.cursor()
+
+    usuarios_certificantes = usuarios.get_usuarios_certificantes()
+
     for us_cert in usuarios_certificantes:
         query_insert_user_prov = 'INSERT INTO public."Certificantes" (nombre, apellido, fecha_nacimiento, nombre_provincia) VALUES (%s, %s, %s, %s);'
         data_insert_user_prov = (us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento, us_cert.provincias[0].nombre)
 
         cur.execute(query_insert_user_prov, data_insert_user_prov)
-    
-    """Esta parte hace el etl de entidad_sede"""
+
+    conexion.commit()
+
+    conexion.close()
+
+    return redirect("/usuarios/inicio")
+
+@super_usuario.route("/ETL_sedes")
+def ejecucion_etl_sedes():
+    """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
+    conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
+    cur = conexion.cursor()
     sedes_all = sedes.get_sedes("")
+
     for sede in sedes_all:
-        entidad = entidades.get_entidad(id=sede.id_entidad)
-        deas_solidarios = deas.get_deas_sede(sede.id)
+        print(sede.id)
         ok = "0"
+        entidad = entidades.get_entidad(id=sede.id_entidad)
         nombre_prov = provincias.get_provincia(sede.id_provincia)
-        for dea in deas_solidarios:
-            if dea.solidario:
-                ok = "1"
+        cant_deas = deas.get_by_sede(sede.id)
+        if len(cant_deas) > 0 and cant_deas[0].solidario:
+            ok = "1"
         if entidad:
             query_insert_entidad_sede = 'INSERT INTO public."Entidad_Sede" (id, fecha_creacion, localidad, año_creacion, mes_creacion, nombre_provincia, id_entidad, estado, tipo_institucion, sector, cant_deas, deas_solidarios) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
-            data_insert_entidad_sede = (sede.id, sede.fecha_creacion, sede.localidad, sede.fecha_creacion.year, sede.fecha_creacion.month, nombre_prov.nombre, entidad.id, sede.estado, entidad.tipo_institucion, entidad.sector, len(deas_solidarios), ok)  # Asume que todos los DEA son solidarios
+            data_insert_entidad_sede = (sede.id, sede.fecha_creacion, sede.localidad, sede.fecha_creacion.year, sede.fecha_creacion.month, nombre_prov.nombre, entidad.id, sede.estado, entidad.tipo_institucion, entidad.sector, len(cant_deas), ok)  # Asume que todos los DEA son solidarios
 
             cur.execute(query_insert_entidad_sede, data_insert_entidad_sede)
 
     conexion.commit()
 
     conexion.close()
-    exportEMS()
 
     return redirect("/usuarios/inicio")

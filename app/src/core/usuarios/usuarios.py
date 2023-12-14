@@ -9,7 +9,7 @@ class Usuario(db.Model):
     apellido = db.Column(db.String, nullable=False)
     usuario = db.Column(db.String, nullable=False)
     contraseña = db.Column(db.String, nullable=False)
-    dni = db.Column(db.String, unique=True, nullable=False)
+    dni = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     fecha_nacimiento = db.Column(db.Date)
     id_rol = db.Column(db.Integer, db.ForeignKey("Roles.id"))

@@ -35,9 +35,9 @@ for i in range(100000):
 
     cur.execute(query_insert, data_usuario)
 
-    query_select = 'SELECT id FROM public."Usuarios" WHERE dni = %s AND usuario = %s'
+    query_select = 'SELECT id FROM public."Usuarios" WHERE dni = %s AND usuario = %s AND email = %s AND id_publico = %s'
 
-    data_select = (str(dni), usuario)
+    data_select = (str(dni), usuario, email, id_publico)
 
     cur.execute(query_select, data_select)
 
