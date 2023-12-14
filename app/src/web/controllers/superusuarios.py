@@ -125,6 +125,8 @@ def ejecucion_etl_EMS():
         conexion.commit()
     conexion.close()
 
+    return redirect("/usuarios/inicio")
+
 @super_usuario.route("/ETL_representantes")
 def ejecucion_etl_representantes():
     """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
