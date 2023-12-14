@@ -102,7 +102,7 @@ def exportEMS():
     for sedems in sedesms:
         eventos = eventosms.get_by_sede(sedems.id)
         emsprovincia = provincias.get_provincia(sedems.id_provincia).nombre
-        emslocalidad = sedes.get_localidad(sedems)
+        emslocalidad = sedems.localidad # sedes.get_localidad(sedems)
         for evento in eventos:
             emsAño = evento.fecha.year
             emsMes = evento.fecha.month
