@@ -12,7 +12,7 @@ def get_entidades(busqueda):
 
 
 def get_entidad(id):
-    """Devuelve una sede buscada por su id"""
+    """Devuelve una entidad buscada por su id"""
     return Entidad.query.filter_by(id=id).first()
 
 
