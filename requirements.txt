@@ -12,3 +12,4 @@ reportlab
 wtforms_components
 Faker
 requests
+openpyxl

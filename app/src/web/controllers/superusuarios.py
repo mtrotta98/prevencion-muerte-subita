@@ -3,11 +3,16 @@ import smtplib
 import psycopg2
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import requests
+import json
+from datetime import datetime
 
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import get_jwt_identity
 
+from src.core import sedes
+from src.core import eventosms
 from src.core import usuarios
 from src.core import provincias
 from src.core import roles
@@ -80,6 +85,47 @@ def alta_admin():
         flash(mensaje) if mensaje != "" else flash(mensaje2)
         return redirect("/super_usuario/form_alta")
     
+@jwt_required()
+def exportEMS():
+    conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
+    cur = conexion.cursor()
+    sexos={
+        1: 'Masculino',
+        2: 'Femenino',
+        3: 'Otro'}
+
+    # Recupero las marcas
+    res = requests.get('https://api.claudioraverta.com/deas/')
+    marcas = json.loads(res.text)
+
+    sedesms = sedes.get_sedes("")
+    for sedems in sedesms:
+        eventos = eventosms.get_by_sede(sedems.id)
+        emsprovincia = provincias.get_provincia(sedems.id_provincia).nombre
+        emslocalidad = sedes.get_localidad(sedems)
+        for evento in eventos:
+            emsAño = evento.fecha.year
+            emsMes = evento.fecha.month
+            emssexo = sexos[evento.sexo]
+            if evento.usodea:
+                emsmarcadea = marcas[evento.marca-1]["marca"]   # Extraigo el string
+                emsmodelo = evento.modelo
+                usosdea = evento.usosdea
+            else:
+                emsmarcadea = "None"
+                emsmodelo = "None"
+                usosdea = 0
+            if evento.usorcp:
+                tiemporcp = evento.tiemporcp
+            else:
+                tiemporcp = 0
+            query_ems = 'INSERT INTO public."Evento_muerte_subita" (fecha, año, mes, nombre_provincia, localidad, sexo_aparente, edad_aparente, uso_dea, cantidad_descargas, rcp, tiempo_rcp, modelo_dea, marca_dea, sobrevive) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+            data_ems = (evento.fecha, emsAño, emsMes, emsprovincia, emslocalidad, emssexo, evento.edad, evento.usodea, usosdea, evento.usorcp, tiemporcp, emsmodelo, emsmarcadea, evento.sobrevive)
+            cur.execute(query_ems, data_ems)
+        conexion.commit()
+    conexion.close()
+
+
 @super_usuario.route("/ETL")
 def ejecucion_etl():
     """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
@@ -121,5 +167,6 @@ def ejecucion_etl():
     conexion.commit()
 
     conexion.close()
+    exportEMS()
 
     return redirect("/usuarios/inicio")
