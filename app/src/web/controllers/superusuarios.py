@@ -11,7 +11,10 @@ from flask_jwt_extended import get_jwt_identity
 from src.core import usuarios
 from src.core import provincias
 from src.core import roles
+from src.core import sedes
+from src.core import entidades
 from src.core import solicitudes
+from src.core import deas
 from src.web.controllers.validators import validator_usuario, validator_permission
 from src.web.helpers.send_emails import enviar_email_alta_admin_prov
 
@@ -87,16 +90,33 @@ def ejecucion_etl():
     usuarios_certificantes = usuarios.get_usuarios_certificantes()
 
     for us_repre in usuarios_representantes:
-        query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento, año_nacimiento, mes_nacimiento, id_sede) VALUES (%s, %s, %s, %s, %s, %s);'
-        data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento, us_repre.fecha_nacimiento.year, us_repre.fecha_nacimiento.month, us_repre.sedes[0].id)
+        if len(us_repre.sedes) > 0:
+            query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento, año_nacimiento, mes_nacimiento, id_sede) VALUES (%s, %s, %s, %s, %s, %s);'
+            data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento, us_repre.fecha_nacimiento.year, us_repre.fecha_nacimiento.month, us_repre.sedes[0].id)
 
-        cur.execute(query_insert_user_prov, data_insert_user_prov)
+            cur.execute(query_insert_user_prov, data_insert_user_prov)
 
     for us_cert in usuarios_certificantes:
         query_insert_user_prov = 'INSERT INTO public."Certificantes" (nombre, apellido, fecha_nacimiento, nombre_provincia) VALUES (%s, %s, %s, %s);'
         data_insert_user_prov = (us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento, us_cert.provincias[0].nombre)
 
         cur.execute(query_insert_user_prov, data_insert_user_prov)
+    
+    """Esta parte hace el etl de entidad_sede"""
+    sedes_all = sedes.get_sedes("")
+    for sede in sedes_all:
+        entidad = entidades.get_entidad(id=sede.id_entidad)
+        deas_solidarios = deas.get_deas_sede(sede.id)
+        ok = "0"
+        nombre_prov = provincias.get_provincia(sede.id_provincia)
+        for dea in deas_solidarios:
+            if dea.solidario:
+                ok = "1"
+        if entidad:
+            query_insert_entidad_sede = 'INSERT INTO public."Entidad_Sede" (id, fecha_creacion, localidad, año_creacion, mes_creacion, nombre_provincia, id_entidad, estado, tipo_institucion, sector, cant_deas, deas_solidarios) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+            data_insert_entidad_sede = (sede.id, sede.fecha_creacion, sede.localidad, sede.fecha_creacion.year, sede.fecha_creacion.month, nombre_prov.nombre, entidad.id, sede.estado, entidad.tipo_institucion, entidad.sector, len(deas_solidarios), ok)  # Asume que todos los DEA son solidarios
+
+            cur.execute(query_insert_entidad_sede, data_insert_entidad_sede)
 
     conexion.commit()
 

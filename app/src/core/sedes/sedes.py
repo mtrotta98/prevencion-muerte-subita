@@ -25,6 +25,7 @@ class Sede(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False, unique=True)
     latitud = db.Column(db.Float, nullable=False)
     longitud = db.Column(db.Float, nullable=False)
+    localidad = db.Column(db.String(100), nullable=True)
     nombre = db.Column(db.String(100), nullable=False)
     flujo_personas = db.Column(db.Integer, nullable=False)
     superficie = db.Column(db.Float, nullable=False)
@@ -39,9 +40,10 @@ class Sede(db.Model):
     usuarios = db.relationship("Usuario", secondary=Usuario_Sede, backref="sedes")
 
 
-def __init__(self, latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, fecha_creacion):
+def __init__(self, latitud, longitud, localidad, nombre, flujo_personas, superficie, personal_estable, pisos, estado, fecha_creacion):
     self.latitud = latitud
     self.longitud = longitud
+    self.localidad = localidad
     self.nombre = nombre
     self.flujo_personas = flujo_personas
     self.superficie = superficie

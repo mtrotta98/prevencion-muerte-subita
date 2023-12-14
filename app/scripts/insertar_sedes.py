@@ -60,14 +60,16 @@ def buscar_nombre_provincia(numero):
     nombre_provincia = diccionario_provincias.get(numero)
     return nombre_provincia
 
-for i in range(1000000):
+for i in range(100000):
     row = complete_list[i % len(complete_list)]
     latitud = row[3]
     longitud = row[4]
+    localidad = row[5]
     nombre_provincia = row[7]
 
     print(latitud)
     print(longitud)
+    print(localidad)
     print(nombre_provincia)
 
     if isinstance(nombre_provincia, float):
@@ -85,9 +87,9 @@ for i in range(1000000):
     if id_provincia is not None:
         nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad, fecha_creacion = generar_datos()
         
-        query_insert = 'INSERT INTO public."Sedes" (latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+        query_insert = 'INSERT INTO public."Sedes" (latitud, longitud, localidad, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
 
-        data_sede = (latitud, longitud, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion)
+        data_sede = (latitud, longitud, localidad, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion)
     
         cur.execute(query_insert, data_sede)
 
