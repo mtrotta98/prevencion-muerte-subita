@@ -129,7 +129,7 @@ def exportEMS():
 @super_usuario.route("/ETL")
 def ejecucion_etl():
     """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
-    """conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
+    conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
     cur = conexion.cursor()
 
     usuarios_representantes = usuarios.get_usuarios_representantes()
@@ -166,7 +166,7 @@ def ejecucion_etl():
 
     conexion.commit()
 
-    conexion.close()"""
+    conexion.close()
     exportEMS()
 
     return redirect("/usuarios/inicio")
