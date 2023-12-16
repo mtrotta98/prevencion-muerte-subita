@@ -91,15 +91,31 @@ def ejecucion_etl_EMS():
         1: 'Masculino',
         2: 'Femenino',
         3: 'Otro'}
+    
+    data_eventosms = {}
 
     # Recupero las marcas
     res = requests.get('https://api.claudioraverta.com/deas/')
     marcas = json.loads(res.text)
 
     sedesms = sedes.get_sedes("")
+    eventos_all = eventosms.get_all()
+    provincias_all = provincias.get_provincias()
+
+    for evento in eventos_all:
+        if evento.sede_id not in data_eventosms:
+            data_eventosms[evento.sede_id] = [evento]
+        else:
+            data_eventosms[evento.sede_id].append(evento)
+
     for sedems in sedesms:
-        eventos = eventosms.get_by_sede(sedems.id)
-        emsprovincia = provincias.get_provincia(sedems.id_provincia).nombre
+        print(sedems.id)
+        eventos = data_eventosms[evento.sede_id]
+        for prov in provincias_all:
+            if sedems.id_provincia == prov.id:
+                emsprovincia = prov.nombre
+                break
+            
         emslocalidad = sedems.localidad # sedes.get_localidad(sedems)
         for evento in eventos:
             emsAño = evento.fecha.year
@@ -175,7 +191,6 @@ def ejecucion_etl_sedes():
     conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
     cur = conexion.cursor()
     data_entidades = {}
-    data_provincias = {}
     data_deas = {}
     sedes_all = sedes.get_sedes("")
     entidades_all = entidades.get_entidades("")
