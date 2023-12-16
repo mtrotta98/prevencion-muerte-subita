@@ -1,11 +1,9 @@
 import uuid
-import smtplib
+import random
 import psycopg2
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import requests
 import json
-from datetime import datetime
+import csv
 
 from flask import Blueprint, render_template, request, flash, redirect, make_response, jsonify, abort
 from flask_jwt_extended import jwt_required
@@ -18,7 +16,7 @@ from src.core import provincias
 from src.core import roles
 from src.core import sedes
 from src.core import entidades
-from src.core import solicitudes
+from src.core import visitas
 from src.core import deas
 from src.web.controllers.validators import validator_usuario, validator_permission
 from src.web.helpers.send_emails import enviar_email_alta_admin_prov
@@ -136,11 +134,13 @@ def ejecucion_etl_representantes():
     usuarios_representantes = usuarios.get_usuarios_representantes()
 
     for us_repre in usuarios_representantes:
+        print(us_repre.id)
         if len(us_repre.sedes) > 0:
-            query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento, año_nacimiento, mes_nacimiento, id_sede) VALUES (%s, %s, %s, %s, %s, %s);'
-            data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento, us_repre.fecha_nacimiento.year, us_repre.fecha_nacimiento.month, us_repre.sedes[0].id)
+            for sede_repre in us_repre.sedes:
+                query_insert_user_prov = 'INSERT INTO public."Representantes" (nombre, apellido, fecha_nacimiento, año_nacimiento, mes_nacimiento, id_sede, id_representante) VALUES (%s, %s, %s, %s, %s, %s, %s);'
+                data_insert_user_prov = (us_repre.nombre, us_repre.apellido, us_repre.fecha_nacimiento, us_repre.fecha_nacimiento.year, us_repre.fecha_nacimiento.month, sede_repre.id, us_repre.id)
 
-            cur.execute(query_insert_user_prov, data_insert_user_prov)
+                cur.execute(query_insert_user_prov, data_insert_user_prov)
 
     conexion.commit()
 
@@ -157,8 +157,9 @@ def ejecucion_etl_certificantes():
     usuarios_certificantes = usuarios.get_usuarios_certificantes()
 
     for us_cert in usuarios_certificantes:
-        query_insert_user_prov = 'INSERT INTO public."Certificantes" (nombre, apellido, fecha_nacimiento, nombre_provincia) VALUES (%s, %s, %s, %s);'
-        data_insert_user_prov = (us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento, us_cert.provincias[0].nombre)
+        print(us_cert.id)
+        query_insert_user_prov = 'INSERT INTO public."Certificantes" (id, nombre, apellido, fecha_nacimiento, nombre_provincia) VALUES (%s, %s, %s, %s, %s);'
+        data_insert_user_prov = (us_cert.id, us_cert.nombre, us_cert.apellido, us_cert.fecha_nacimiento, us_cert.provincias[0].nombre)
 
         cur.execute(query_insert_user_prov, data_insert_user_prov)
 
@@ -181,6 +182,7 @@ def ejecucion_etl_sedes():
         entidad = entidades.get_entidad(id=sede.id_entidad)
         nombre_prov = provincias.get_provincia(sede.id_provincia)
         cant_deas = deas.get_by_sede(sede.id)
+
         if len(cant_deas) > 0 and cant_deas[0].solidario:
             ok = "1"
         if entidad:
@@ -189,7 +191,71 @@ def ejecucion_etl_sedes():
 
             cur.execute(query_insert_entidad_sede, data_insert_entidad_sede)
 
-    conexion.commit()
+        conexion.commit()
+
+    conexion.close()
+
+    return redirect("/usuarios/inicio")
+
+@super_usuario.route("/ETL_ids")
+def ejecucion_etl_ids():
+    """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
+    conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
+    cur = conexion.cursor()
+    sedes_all = sedes.get_sedes("")
+    data_ids_repre = {}
+    data_sedes_cert = {}
+    data_deas = {}
+    data_eventosms = {}
+    representantes = usuarios.get_usuarios_representantes()
+    sedes_certificadas = sedes.get_sedes_certificadas()
+    visitas_all = visitas.get_visitas()
+    deas_all = deas.get_all()
+    eventos_all = eventosms.get_all()
+    provincias_all = provincias.get_provincias()
+
+    for representante in representantes:
+        print(f"id_repre: {representante.id}")
+        id_sede = representante.sedes[0].id
+        data_ids_repre[id_sede] = representante.id
+
+    for sede in sedes_certificadas:
+        print(f"sede.id: {sede.id}")
+        for visita in visitas_all:
+            if sede.id == visita.id_sede:
+                data_sedes_cert[sede.id] = visita.id_certificante
+                break
+
+    for dea in deas_all:
+        if dea.sede_id not in data_deas:
+            data_deas[dea.sede_id] = 1
+        else:
+            data_deas[dea.sede_id] += 1
+
+    for evento in eventos_all:
+        data_eventosms[evento.sede_id] = evento.id
+
+    for sede in sedes_all:
+        print(sede.id)
+        cant_deas = data_deas[sede.id] if sede.id in data_deas else 0
+        for prov in provincias_all:
+            if sede.id_provincia == prov.id:
+                provincia_sede = prov
+                break
+        
+        evento = data_eventosms[sede.id] if sede.id in data_eventosms else None
+
+        id_repre_sede = data_ids_repre[sede.id] if sede.id in data_ids_repre.keys() else None
+
+        id_certificante = data_sedes_cert[sede.id] if sede.id in data_sedes_cert.keys() else None
+
+        query_insert = 'INSERT INTO public."tabla_ids" (id_representante, id_certificante, id_entidad_sede, id_evento_muerte_subita, cant_deas, provincia_sede) VALUES (%s, %s, %s, %s, %s, %s)'
+
+        data_insert = (id_repre_sede, id_certificante, sede.id, evento, cant_deas, provincia_sede.nombre)
+
+        cur.execute(query_insert, data_insert)
+
+        conexion.commit()
 
     conexion.close()
 

@@ -55,3 +55,15 @@ def verificar_usuario(usuario, contraseña):
             return usuario, "Datos correctos"
         else:
             return None, "Datos incorrectos"
+        
+def representantes_de_sede(sede):
+    """Esta funcion devuelve los representantes de una sede"""
+    representantes = get_usuarios_representantes()
+
+    representantes_sede = []
+
+    for representante in representantes:
+        if sede in (representante.sedes):
+            representantes_sede.append(representante)
+
+    return representantes_sede

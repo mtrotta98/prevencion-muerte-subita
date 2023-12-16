@@ -12,6 +12,7 @@ conexion = psycopg2.connect(host="localhost", database="prevencion_muerte_subita
 cur = conexion.cursor()
 
 for i in range(100000):
+    print(i)
 
     id_rol =  2
     nombre = fake.first_name()
@@ -29,19 +30,21 @@ for i in range(100000):
 
     cur.execute(query_insert, data_usuario)
 
-    query_select = 'SELECT id FROM public."Usuarios" WHERE dni = %s AND usuario = %s AND email = %s AND id_publico = %s'
+    query_select = 'SELECT id FROM public."Usuarios" WHERE dni = %s AND usuario = %s AND email = %s AND id_publico = %s AND id_rol = %s'
 
-    data_select = (str(dni), usuario, email, id_publico)
+    data_select = (str(dni), usuario, email, id_publico, "2")
 
     cur.execute(query_select, data_select)
 
     for data_select in cur.fetchall():
+        cant_sedes = random.randint(1, 3)
         id_usuario = data_select[0]
-        id_sede = random.randint(1, 46112)
-        query_insert_user_sede = 'INSERT INTO public."Usuario_Sede" (id_usuario, id_sede) VALUES (%s, %s);'
-        data_insert_user_sede = (id_usuario, id_sede)
+        for i in range(cant_sedes):
+            id_sede = random.randint(1, 99445)
+            query_insert_user_sede = 'INSERT INTO public."Usuario_Sede" (id_usuario, id_sede) VALUES (%s, %s);'
+            data_insert_user_sede = (id_usuario, id_sede)
 
-        cur.execute(query_insert_user_sede, data_insert_user_sede)
+            cur.execute(query_insert_user_sede, data_insert_user_sede)
     
     conexion.commit()
 

@@ -8,6 +8,7 @@ class Visita(db.Model):
     resultado = db.Column(db.Boolean)
     observacion = db.Column(db.String(50))
     id_sede = db.Column(db.Integer, db.ForeignKey("Sedes.id"))
+    id_certificante = db.Column(db.Integer, db.ForeignKey("Usuarios.id"))
     
 
 

@@ -18,6 +18,7 @@ for data_prov in cur.fetchall():
     lista_provincias.append(data_prov)
 
 for i in range(100000):
+    print(i)
 
     id_rol =  3
     nombre = fake.first_name()
@@ -35,9 +36,9 @@ for i in range(100000):
 
     cur.execute(query_insert, data_usuario)
 
-    query_select = 'SELECT id FROM public."Usuarios" WHERE dni = %s AND usuario = %s AND email = %s AND id_publico = %s'
+    query_select = 'SELECT id FROM public."Usuarios" WHERE dni = %s AND usuario = %s AND email = %s AND id_publico = %s AND id_rol = %s'
 
-    data_select = (str(dni), usuario, email, id_publico)
+    data_select = (str(dni), usuario, email, id_publico, "3")
 
     cur.execute(query_select, data_select)
 

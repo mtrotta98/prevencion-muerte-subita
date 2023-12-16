@@ -79,14 +79,15 @@ query_select = 'SELECT id FROM public."Sedes"'
 cur.execute(query_select)
 sedes = cur.fetchall()
 for sede in sedes:
+    print(sede[0])
     insertDeas = bool(random.getrandbits(2))  # Mas activos que inactivos;
-    for i in range(random.randint(0,10)):
+    for i in range(random.randint(0,5)):
         insertDeas=True
         loadDea(cur,sede)
     if insertDeas:
-        for i in range(random.randint(1,3)):
+        for i in range(random.randint(1,2)):
             loadResp(cur,sede)
-        for i in range(random.randint(1,5)):
+        for i in range(random.randint(1,3)):
             loadEventMS(cur,sede)
     conexion.commit()
 conexion.close()

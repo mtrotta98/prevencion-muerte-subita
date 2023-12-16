@@ -194,3 +194,7 @@ def get_localidad(sede):
             if 'town' in location.raw['address']:
                 return location.raw['address']['town']
     return "Undefined"
+
+def get_sedes_certificadas():
+    """ Esta funcion devuelve las sedes certificadas """
+    return Sede.query.filter_by(estado="Espacio cardioasistico certificado").all()

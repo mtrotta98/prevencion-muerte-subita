@@ -29,11 +29,6 @@ for row in complete_list:
     latitud = row[3]
     logintud = row[4]
     nombre_provincia = row[7]
-    print(f"""
-            Latitud: {latitud},
-            Longitud: {logintud},
-            Provincia: {nombre_provincia}
-            """)
     
     id_provincia = None
     for provincia in lista_provincias:
@@ -44,12 +39,13 @@ for row in complete_list:
 
 def generar_datos():
 
+    estados = ["En proceso de ser cardioasistido", "Espacio cardioasistido", "Espacio cardioasistico certificado", "Espacio cardioasistico con certificacion vencida"]
     nombre = fake.company()
     flujo_personas = random.randint(200, 5000)
     superficie = random.uniform(100, 10000)
     personal_estable = random.randint(20, 2000)
     pisos = random.randint(1, 10)
-    estado = 'En proceso de ser cardioasistido'
+    estado = random.choice(estados)
     id_entidad = random.randint(1, 100000)
     fecha_creacion = fake.date_between(start_date="-40y", end_date="-5y")
     
@@ -61,16 +57,17 @@ def buscar_nombre_provincia(numero):
     return nombre_provincia
 
 for i in range(100000):
+    print(i)
     row = complete_list[i % len(complete_list)]
     latitud = row[3]
     longitud = row[4]
     localidad = row[5]
     nombre_provincia = row[7]
 
-    print(latitud)
-    print(longitud)
-    print(localidad)
-    print(nombre_provincia)
+    # print(latitud)
+    # print(longitud)
+    # print(localidad)
+    # print(nombre_provincia)
 
     if isinstance(nombre_provincia, float):
         # Maneja el caso en el que nombre_provincia es un número de punto flotante
@@ -82,11 +79,11 @@ for i in range(100000):
         # print(str(nombre_provincia).upper())
         # print(str(provincia[1].upper()))
         id_provincia = next((provincia[0] for provincia in lista_provincias if provincia[1] is not None and str(provincia[1]).upper() == nombre_provincia.upper()), None)
-        print(f"id_provincia: {id_provincia}")  # Imprime el valor de id_provincia
+        #print(f"id_provincia: {id_provincia}")  # Imprime el valor de id_provincia
     
     if id_provincia is not None:
         nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad, fecha_creacion = generar_datos()
-        
+
         query_insert = 'INSERT INTO public."Sedes" (latitud, longitud, localidad, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
 
         data_sede = (latitud, longitud, localidad, nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_provincia, id_entidad, fecha_creacion)
