@@ -174,20 +174,48 @@ def ejecucion_etl_sedes():
     """ Esta funcion realiza la ejecucion del ETL para migrar los datos al datawarehouse """
     conexion = psycopg2.connect(host="localhost", database="warehouse", user="postgres", password="proyecto")
     cur = conexion.cursor()
+    data_entidades = {}
+    data_provincias = {}
+    data_deas = {}
     sedes_all = sedes.get_sedes("")
+    entidades_all = entidades.get_entidades("")
+    provincias_all = provincias.get_provincias()
+    deas_all = deas.get_all()
+
+    for entidad in entidades_all:
+        data_entidades[entidad.id] = entidad
+
+    for dea in deas_all:
+        if dea.sede_id not in data_deas:
+            data_deas[dea.sede_id] = [1, "0"]
+        else:
+            data_deas[dea.sede_id][0] += 1
+        
+        if dea.solidario:
+            data_deas[dea.sede_id][1] = "1"
 
     for sede in sedes_all:
         print(sede.id)
-        ok = "0"
-        entidad = entidades.get_entidad(id=sede.id_entidad)
-        nombre_prov = provincias.get_provincia(sede.id_provincia)
-        cant_deas = deas.get_by_sede(sede.id)
+        entidad = data_entidades[sede.id_entidad] if sede.id_entidad in data_entidades else None
+        if entidad:
+            id_entidad = entidad.id
+            tipo_institucion = entidad.tipo_institucion
+            sector = entidad.sector
 
-        if len(cant_deas) > 0 and cant_deas[0].solidario:
-            ok = "1"
+        for prov in provincias_all:
+            if sede.id_provincia == prov.id:
+                provincia_sede = prov
+                break
+        cant_deas = data_deas[sede.id][0] if sede.id in data_deas else 0
+
+        if cant_deas > 0:
+            ok = data_deas[sede.id][1]
+        else:
+            ok = "0"
+
         if entidad:
             query_insert_entidad_sede = 'INSERT INTO public."Entidad_Sede" (id, fecha_creacion, localidad, año_creacion, mes_creacion, nombre_provincia, id_entidad, estado, tipo_institucion, sector, cant_deas, deas_solidarios) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
-            data_insert_entidad_sede = (sede.id, sede.fecha_creacion, sede.localidad, sede.fecha_creacion.year, sede.fecha_creacion.month, nombre_prov.nombre, entidad.id, sede.estado, entidad.tipo_institucion, entidad.sector, len(cant_deas), ok)  # Asume que todos los DEA son solidarios
+            data_insert_entidad_sede = (sede.id, sede.fecha_creacion, sede.localidad, sede.fecha_creacion.year, sede.fecha_creacion.month, provincia_sede.nombre, id_entidad, sede.estado, tipo_institucion, sector, cant_deas, ok)  # Asume que todos los DEA son solidarios
 
             cur.execute(query_insert_entidad_sede, data_insert_entidad_sede)
 
