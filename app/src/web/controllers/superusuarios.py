@@ -100,43 +100,43 @@ def ejecucion_etl_EMS():
 
     sedesms = sedes.get_sedes("")
     eventos_all = eventosms.get_all()
-    provincias_all = provincias.get_provincias()
+    provincias_all = {}
+    for provincia in provincias.get_provincias():
+        provincias_all[provincia.id] = provincia.nombre
 
     for evento in eventos_all:
         if evento.sede_id not in data_eventosms:
             data_eventosms[evento.sede_id] = [evento]
         else:
             data_eventosms[evento.sede_id].append(evento)
-
     for sedems in sedesms:
         print(sedems.id)
-        eventos = data_eventosms[evento.sede_id]
-        for prov in provincias_all:
-            if sedems.id_provincia == prov.id:
-                emsprovincia = prov.nombre
-                break
-            
-        emslocalidad = sedems.localidad # sedes.get_localidad(sedems)
-        for evento in eventos:
-            emsAño = evento.fecha.year
-            emsMes = evento.fecha.month
-            emssexo = sexos[evento.sexo]
-            if evento.usodea:
-                emsmarcadea = marcas[evento.marca-1]["marca"]   # Extraigo el string
-                emsmodelo = evento.modelo
-                usosdea = evento.usosdea
-            else:
-                emsmarcadea = "None"
-                emsmodelo = "None"
-                usosdea = 0
-            if evento.usorcp:
-                tiemporcp = evento.tiemporcp
-            else:
-                tiemporcp = 0
-            query_ems = 'INSERT INTO public."Evento_muerte_subita" (fecha, año, mes, nombre_provincia, localidad, sexo_aparente, edad_aparente, uso_dea, cantidad_descargas, rcp, tiempo_rcp, modelo_dea, marca_dea, sobrevive) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
-            data_ems = (evento.fecha, emsAño, emsMes, emsprovincia, emslocalidad, emssexo, evento.edad, evento.usodea, usosdea, evento.usorcp, tiemporcp, emsmodelo, emsmarcadea, evento.sobrevive)
-            cur.execute(query_ems, data_ems)
-        conexion.commit()
+        #eventos = data_eventosms[evento.sede_id]
+        if sedems.id in data_eventosms:     #Si no hay eventos de esta sede, sigue de largo
+            eventos = data_eventosms[sedems.id]
+            if sedems.id_provincia in provincias_all:
+                emsprovincia = provincias_all[sedems.id_provincia]                
+            emslocalidad = sedems.localidad # sedes.get_localidad(sedems)
+            for evento in eventos:
+                emsAño = evento.fecha.year
+                emsMes = evento.fecha.month
+                emssexo = sexos[evento.sexo]
+                if evento.usodea:
+                    emsmarcadea = marcas[evento.marca-1]["marca"]   # Extraigo el string
+                    emsmodelo = evento.modelo
+                    usosdea = evento.usosdea
+                else:
+                    emsmarcadea = "None"
+                    emsmodelo = "None"
+                    usosdea = 0
+                if evento.usorcp:
+                    tiemporcp = evento.tiemporcp
+                else:
+                    tiemporcp = 0
+                query_ems = 'INSERT INTO public."Evento_muerte_subita" (fecha, año, mes, nombre_provincia, localidad, sexo_aparente, edad_aparente, uso_dea, cantidad_descargas, rcp, tiempo_rcp, modelo_dea, marca_dea, sobrevive) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);'
+                data_ems = (evento.fecha, emsAño, emsMes, emsprovincia, emslocalidad, emssexo, evento.edad, evento.usodea, usosdea, evento.usorcp, tiemporcp, emsmodelo, emsmarcadea, evento.sobrevive)
+                cur.execute(query_ems, data_ems)
+            conexion.commit()
     conexion.close()
 
     return redirect("/usuarios/inicio")

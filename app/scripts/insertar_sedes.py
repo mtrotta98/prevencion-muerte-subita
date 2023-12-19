@@ -46,7 +46,7 @@ def generar_datos():
     personal_estable = random.randint(20, 2000)
     pisos = random.randint(1, 10)
     estado = random.choice(estados)
-    id_entidad = random.randint(1, 100000)
+    id_entidad = random.randint(1, 101000)
     fecha_creacion = fake.date_between(start_date="-40y", end_date="-5y")
     
     return nombre, flujo_personas, superficie, personal_estable, pisos, estado, id_entidad, fecha_creacion
@@ -56,7 +56,7 @@ def buscar_nombre_provincia(numero):
     nombre_provincia = diccionario_provincias.get(numero)
     return nombre_provincia
 
-for i in range(100000):
+for i in range(1000000):
     print(i)
     row = complete_list[i % len(complete_list)]
     latitud = row[3]
