@@ -87,7 +87,8 @@ for sede in sedes:
     if insertDeas:
         for i in range(random.randint(1,2)):
             loadResp(cur,sede)
-        for i in range(random.randint(1,3)):
-            loadEventMS(cur,sede)
+        if not bool(random.getrandbits(2)):
+            for i in range(random.randint(1,3)):
+                loadEventMS(cur,sede)
     conexion.commit()
 conexion.close()

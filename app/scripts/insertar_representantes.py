@@ -40,7 +40,7 @@ for i in range(100000):
         cant_sedes = random.randint(1, 3)
         id_usuario = data_select[0]
         for i in range(cant_sedes):
-            id_sede = random.randint(1, 99445)
+            id_sede = random.randint(1, 1000000)
             query_insert_user_sede = 'INSERT INTO public."Usuario_Sede" (id_usuario, id_sede) VALUES (%s, %s);'
             data_insert_user_sede = (id_usuario, id_sede)
 
